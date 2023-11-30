@@ -4,7 +4,11 @@ import { styled, alpha } from '@mui/material/styles';
 import SearchIcon from '@mui/icons-material/Search';
 
 import InputBase from '@mui/material/InputBase';
-import logo from '../../assets/logo192.png';
+import TuneIcon from '@mui/icons-material/Tune';
+import { BottomNavigationAction } from '@mui/material';
+import logo from '../../assets/leaf_color.png';
+import './appHeader.scss';
+import Posts from '../Posts/Posts';
 
 function appHeader() {
   // const handleSubmitSearchMessage: React.FormEventHandler<HTMLFormElement> | undefined(event: FormEvent<HTMLFormElement>) => {
@@ -57,6 +61,7 @@ function appHeader() {
       },
     },
   }));
+
   return (
     <header className="header">
       <img src={logo} className="header__logo" alt="Logo Leeaf" />
@@ -70,6 +75,19 @@ function appHeader() {
             inputProps={{ 'aria-label': 'search' }}
           />
         </Search>
+
+        <BottomNavigationAction
+          className="customLabelColor"
+          label="Filtres"
+          icon={<TuneIcon />}
+          sx={{
+            width: 300,
+            color: 'blue',
+            '& .MuiBottomNavigationAction-label': {
+              opacity: 1,
+            },
+          }}
+        />
       </form>
     </header>
   );
