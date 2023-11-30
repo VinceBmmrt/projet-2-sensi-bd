@@ -7,6 +7,7 @@ import InputBase from '@mui/material/InputBase';
 import TuneIcon from '@mui/icons-material/Tune';
 import { BottomNavigationAction } from '@mui/material';
 import logo from '../../assets/leaf_color.png';
+import leafIcon from '../../../public/feuille.png';
 import './appHeader.scss';
 import Posts from '../Posts/Posts';
 
@@ -28,6 +29,7 @@ function appHeader() {
     backgroundColor: alpha(theme.palette.common.white, 0.15),
     '&:hover': {
       backgroundColor: alpha(theme.palette.common.white, 0.25),
+      border: '1px solid green',
     },
     marginRight: theme.spacing(2),
     marginLeft: 0,
@@ -36,10 +38,12 @@ function appHeader() {
       marginLeft: theme.spacing(3),
       width: 'auto',
     },
+    border: '1px solid grey',
+    height: '100%',
   }));
 
   const SearchIconWrapper = styled('div')(({ theme }) => ({
-    padding: theme.spacing(0, 2),
+    // padding: theme.spacing(0, 2),
     height: '100%',
     position: 'absolute',
     pointerEvents: 'none',
@@ -51,7 +55,7 @@ function appHeader() {
   const StyledInputBase = styled(InputBase)(({ theme }) => ({
     color: 'inherit',
     '& .MuiInputBase-input': {
-      padding: theme.spacing(1, 1, 1, 0),
+      // padding: theme.spacing(1, 1, 1, 0),
       // vertical padding + font size from searchIcon
       paddingLeft: `calc(1em + ${theme.spacing(4)})`,
       transition: theme.transitions.create('width'),
@@ -64,18 +68,34 @@ function appHeader() {
 
   return (
     <header className="header">
-      <img src={logo} className="header__logo" alt="Logo Leeaf" />
-      <form className="form">
-        <Search>
-          <SearchIconWrapper>
-            <SearchIcon />
-          </SearchIconWrapper>
-          <StyledInputBase
-            placeholder="Search…"
-            inputProps={{ 'aria-label': 'search' }}
+      <div className="header__topContainer">
+        <img
+          src={logo}
+          className="header__topContainer-logo"
+          alt="Logo Leeaf"
+        />
+        <div className="header__topContainer-credit">
+          <div className="header__topContainer-creditCount">9999</div>
+          <img
+            src={leafIcon}
+            className="header__topContainer-creditLogo"
+            alt="Logo Leeaf"
           />
-        </Search>
+        </div>
+      </div>
 
+      <div className="header__searchContainer">
+        <form className="form">
+          <Search>
+            <SearchIconWrapper>
+              <SearchIcon />
+            </SearchIconWrapper>
+            <StyledInputBase
+              placeholder="Search…"
+              inputProps={{ 'aria-label': 'search' }}
+            />
+          </Search>
+        </form>
         <BottomNavigationAction
           className="customLabelColor"
           label="Filtres"
@@ -88,7 +108,7 @@ function appHeader() {
             },
           }}
         />
-      </form>
+      </div>
     </header>
   );
 }

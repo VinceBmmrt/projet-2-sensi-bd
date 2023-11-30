@@ -1,10 +1,11 @@
 import * as React from 'react';
 import BottomNavigation from '@mui/material/BottomNavigation';
 import BottomNavigationAction from '@mui/material/BottomNavigationAction';
-import FolderIcon from '@mui/icons-material/Folder';
-import RestoreIcon from '@mui/icons-material/Restore';
-import FavoriteIcon from '@mui/icons-material/Favorite';
-import LocationOnIcon from '@mui/icons-material/LocationOn';
+import HomeIcon from '@mui/icons-material/Home';
+import FavorisIcon from '@mui/icons-material/Favorite';
+import AddCircleIcon from '@mui/icons-material/AddCircle';
+import ChatBubbleIcon from '@mui/icons-material/ChatBubble';
+import PersonIcon from '@mui/icons-material/Person';
 
 export default function LabelBottomNavigation() {
   const [value, setValue] = React.useState('recents');
@@ -14,27 +15,19 @@ export default function LabelBottomNavigation() {
   };
 
   return (
-    <BottomNavigation sx={{ width: 500 }} value={value} onChange={handleChange}>
-      <BottomNavigationAction
-        label="Recents"
-        value="recents"
-        icon={<RestoreIcon />}
-      />
-      <BottomNavigationAction
-        label="Favorites"
-        value="favorites"
-        icon={<FavoriteIcon />}
-      />
-      <BottomNavigationAction
-        label="Nearby"
-        value="nearby"
-        icon={<LocationOnIcon />}
-      />
-      <BottomNavigationAction
-        label="Folder"
-        value="folder"
-        icon={<FolderIcon />}
-      />
+    <BottomNavigation
+      showLabels
+      value={value}
+      onChange={(event, newValue) => {
+        setValue(newValue);
+      }}
+    >
+      <BottomNavigationAction label="Accueil" icon={<HomeIcon />} />
+      <BottomNavigationAction label="Favoris" icon={<FavorisIcon />} />
+      <BottomNavigationAction label="AddCircle" icon={<AddCircleIcon />} />
+      <BottomNavigationAction label="Messages" icon={<ChatBubbleIcon />} />
+
+      <BottomNavigationAction label="Connexion" icon={<PersonIcon />} />
     </BottomNavigation>
   );
 }
