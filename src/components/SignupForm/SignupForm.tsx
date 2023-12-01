@@ -1,11 +1,9 @@
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
-import React, { useState } from 'react';
+import React, { useState, ChangeEvent, FormEvent } from 'react';
+import GooglePlacesAutocomplete from 'react-google-autocomplete';
 
-// import axios from 'axios';
-const googlePlacesApiKey: string = import.meta.env
-  .REACT_APP_GOOGLE_PLACES_API_KEY;
-type FormDataT = {
+type FormData = {
   firstname: string;
   lastname: string;
   nickname: string;
@@ -16,7 +14,7 @@ type FormDataT = {
 };
 
 function SignupForm() {
-  const [formData, setFormData] = useState<FormDataT>({
+  const [formData, setFormData] = useState<FormData>({
     firstname: '',
     lastname: '',
     nickname: '',
@@ -26,16 +24,23 @@ function SignupForm() {
     confirmPassword: '',
   });
 
-  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
     setFormData((prevData) => ({ ...prevData, [name]: value }));
   };
 
-  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+  const handleAddressChange = (place) => {
+    setFormData((prevData) => ({
+      ...prevData,
+      address: place.formatted_address,
+    }));
+  };
+
+  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     try {
-      // const response = await axios.post('/api/signup', formData);
-      console.log(formData); // Handle the response as needed
+      // Your form submission logic
+      console.log(formData);
     } catch (error) {
       console.error('Error submitting form:', error);
     }
@@ -72,12 +77,16 @@ function SignupForm() {
         onChange={handleChange}
         required
       />
-      <TextField
-        label="Address"
-        name="address"
-        value={formData.address}
-        onChange={handleChange}
-        required
+      <GooglePlacesAutocomplete
+        apiKey="AIzaSyBe1bXbz2e6IzfLTVygUgInpIVCu3DC4ko"
+        selectProps={{
+          onChange: handleAddressChange,
+          placeholder: 'Start typing your address...',
+        }}
+        options={{
+          types: ['address'],
+          componentRestrictions: { country: 'FR' },
+        }}
       />
       <TextField
         label="Password"
