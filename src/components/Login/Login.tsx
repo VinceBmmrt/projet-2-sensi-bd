@@ -60,6 +60,26 @@ export default function SignIn() {
     dispatch(changeCheckedValue());
   };
 
+  const handleSignIn = (event) => {
+    event.preventDefault();
+
+    // Logique de connexion ici
+    console.log('Email:', emailValue);
+    console.log('Password:', passwordValue);
+    console.log('Remember Me:', checkedValue);
+
+    // Stockage local (localStorage) - à ajuster selon vos besoins
+    if (checkedValue) {
+      localStorage.setItem('Email', emailValue);
+      localStorage.setItem('Password', passwordValue);
+    } else {
+      localStorage.removeItem('Email');
+      localStorage.removeItem('Password');
+    }
+
+    // Autres actions de connexion...
+  };
+
   return (
     <Container component="main" maxWidth="xs">
       <CssBaseline />
@@ -115,12 +135,13 @@ export default function SignIn() {
             fullWidth
             variant="contained"
             sx={{ mt: 3, mb: 2 }}
+            onClick={handleSignIn}
           >
             se connecter
           </Button>
           <Grid container>
             <Grid item xs>
-              <Link href="#" variant="body2">
+              <Link href="/" variant="body2">
                 Forgot password?
               </Link>
             </Grid>
