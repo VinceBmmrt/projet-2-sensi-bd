@@ -14,6 +14,7 @@ type FormData = {
 };
 
 function SignupForm() {
+  const googlePlacesAPIKey = import.meta.env.VITE_APP_GOOGLE_MAPS_API_KEY;
   const [formData, setFormData] = useState<FormData>({
     firstname: '',
     lastname: '',
@@ -78,7 +79,7 @@ function SignupForm() {
         required
       />
       <GooglePlacesAutocomplete
-        apiKey="AIzaSyBe1bXbz2e6IzfLTVygUgInpIVCu3DC4ko"
+        apiKey={googlePlacesAPIKey}
         selectProps={{
           onChange: handleAddressChange,
           placeholder: 'Start typing your address...',
