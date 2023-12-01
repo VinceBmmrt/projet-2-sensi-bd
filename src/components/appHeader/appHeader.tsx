@@ -34,16 +34,17 @@ function appHeader() {
     marginRight: theme.spacing(2),
     marginLeft: 0,
     width: '100%',
+    height: '100%', // Ajustez la hauteur selon vos préférences
+    alignItems: 'center', // Alignement vertical du contenu
     [theme.breakpoints.up('sm')]: {
       marginLeft: theme.spacing(3),
       width: 'auto',
     },
     border: '1px solid grey',
-    height: '100%',
   }));
 
   const SearchIconWrapper = styled('div')(({ theme }) => ({
-    // padding: theme.spacing(0, 2),
+    padding: theme.spacing(0, 0),
     height: '100%',
     position: 'absolute',
     pointerEvents: 'none',
@@ -80,6 +81,7 @@ function appHeader() {
             src={leafIcon}
             className="header__topContainer-creditLogo"
             alt="Logo Leeaf"
+            style={{ maxWidth: '50%', width: '100%', height: 'auto' }}
           />
         </div>
       </div>
@@ -99,10 +101,12 @@ function appHeader() {
         <BottomNavigationAction
           className="customLabelColor"
           label="Filtres"
-          icon={<TuneIcon />}
+          icon={<TuneIcon style={{ fontSize: 18 }} />}
           sx={{
-            width: 300,
+            width: 200,
             color: 'blue',
+
+            padding: 0,
             '& .MuiBottomNavigationAction-label': {
               opacity: 1,
             },

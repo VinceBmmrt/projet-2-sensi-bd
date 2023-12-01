@@ -1,0 +1,10 @@
+.posts {
+  display: flex;
+  flex-wrap: wrap;
+
+  padding: 0 auto;
+  justify-content: center;
+  align-items: center;
+  row-gap: 1rem;
+  gap: 1rem;
+}

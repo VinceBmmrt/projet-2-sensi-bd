@@ -1,17 +1,18 @@
 import Post from '../Post/Post';
 
-function Posts() {
+import { Post as TPost } from '../../@types/post';
+import './Posts.scss';
+
+type PostsProps = {
+  posts: TPost[];
+};
+function Posts({ posts }: PostsProps) {
+  console.log('🚀 ~ posts:', posts);
   return (
     <div className="posts">
-      <Post />
-      <Post />
-      <Post />
-      <Post />
-      <Post />
-      <Post />
-      <Post />
-      <Post />
-      <Post />
+      {posts.map((post) => (
+        <Post key={post.id} post={post} />
+      ))}
     </div>
   );
 }
