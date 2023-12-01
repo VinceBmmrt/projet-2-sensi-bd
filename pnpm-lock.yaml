@@ -23,6 +23,12 @@ dependencies:
   clsx:
     specifier: ^2.0.0
     version: 2.0.0
+  icons-material,:
+    specifier: link:@mui/icons-material,
+    version: link:@mui/icons-material,
+  material,:
+    specifier: link:@mui/material,
+    version: link:@mui/material,
   react:
     specifier: ^18.2.0
     version: 18.2.0
@@ -35,6 +41,9 @@ dependencies:
   react-router-dom:
     specifier: ^6.20.0
     version: 6.20.0(react-dom@18.2.0)(react@18.2.0)
+  styled,:
+    specifier: link:@emotion/styled,
+    version: link:@emotion/styled,
 
 devDependencies:
   '@types/react':

@@ -17,10 +17,13 @@
 		"@reduxjs/toolkit": "^1.9.7",
 		"axios": "^1.6.2",
 		"clsx": "^2.0.0",
+		"icons-material,": "link:@mui/icons-material,",
+		"material,": "link:@mui/material,",
 		"react": "^18.2.0",
 		"react-dom": "^18.2.0",
 		"react-redux": "^8.1.3",
-		"react-router-dom": "^6.20.0"
+		"react-router-dom": "^6.20.0",
+		"styled,": "link:@emotion/styled,"
 	},
 	"devDependencies": {
 		"@types/react": "^18.0.28",
