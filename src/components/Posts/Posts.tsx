@@ -7,7 +7,6 @@ type PostsProps = {
   posts: TPost[];
 };
 function Posts({ posts }: PostsProps) {
-  console.log('🚀 ~ posts:', posts);
   return (
     <div className="posts">
       {posts.map((post) => (
