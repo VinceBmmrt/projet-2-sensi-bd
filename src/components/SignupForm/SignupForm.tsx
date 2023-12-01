@@ -1,6 +1,6 @@
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
-import React, { useState } from 'react';
+import React, { RefObject, useEffect, useRef, useState } from 'react';
 
 // import axios from 'axios';
 const googlePlacesApiKey: string = import.meta.env
@@ -15,7 +15,19 @@ type FormDataT = {
   confirmPassword: string;
 };
 
-function SignupForm() {
+function SignupForm({ onPlaceSelected }) {
+  const inputRef = useRef<RefObject<unknown>>();
+  useEffect(() => {
+    const autocomplete = new window.google.maps.places.Autocomplete(
+      inputRef.current
+    );
+
+    // Listen for the 'place_changed' event, which is triggered when a place is selected
+    autocomplete.addListener('place_changed', () => {
+      const place = autocomplete.getPlace();
+      onPlaceSelected(place);
+    });
+  }, [onPlaceSelected]);
   const [formData, setFormData] = useState<FormDataT>({
     firstname: '',
     lastname: '',
@@ -77,6 +89,7 @@ function SignupForm() {
         name="address"
         value={formData.address}
         onChange={handleChange}
+        ref={inputRef}
         required
       />
       <TextField
@@ -101,5 +114,3 @@ function SignupForm() {
     </form>
   );
 }
-
-export default SignupForm;
