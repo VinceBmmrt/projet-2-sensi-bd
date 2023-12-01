@@ -3,7 +3,8 @@ import TextField from '@mui/material/TextField';
 import React, { useState } from 'react';
 
 // import axios from 'axios';
-
+const googlePlacesApiKey: string = import.meta.env
+  .REACT_APP_GOOGLE_PLACES_API_KEY;
 type FormDataT = {
   firstname: string;
   lastname: string;
