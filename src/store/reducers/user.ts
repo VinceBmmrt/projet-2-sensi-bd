@@ -20,7 +20,7 @@ interface UserState {
 // const userData = LocalStorage.getItem('user');
 
 export const initialState: UserState = {
-  isLogged: false,
+  isLogged: true,
   credentials: {
     email: '',
     password: '',
@@ -78,7 +78,7 @@ const userReducer = createSlice({
       }
     },
     setCredentialsToStorage(state) {
-      if (state.checked === true) {
+      if (state.isLogged === true && state.checked === true) {
         localStorage.setItem('email', state.credentials.email);
         localStorage.setItem('password', state.credentials.password);
       }
