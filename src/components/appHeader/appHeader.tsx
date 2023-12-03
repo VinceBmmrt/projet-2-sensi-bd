@@ -1,17 +1,25 @@
 import * as React from 'react';
-import { styled, alpha } from '@mui/material/styles';
+import { styled, alpha, useTheme } from '@mui/material/styles';
 
 import SearchIcon from '@mui/icons-material/Search';
 
 import InputBase from '@mui/material/InputBase';
 import TuneIcon from '@mui/icons-material/Tune';
-import { BottomNavigationAction } from '@mui/material';
+import {
+  BottomNavigationAction,
+  Divider,
+  Drawer,
+  IconButton,
+} from '@mui/material';
+import { useState } from 'react';
+import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
+import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import logo from '../../assets/leaf_color.png';
 import leafIcon from '../../../public/feuille.png';
 import './appHeader.scss';
 import Posts from '../Posts/Posts';
 
-function appHeader() {
+function AppHeader() {
   // const handleSubmitSearchMessage: React.FormEventHandler<HTMLFormElement> | undefined(event: FormEvent<HTMLFormElement>) => {
 
   //   console.log('test');
@@ -23,7 +31,19 @@ function appHeader() {
   //   // J'emet l'intention de changer la valeur de mon input avec sa nouvelle valeur
   //   dispatch(changeInputValue(newValue));
   // };
-  const Search = styled('div')(({ theme }) => ({
+  const drawerWidth = 240;
+  const theme = useTheme();
+  const [open, setOpen] = useState(false);
+  const DrawerHeader = styled('div')(() => ({
+    display: 'flex',
+    alignItems: 'center',
+    padding: theme.spacing(0, 1),
+    // necessary for content to be below app bar
+    ...theme.mixins.toolbar,
+    justifyContent: 'flex-start',
+  }));
+
+  const Search = styled('div')(() => ({
     position: 'relative',
     borderRadius: theme.shape.borderRadius,
     backgroundColor: alpha(theme.palette.common.white, 0.15),
@@ -43,7 +63,7 @@ function appHeader() {
     border: '1px solid grey',
   }));
 
-  const SearchIconWrapper = styled('div')(({ theme }) => ({
+  const SearchIconWrapper = styled('div')(() => ({
     padding: theme.spacing(0, 0),
     height: '100%',
     position: 'absolute',
@@ -53,7 +73,7 @@ function appHeader() {
     justifyContent: 'center',
   }));
 
-  const StyledInputBase = styled(InputBase)(({ theme }) => ({
+  const StyledInputBase = styled(InputBase)(() => ({
     color: 'inherit',
     '& .MuiInputBase-input': {
       // padding: theme.spacing(1, 1, 1, 0),
@@ -66,6 +86,13 @@ function appHeader() {
       },
     },
   }));
+  const handleDrawerOpen = () => {
+    setOpen(true);
+  };
+
+  const handleDrawerClose = () => {
+    setOpen(false);
+  };
 
   return (
     <header className="header">
@@ -102,19 +129,47 @@ function appHeader() {
           className="customLabelColor"
           label="Filtres"
           icon={<TuneIcon style={{ fontSize: 18 }} />}
+          onClick={handleDrawerOpen}
           sx={{
+            ...(open && { display: 'none' }),
             width: 200,
             color: 'blue',
 
             padding: 0,
+
             '& .MuiBottomNavigationAction-label': {
               opacity: 1,
             },
           }}
         />
       </div>
+      <Drawer
+        sx={{
+          width: drawerWidth,
+          flexShrink: 0,
+          '& .MuiDrawer-paper': {
+            width: drawerWidth,
+          },
+        }}
+        variant="persistent"
+        anchor="right"
+        open={open}
+      >
+        <DrawerHeader>
+          <IconButton onClick={handleDrawerClose}>
+            {theme.direction === 'rtl' ? (
+              <ChevronLeftIcon />
+            ) : (
+              <ChevronRightIcon />
+            )}
+          </IconButton>
+        </DrawerHeader>
+        <Divider />
+
+        <Divider />
+      </Drawer>
     </header>
   );
 }
 
-export default appHeader;
+export default AppHeader;
