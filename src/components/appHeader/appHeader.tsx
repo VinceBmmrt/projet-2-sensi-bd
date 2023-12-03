@@ -7,9 +7,15 @@ import InputBase from '@mui/material/InputBase';
 import TuneIcon from '@mui/icons-material/Tune';
 import {
   BottomNavigationAction,
+  Box,
+  Button,
+  Checkbox,
   Divider,
   Drawer,
+  FormControlLabel,
   IconButton,
+  Slider,
+  TextField,
 } from '@mui/material';
 import { useState } from 'react';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
@@ -18,6 +24,7 @@ import logo from '../../assets/leaf_color.png';
 import leafIcon from '../../../public/feuille.png';
 import './appHeader.scss';
 import Posts from '../Posts/Posts';
+import RangeSlider from '../RangeSlider/RangeSlider';
 
 function AppHeader() {
   // const handleSubmitSearchMessage: React.FormEventHandler<HTMLFormElement> | undefined(event: FormEvent<HTMLFormElement>) => {
@@ -31,9 +38,13 @@ function AppHeader() {
   //   // J'emet l'intention de changer la valeur de mon input avec sa nouvelle valeur
   //   dispatch(changeInputValue(newValue));
   // };
-  const drawerWidth = 240;
+  const drawerWidth = 340;
   const theme = useTheme();
   const [open, setOpen] = useState(false);
+  const [distanceFilterValue, setDistanceFilterValue] = useState<number[]>([
+    5, 50,
+  ]);
+
   const DrawerHeader = styled('div')(() => ({
     display: 'flex',
     alignItems: 'center',
@@ -93,7 +104,13 @@ function AppHeader() {
   const handleDrawerClose = () => {
     setOpen(false);
   };
-
+  const handleChangeDistanceFilterValue = (
+    event: Event,
+    newValue: number | number[]
+  ) => {
+    setDistanceFilterValue(newValue as number[]);
+    console.log(distanceFilterValue);
+  };
   return (
     <header className="header">
       <div className="header__topContainer">
@@ -165,7 +182,36 @@ function AppHeader() {
           </IconButton>
         </DrawerHeader>
         <Divider />
+        <Box component="form" noValidate sx={{ mt: 1 }}>
+          <RangeSlider
+            value={distanceFilterValue}
+            onChange={handleChangeDistanceFilterValue}
+            valueLabelDisplay="auto"
+            // the getAriaValueText function is called to generate the corresponding text representation of the value. This generated text is then used by screen readers to announce the current value to the user.
+            getAriaValueText={(value: number) => `${value} Kilometers`}
+          />
 
+          <FormControlLabel
+            control={
+              <Checkbox
+                // checked={}
+                // onChange={}
+                inputProps={{ 'aria-label': 'Categorie' }}
+              />
+            }
+            label="Categorie"
+          />
+
+          <Button
+            type="submit"
+            fullWidth
+            variant="contained"
+            sx={{ mt: 3, mb: 2 }}
+            // onClick={}
+          >
+            Valider les filtres
+          </Button>
+        </Box>
         <Divider />
       </Drawer>
     </header>
