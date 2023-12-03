@@ -78,7 +78,7 @@ function RangeSlider({
         0 KM
         <CustomSlider
           valueLabelDisplay="auto"
-          aria-label="distance slider"
+          getAriaLabel={() => 'Label pour le curseur'}
           defaultValue={20}
           value={value}
           onChange={onChange}

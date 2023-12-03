@@ -20,7 +20,6 @@ function CheckboxGroupCategory() {
       <FormControlLabel
         control={
           <Checkbox
-            defaultChecked
             color="success"
             checked={selectedCheckbox === 'label'}
             onChange={() => handleCheckboxChange('label')}
@@ -31,7 +30,6 @@ function CheckboxGroupCategory() {
       <FormControlLabel
         control={
           <Checkbox
-            defaultChecked
             color="success"
             checked={selectedCheckbox === 'required'}
             onChange={() => handleCheckboxChange('required')}
@@ -42,7 +40,6 @@ function CheckboxGroupCategory() {
       <FormControlLabel
         control={
           <Checkbox
-            defaultChecked
             color="success"
             checked={selectedCheckbox === 'disabled'}
             onChange={() => handleCheckboxChange('disabled')}
