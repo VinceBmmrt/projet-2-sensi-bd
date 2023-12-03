@@ -16,6 +16,7 @@ import {
   IconButton,
   Slider,
   TextField,
+  Typography,
 } from '@mui/material';
 import { useState } from 'react';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
@@ -25,6 +26,8 @@ import leafIcon from '../../../public/feuille.png';
 import './appHeader.scss';
 import Posts from '../Posts/Posts';
 import RangeSlider from '../RangeSlider/RangeSlider';
+
+import CheckboxGroupCategory from '../CheckboxGroup/CheckBoxGroup';
 
 function AppHeader() {
   // const handleSubmitSearchMessage: React.FormEventHandler<HTMLFormElement> | undefined(event: FormEvent<HTMLFormElement>) => {
@@ -190,18 +193,14 @@ function AppHeader() {
             // the getAriaValueText function is called to generate the corresponding text representation of the value. This generated text is then used by screen readers to announce the current value to the user.
             getAriaValueText={(value: number) => `${value} Kilometers`}
           />
-
-          <FormControlLabel
-            control={
-              <Checkbox
-                // checked={}
-                // onChange={}
-                inputProps={{ 'aria-label': 'Categorie' }}
-              />
-            }
-            label="Categorie"
-          />
-
+          <Typography>Categorie produit</Typography>
+          <CheckboxGroupCategory />
+          <Typography>Categorie d age</Typography>
+          <CheckboxGroupCategory />
+          <Typography>Etat du produit</Typography>
+          <CheckboxGroupCategory />
+          <Typography>marqués comme favoris</Typography>
+          <Checkbox defaultChecked color="success" />
           <Button
             type="submit"
             fullWidth
