@@ -60,6 +60,7 @@ function UserProfilePage() {
     credits: 100,
     postedAds: 5,
   });
+  const [avatarSrc, setAvatarSrc] = useState('/path/to/avatar.jpg'); // Initial avatar source
 
   const handleInputChange = (field, value) => {
     setUserData((prevData) => ({ ...prevData, [field]: value }));
@@ -69,7 +70,15 @@ function UserProfilePage() {
     // Ajoutez ici la logique de sauvegarde des modifications
     console.log('newInfo', userData);
   };
+  const handleImageUpload = (event) => {
+    const file = event.target.files[0];
 
+    // Update the avatar source dynamically
+    setAvatarSrc(URL.createObjectURL(file));
+
+    // Handle the file upload logic here
+    console.log('Uploaded file:', file);
+  };
   return (
     <Box
       display="flex"
@@ -86,11 +95,26 @@ function UserProfilePage() {
           width: '100%',
         }}
       >
-        <Avatar
-          alt="User Avatar"
-          src="/path/to/avatar.jpg"
-          sx={{ width: 100, height: 100, marginBottom: 2, margin: 'auto' }}
+        <input
+          type="file"
+          accept="image/*"
+          id="image-upload"
+          style={{ display: 'none' }}
+          onChange={handleImageUpload}
         />
+        <label htmlFor="image-upload">
+          <Avatar
+            alt="User Avatar"
+            src={avatarSrc} // Set the src dynamically
+            sx={{
+              width: 100,
+              height: 100,
+              marginBottom: 2,
+              margin: 'auto',
+              cursor: 'pointer',
+            }}
+          />
+        </label>
         <div style={{ textAlign: 'center' }}>
           <Typography variant="h5" gutterBottom>
             {userData.username}
