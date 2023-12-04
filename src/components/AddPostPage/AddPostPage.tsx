@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { ChangeEvent, FormEvent, useState } from 'react';
 import {
   Typography,
   TextField,
@@ -13,52 +13,69 @@ import {
 } from '@mui/material';
 import { Add as AddIcon } from '@mui/icons-material';
 
+type FormData = {
+  title: string;
+  description: string;
+  book_title: string;
+  author: string;
+  photos: File[];
+  bookType: string;
+  age: string;
+  status: string;
+};
+
 function AddPostPage() {
-  const [title, setTitle] = useState('');
-  const [description, setDescription] = useState('');
-  const [photos, setPhotos] = useState([]);
-  const [bookType, setBookType] = useState('');
-  const [age, setAge] = useState('');
-  const [status, setStatus] = useState('');
-  const [formData, setFormData] = useState({
-    distance: 5,
+  const [formData, setFormData] = useState<FormData>({
+    title: '',
+    description: '',
+    book_title: '',
+    author: '',
+    photos: [],
     bookType: '',
     age: '',
     status: '',
   });
-  const handleTitleChange = (e) => {
-    setTitle(e.target.value);
+
+  const handleInputChange =
+    (field: keyof FormData) =>
+    (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+      setFormData((prevData) => ({
+        ...prevData,
+        [field]: event.target.value,
+      }));
+    };
+
+  const handlePhotoUpload = (event: ChangeEvent<HTMLInputElement>) => {
+    const { files } = event.target;
+    if (files) {
+      setFormData((prevData) => ({
+        ...prevData,
+        photos: [...prevData.photos, ...Array.from(files)],
+      }));
+    }
   };
 
-  const handleDescriptionChange = (e) => {
-    setDescription(e.target.value);
-  };
-
-  const handlePhotoUpload = (e) => {
-    const { files } = e.target;
-    setPhotos((prevPhotos) => [...prevPhotos, ...files]);
-  };
-
-  const handleRemovePhoto = (index) => {
-    setPhotos((prevPhotos) => {
-      const updatedPhotos = [...prevPhotos];
+  const handleRemovePhoto = (index: number) => {
+    setFormData((prevData) => {
+      const updatedPhotos = [...prevData.photos];
       updatedPhotos.splice(index, 1);
-      return updatedPhotos;
+      return {
+        ...prevData,
+        photos: updatedPhotos,
+      };
     });
   };
-  const handleCheckboxChange = (category, value) => {
+
+  const handleCheckboxChange = (category: keyof FormData, value: string) => {
     setFormData((prevData) => ({
       ...prevData,
       [category]: prevData[category] === value ? '' : value,
     }));
   };
-  const handleSubmit = (event) => {
+
+  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    // Handle form submission logic here
-    console.log('Title:', title);
-    console.log('Description:', description);
-    console.log('Photos:', photos);
-    console.log('FormCheckbox:', formData);
+    console.log('Form Data:', formData);
   };
 
   return (
@@ -73,8 +90,8 @@ function AddPostPage() {
               <TextField
                 label="Titre de l'annonce"
                 fullWidth
-                value={title}
-                onChange={handleTitleChange}
+                value={formData.title}
+                onChange={handleInputChange('title')}
               />
             </Grid>
             <Grid item xs={12}>
@@ -83,8 +100,28 @@ function AddPostPage() {
                 multiline
                 rows={4}
                 fullWidth
-                value={description}
-                onChange={handleDescriptionChange}
+                value={formData.description}
+                onChange={handleInputChange('description')}
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <TextField
+                label="Titre de l'ouvrage"
+                multiline
+                rows={4}
+                fullWidth
+                value={formData.book_title}
+                onChange={handleInputChange('book_title')}
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <TextField
+                label="Auteur de l'ouvrage"
+                multiline
+                rows={4}
+                fullWidth
+                value={formData.author}
+                onChange={handleInputChange('author')}
               />
             </Grid>
             <Grid item xs={12}>
@@ -106,7 +143,7 @@ function AddPostPage() {
                 </Button>
               </label>
             </Grid>
-            {photos.map((photo, index) => (
+            {formData.photos.map((photo, index) => (
               <Grid item xs={3} key={index}>
                 <img
                   src={URL.createObjectURL(photo)}
@@ -118,10 +155,28 @@ function AddPostPage() {
                 </IconButton>
               </Grid>
             ))}
-            <Grid item xs={12}>
+            <Grid
+              item
+              // xs={12}
+              // style={{
+              //   display: 'flex',
+              //   flexDirection: 'column',
+              // }}
+              sx={{
+                // Styles pour les écrans extra petits (xs) à moyens (md)
+                '@media (max-width:600px)': {
+                  display: 'flex',
+                  flexDirection: 'column',
+                },
+                // Styles pour les écrans larges (lg) et très larges (xl)
+                '@media (min-width:1200px)': {
+                  display: 'flex',
+                  flexDirection: 'row',
+                },
+              }}
+            >
               <div>
-                <h3>Book Types</h3>
-
+                <h3>Type d'ouvrage</h3>
                 <FormGroup style={{ display: 'flex', flexDirection: 'row' }}>
                   <FormControlLabel
                     control={
@@ -137,24 +192,22 @@ function AddPostPage() {
                   <FormControlLabel
                     control={
                       <Checkbox
-                        checked={formData.bookType === 'book'}
+                        checked={formData.bookType === 'livre'}
                         onChange={() =>
-                          handleCheckboxChange('bookType', 'book')
+                          handleCheckboxChange('bookType', 'livre')
                         }
                       />
                     }
-                    label="Book"
+                    label="Livre"
                   />
                   <FormControlLabel
                     control={
                       <Checkbox
-                        checked={formData.bookType === 'comics'}
-                        onChange={() =>
-                          handleCheckboxChange('bookType', 'comics')
-                        }
+                        checked={formData.bookType === 'bd'}
+                        onChange={() => handleCheckboxChange('bookType', 'bd')}
                       />
                     }
-                    label="Comics"
+                    label="Bande dessinée"
                   />
                 </FormGroup>
               </div>
@@ -164,20 +217,20 @@ function AddPostPage() {
                   <FormControlLabel
                     control={
                       <Checkbox
-                        checked={formData.age === 'adult'}
-                        onChange={() => handleCheckboxChange('age', 'adult')}
+                        checked={formData.age === 'tous'}
+                        onChange={() => handleCheckboxChange('age', 'tous')}
                       />
                     }
-                    label="adult"
+                    label="Adulte"
                   />
                   <FormControlLabel
                     control={
                       <Checkbox
-                        checked={formData.age === 'kid'}
-                        onChange={() => handleCheckboxChange('age', 'kid')}
+                        checked={formData.age === 'enfant'}
+                        onChange={() => handleCheckboxChange('age', 'enfant')}
                       />
                     }
-                    label="kid"
+                    label="enfant"
                   />
                 </FormGroup>
               </div>
@@ -187,36 +240,36 @@ function AddPostPage() {
                   <FormControlLabel
                     control={
                       <Checkbox
-                        checked={formData.status === 'good'}
-                        onChange={() => handleCheckboxChange('status', 'good')}
+                        checked={formData.status === 'neuf'}
+                        onChange={() => handleCheckboxChange('status', 'neuf')}
                       />
                     }
-                    label="good"
+                    label="Comme  neuf"
                   />
                   <FormControlLabel
                     control={
                       <Checkbox
-                        checked={formData.status === 'ok'}
-                        onChange={() => handleCheckboxChange('status', 'ok')}
+                        checked={formData.status === 'bon'}
+                        onChange={() => handleCheckboxChange('status', 'bon')}
                       />
                     }
-                    label="ok"
+                    label="Bon état"
                   />
                   <FormControlLabel
                     control={
                       <Checkbox
-                        checked={formData.status === 'bad'}
-                        onChange={() => handleCheckboxChange('status', 'bad')}
+                        checked={formData.status === 'abime'}
+                        onChange={() => handleCheckboxChange('status', 'abime')}
                       />
                     }
-                    label="bad"
+                    label="Abimé"
                   />
                 </FormGroup>
               </div>
             </Grid>
             <Grid item xs={12}>
               <Button variant="contained" color="primary" type="submit">
-                Publier lannonce
+                Publier
               </Button>
             </Grid>
           </Grid>
