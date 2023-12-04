@@ -118,11 +118,11 @@ function AddPostPage() {
                 </IconButton>
               </Grid>
             ))}
-            <Grid item xs={12} style={{ display: 'flex' }}>
+            <Grid item xs={12}>
               <div>
                 <h3>Book Types</h3>
 
-                <FormGroup>
+                <FormGroup style={{ display: 'flex', flexDirection: 'row' }}>
                   <FormControlLabel
                     control={
                       <Checkbox
@@ -160,7 +160,7 @@ function AddPostPage() {
               </div>
               <div>
                 <h3>Age</h3>
-                <FormGroup>
+                <FormGroup style={{ display: 'flex', flexDirection: 'row' }}>
                   <FormControlLabel
                     control={
                       <Checkbox
@@ -183,7 +183,7 @@ function AddPostPage() {
               </div>
               <div>
                 <h3>Status</h3>
-                <FormGroup>
+                <FormGroup style={{ display: 'flex', flexDirection: 'row' }}>
                   <FormControlLabel
                     control={
                       <Checkbox
