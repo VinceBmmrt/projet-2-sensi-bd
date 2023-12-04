@@ -1,7 +1,7 @@
 import { Alert, AlertTitle } from '@mui/material';
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
-import React, { useState, ChangeEvent, FormEvent } from 'react';
+import React, { useState, ChangeEvent, FormEvent, LegacyRef } from 'react';
 import { usePlacesWidget } from 'react-google-autocomplete';
 
 type FormData = {
@@ -16,8 +16,8 @@ type FormData = {
 };
 
 function SignupForm() {
-  // const googlePlacesAPIKey = import.meta.env
-  //   .VITE_REACT_APP_GOOGLE_PLACES_API_KEY;
+  const googlePlacesAPIKey = import.meta.env.VITE_GOOGLE_API_KEY;
+  console.log('🚀 ~ googlePlacesAPIKey:', googlePlacesAPIKey);
   const passwordRegex =
     /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
   const [formData, setFormData] = useState<FormData>({
@@ -46,7 +46,7 @@ function SignupForm() {
   };
 
   const { ref: placesRef, autocompleteRef } = usePlacesWidget({
-    apiKey: 'YOUR_GOOGLE_MAPS_API_KEY',
+    apiKey: googlePlacesAPIKey,
     onPlaceSelected: (place) => {
       // Update the address in the form data when a place is selected
       setFormData((prevData) => ({
@@ -131,7 +131,7 @@ function SignupForm() {
       />
       {/* Use the placesRef for the input field */}
       <input
-        ref={placesRef}
+        ref={placesRef as unknown as LegacyRef<HTMLInputElement>}
         placeholder="Address"
         autoComplete="off"
         name="address"
