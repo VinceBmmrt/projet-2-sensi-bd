@@ -1,7 +1,7 @@
 import Posts from '../Posts/Posts';
 import AppHeader from '../appHeader/appHeader';
 import data from '../../data';
-import SimpleBottomNavigation from '../BottomNav/BottomNav';
+
 // TO DO remplacer la data far un fetch axios
 // import { useAppSelector } from '../../hooks/redux';
 
@@ -11,7 +11,6 @@ function Home() {
     <div className="home">
       <AppHeader />
       <Posts posts={data} />
-      <SimpleBottomNavigation />
     </div>
   );
 }
