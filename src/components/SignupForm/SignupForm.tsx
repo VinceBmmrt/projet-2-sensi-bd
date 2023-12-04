@@ -85,20 +85,32 @@ function SignupForm() {
   };
 
   return (
-    <form onSubmit={handleSubmit}>
-      <TextField
-        label="First Name"
-        name="firstname"
-        value={formData.firstname}
-        onChange={handleChange}
-        required
-      />
+    <form
+      onSubmit={handleSubmit}
+      style={{
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'center',
+      }}
+    >
+      <div style={{ paddingTop: '20px' }}>
+        <TextField
+          label="First Name"
+          name="firstname"
+          value={formData.firstname}
+          onChange={handleChange}
+          required
+          sx={{ mb: 2 }} // Add margin-bottom for spacing
+        />
+      </div>
       <TextField
         label="Last Name"
         name="lastname"
         value={formData.lastname}
         onChange={handleChange}
         required
+        sx={{ mb: 2 }} // Add margin-bottom for spacing
       />
       <TextField
         label="Nickname"
@@ -106,6 +118,7 @@ function SignupForm() {
         value={formData.nickname}
         onChange={handleChange}
         required
+        sx={{ mb: 2 }} // Add margin-bottom for spacing
       />
       <TextField
         label="Email"
@@ -114,6 +127,7 @@ function SignupForm() {
         value={formData.email}
         onChange={handleChange}
         required
+        sx={{ mb: 2 }} // Add margin-bottom for spacing
       />
       {/* Use the placesRef for the input field */}
       <input
@@ -125,6 +139,7 @@ function SignupForm() {
         onChange={handleChange}
         value={formData.address}
         required
+        style={{ marginBottom: '16px' }} // Add margin-bottom for spacing
       />
       <TextField
         label="Password"
@@ -138,6 +153,7 @@ function SignupForm() {
             'Password must be at least 8 characters long and include at least one uppercase letter, one lowercase letter, one digit, and one special character.',
         }}
         required
+        sx={{ mb: 2 }} // Add margin-bottom for spacing
       />
       <TextField
         label="Confirm Password"
@@ -146,6 +162,7 @@ function SignupForm() {
         value={formData.confirmPassword}
         onChange={handleChange}
         required
+        sx={{ mb: 2 }} // Add margin-bottom for spacing
       />
       {formData.error && (
         <Alert severity="warning">
