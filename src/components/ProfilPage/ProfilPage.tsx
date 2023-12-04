@@ -91,12 +91,14 @@ function UserProfilePage() {
           src="/path/to/avatar.jpg"
           sx={{ width: 100, height: 100, marginBottom: 2, margin: 'auto' }}
         />
-        <Typography variant="h5" gutterBottom>
-          {userData.username}
-        </Typography>
-        <Typography>
-          Crédits: {userData.credits} | Annonces postées: {userData.postedAds}
-        </Typography>
+        <div style={{ textAlign: 'center' }}>
+          <Typography variant="h5" gutterBottom>
+            {userData.username}
+          </Typography>
+          <Typography>
+            Crédits: {userData.credits} | Annonces postées: {userData.postedAds}
+          </Typography>
+        </div>
         <div style={{ marginTop: 16, textAlign: 'center' }}>
           <Typography variant="h6" gutterBottom>
             Récapitulatif des informations
@@ -129,19 +131,18 @@ function UserProfilePage() {
           />
         </Grid>
 
-        <div style={{ marginTop: 16 }}>
+        <div style={{ marginTop: 16, textAlign: 'center' }}>
           <Link href="/mes-annonces">Mes annonces</Link>
           <span style={{ margin: '0 8px' }}>|</span>
           <Link href="/mes-favoris">Mes favoris</Link>
         </div>
-        <Button
-          variant="contained"
-          color="primary"
-          style={{ marginTop: 16 }}
-          onClick={handleSaveClick}
+        <div
+          style={{ marginTop: 16, display: 'flex', justifyContent: 'center' }}
         >
-          Enregistrer les modifications
-        </Button>
+          <Button variant="contained" color="primary" onClick={handleSaveClick}>
+            Enregistrer les modifications
+          </Button>
+        </div>
       </Paper>
     </Box>
   );
