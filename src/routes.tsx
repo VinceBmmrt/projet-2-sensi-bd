@@ -22,10 +22,6 @@ export const router = createBrowserRouter([
         element: <Login />,
       },
       {
-        path: '/new-post',
-        element: <AddPostPage />,
-      },
-      {
         path: '/profil',
         element: <UserProfilePage />,
       },
