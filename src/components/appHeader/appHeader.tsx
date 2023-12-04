@@ -146,11 +146,13 @@ function AppHeader() {
   return (
     <header className="header">
       <div className="header__topContainer">
-        <img
-          src={logo}
-          className="header__topContainer-logo"
-          alt="Logo Leeaf"
-        />
+        <div className="header__topContainer-logo-container">
+          <img
+            src={logo}
+            className="header__topContainer-logo"
+            alt="Logo Leeaf"
+          />
+        </div>
         <div className="header__topContainer-credit">
           <div className="header__topContainer-creditCount">9999</div>
           <img

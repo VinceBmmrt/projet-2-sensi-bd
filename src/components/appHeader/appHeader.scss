@@ -21,3 +21,28 @@
   align-items: end;
   height: '100%';
 }
+.header__topContainer-logo-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100px; /* Ajustez la hauteur selon vos besoins */
+}
+
+.header__topContainer-logo {
+  width: 100px; /* Ajustez la largeur selon vos besoins */
+  height: auto;
+  animation: pulse 2s infinite; /* Animation de pulsation pendant 2 secondes en boucle infinie */
+  padding: 1rem;
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.1);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
