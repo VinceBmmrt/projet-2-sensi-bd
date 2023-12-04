@@ -13,6 +13,7 @@ import {
   Divider,
   Drawer,
   FormControlLabel,
+  FormGroup,
   FormLabel,
   IconButton,
   Slider,
@@ -26,10 +27,14 @@ import logo from '../../assets/leaf_color.png';
 import leafIcon from '../../../public/feuille.png';
 import './appHeader.scss';
 import Posts from '../Posts/Posts';
-import RangeSlider from '../RangeSlider/RangeSlider';
 
-import CheckboxGroupCategory from '../CheckboxGroup/CheckBoxGroup';
-
+type FilterData = {
+  distance: number | number[];
+  bookType: string;
+  age: string;
+  status: string;
+  reserved: boolean;
+};
 function AppHeader() {
   // const handleSubmitSearchMessage: React.FormEventHandler<HTMLFormElement> | undefined(event: FormEvent<HTMLFormElement>) => {
 
@@ -48,7 +53,14 @@ function AppHeader() {
   const [distanceFilterValue, setDistanceFilterValue] = useState<number[]>([
     5, 50,
   ]);
-
+  const [drawerOpen, setDrawerOpen] = useState(false);
+  const [formData, setFormData] = useState<FilterData>({
+    distance: 5,
+    bookType: '',
+    age: '',
+    status: '',
+    reserved: false,
+  });
   const DrawerHeader = styled('div')(() => ({
     display: 'flex',
     alignItems: 'center',
@@ -108,14 +120,29 @@ function AppHeader() {
   const handleDrawerClose = () => {
     setOpen(false);
   };
-  const handleChangeDistanceFilterValue = (
-    event: Event,
-    newValue: number | number[]
-  ) => {
-    setDistanceFilterValue(newValue as number[]);
-    console.log(distanceFilterValue);
+  // const handleChangeDistanceFilterValue = (
+  //   event: Event,
+  //   newValue: number | number[]
+  // ) => {
+  //   setDistanceFilterValue(newValue as number[]);
+  //   console.log(distanceFilterValue);
+  // };
+  const handleSliderChange = (event: Event, newValue: number | number[]) => {
+    setFormData({ ...formData, distance: newValue });
   };
 
+  const handleCheckboxChange = (category, value) => {
+    setFormData((prevData) => ({
+      ...prevData,
+      [category]: prevData[category] === value ? '' : value,
+    }));
+  };
+
+  const handleSubmit = (event: Event) => {
+    event.preventDefault();
+    console.log(formData);
+    // Add your form submission logic here
+  };
   return (
     <header className="header">
       <div className="header__topContainer">
@@ -187,35 +214,125 @@ function AppHeader() {
           </IconButton>
         </DrawerHeader>
         <Divider />
-        <Box component="form" noValidate sx={{ mt: 1 }}>
-          <FormLabel>
-            <RangeSlider
-              value={distanceFilterValue}
-              onChange={handleChangeDistanceFilterValue}
-              valueLabelDisplay="auto"
-              // the getAriaValueText function is called to generate the corresponding text representation of the value. This generated text is then used by screen readers to announce the current value to the user.
-              getAriaValueText={(value: number) => `${value} Kilometers`}
-            />
-            <Typography>Categorie produit</Typography>
-            <CheckboxGroupCategory />
-            <Typography>Categorie d age</Typography>
-            <CheckboxGroupCategory />
-            <Typography>Etat du produit</Typography>
-            <CheckboxGroupCategory />
-            <Typography>marqués comme favoris</Typography>
-            <Checkbox defaultChecked color="success" />
-            <Button
-              type="submit"
-              fullWidth
-              variant="contained"
-              sx={{ mt: 3, mb: 2 }}
-              // onClick={}
-              // onSubmit={}
-            >
-              Valider les filtres
+        <div>
+          <h2>Filter Options</h2>
+          <form onSubmit={handleSubmit}>
+            <div>
+              <label>Distance Range</label>
+              <Slider
+                value={formData.distance}
+                onChange={handleSliderChange}
+                valueLabelDisplay="auto"
+                valueLabelFormat={(value) => `${value} km`}
+                max={10}
+              />
+            </div>
+            <div>
+              <h3>Book Types</h3>
+              <FormGroup>
+                <FormControlLabel
+                  control={
+                    <Checkbox
+                      checked={formData.bookType === 'magazine'}
+                      onChange={() =>
+                        handleCheckboxChange('bookType', 'magazine')
+                      }
+                    />
+                  }
+                  label="Magazine"
+                />
+                <FormControlLabel
+                  control={
+                    <Checkbox
+                      checked={formData.bookType === 'book'}
+                      onChange={() => handleCheckboxChange('bookType', 'book')}
+                    />
+                  }
+                  label="Book"
+                />
+                <FormControlLabel
+                  control={
+                    <Checkbox
+                      checked={formData.bookType === 'comics'}
+                      onChange={() =>
+                        handleCheckboxChange('bookType', 'comics')
+                      }
+                    />
+                  }
+                  label="Comics"
+                />
+              </FormGroup>
+            </div>
+            <div>
+              <h3>Age</h3>
+              <FormGroup>
+                <FormControlLabel
+                  control={
+                    <Checkbox
+                      checked={formData.age === 'adult'}
+                      onChange={() => handleCheckboxChange('age', 'adult')}
+                    />
+                  }
+                  label="adult"
+                />
+                <FormControlLabel
+                  control={
+                    <Checkbox
+                      checked={formData.age === 'kid'}
+                      onChange={() => handleCheckboxChange('age', 'kid')}
+                    />
+                  }
+                  label="kid"
+                />
+              </FormGroup>
+            </div>
+            <div>
+              <h3>Status</h3>
+              <FormGroup>
+                <FormControlLabel
+                  control={
+                    <Checkbox
+                      checked={formData.status === 'good'}
+                      onChange={() => handleCheckboxChange('status', 'good')}
+                    />
+                  }
+                  label="good"
+                />
+                <FormControlLabel
+                  control={
+                    <Checkbox
+                      checked={formData.status === 'ok'}
+                      onChange={() => handleCheckboxChange('status', 'ok')}
+                    />
+                  }
+                  label="ok"
+                />
+                <FormControlLabel
+                  control={
+                    <Checkbox
+                      checked={formData.status === 'bad'}
+                      onChange={() => handleCheckboxChange('status', 'bad')}
+                    />
+                  }
+                  label="bad"
+                />
+              </FormGroup>
+            </div>
+            <div>
+              <h3>Reserved</h3>
+              <FormGroup>
+                <FormControlLabel
+                  control={<Checkbox />}
+                  label="Reserved"
+                  onChange={() => handleCheckboxChange('reserved', true)}
+                />
+              </FormGroup>
+            </div>
+            <Button type="submit" variant="contained" color="primary">
+              Submit
             </Button>
-          </FormLabel>
-        </Box>
+          </form>
+        </div>
         <Divider />
       </Drawer>
     </header>
