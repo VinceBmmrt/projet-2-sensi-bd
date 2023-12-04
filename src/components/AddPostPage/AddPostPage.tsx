@@ -118,7 +118,7 @@ function AddPostPage() {
                 </IconButton>
               </Grid>
             ))}
-            <Grid item xs={12} style={{ display: 'flex' }}>
+            <Grid item xs={12}>
               <div>
                 <h3>Book Types</h3>
 
