@@ -155,17 +155,18 @@ function UserProfilePage() {
           />
         </Grid>
 
-        <div style={{ marginTop: 16, textAlign: 'center' }}>
-          <Link href="/mes-annonces">Mes annonces</Link>
-          <span style={{ margin: '0 8px' }}>|</span>
-          <Link href="/mes-favoris">Mes favoris</Link>
-        </div>
         <div
           style={{ marginTop: 16, display: 'flex', justifyContent: 'center' }}
         >
           <Button variant="contained" color="primary" onClick={handleSaveClick}>
             Enregistrer les modifications
           </Button>
+        </div>
+        <div style={{ marginTop: 16, textAlign: 'center' }}>
+          <Link href="/mes-annonces">Mes annonces</Link>
+          <span style={{ margin: '0 8px' }}>|</span>
+          <Link href="/mes-favoris">Mes favoris</Link>
+          <Link href="/">Me déconnecter</Link>
         </div>
       </Paper>
     </Box>
