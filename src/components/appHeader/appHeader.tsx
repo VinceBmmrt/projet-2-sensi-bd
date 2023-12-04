@@ -13,6 +13,7 @@ import {
   Divider,
   Drawer,
   FormControlLabel,
+  FormLabel,
   IconButton,
   Slider,
   TextField,
@@ -114,6 +115,7 @@ function AppHeader() {
     setDistanceFilterValue(newValue as number[]);
     console.log(distanceFilterValue);
   };
+
   return (
     <header className="header">
       <div className="header__topContainer">
@@ -186,30 +188,33 @@ function AppHeader() {
         </DrawerHeader>
         <Divider />
         <Box component="form" noValidate sx={{ mt: 1 }}>
-          <RangeSlider
-            value={distanceFilterValue}
-            onChange={handleChangeDistanceFilterValue}
-            valueLabelDisplay="auto"
-            // the getAriaValueText function is called to generate the corresponding text representation of the value. This generated text is then used by screen readers to announce the current value to the user.
-            getAriaValueText={(value: number) => `${value} Kilometers`}
-          />
-          <Typography>Categorie produit</Typography>
-          <CheckboxGroupCategory />
-          <Typography>Categorie d age</Typography>
-          <CheckboxGroupCategory />
-          <Typography>Etat du produit</Typography>
-          <CheckboxGroupCategory />
-          <Typography>marqués comme favoris</Typography>
-          <Checkbox defaultChecked color="success" />
-          <Button
-            type="submit"
-            fullWidth
-            variant="contained"
-            sx={{ mt: 3, mb: 2 }}
-            // onClick={}
-          >
-            Valider les filtres
-          </Button>
+          <FormLabel>
+            <RangeSlider
+              value={distanceFilterValue}
+              onChange={handleChangeDistanceFilterValue}
+              valueLabelDisplay="auto"
+              // the getAriaValueText function is called to generate the corresponding text representation of the value. This generated text is then used by screen readers to announce the current value to the user.
+              getAriaValueText={(value: number) => `${value} Kilometers`}
+            />
+            <Typography>Categorie produit</Typography>
+            <CheckboxGroupCategory />
+            <Typography>Categorie d age</Typography>
+            <CheckboxGroupCategory />
+            <Typography>Etat du produit</Typography>
+            <CheckboxGroupCategory />
+            <Typography>marqués comme favoris</Typography>
+            <Checkbox defaultChecked color="success" />
+            <Button
+              type="submit"
+              fullWidth
+              variant="contained"
+              sx={{ mt: 3, mb: 2 }}
+              // onClick={}
+              // onSubmit={}
+            >
+              Valider les filtres
+            </Button>
+          </FormLabel>
         </Box>
         <Divider />
       </Drawer>

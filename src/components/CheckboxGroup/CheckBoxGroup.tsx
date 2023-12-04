@@ -21,8 +21,8 @@ function CheckboxGroupCategory() {
         control={
           <Checkbox
             color="success"
-            checked={selectedCheckbox === 'label'}
-            onChange={() => handleCheckboxChange('label')}
+            checked={selectedCheckbox === 'Category1'}
+            onChange={() => handleCheckboxChange('Category1')}
           />
         }
         label="Category 1"
@@ -31,8 +31,8 @@ function CheckboxGroupCategory() {
         control={
           <Checkbox
             color="success"
-            checked={selectedCheckbox === 'required'}
-            onChange={() => handleCheckboxChange('required')}
+            checked={selectedCheckbox === 'Category2'}
+            onChange={() => handleCheckboxChange('Category2')}
           />
         }
         label="Category 2"
@@ -41,8 +41,8 @@ function CheckboxGroupCategory() {
         control={
           <Checkbox
             color="success"
-            checked={selectedCheckbox === 'disabled'}
-            onChange={() => handleCheckboxChange('disabled')}
+            checked={selectedCheckbox === 'Category3'}
+            onChange={() => handleCheckboxChange('Category3')}
           />
         }
         label="Category 3"
