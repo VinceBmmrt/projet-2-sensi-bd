@@ -1,3 +1,4 @@
+import { Alert, AlertTitle } from '@mui/material';
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 import React, { useState, ChangeEvent, FormEvent } from 'react';
@@ -11,12 +12,14 @@ type FormData = {
   address: string;
   password: string;
   confirmPassword: string;
+  error: boolean;
 };
 
 function SignupForm() {
   // const googlePlacesAPIKey = import.meta.env
   //   .VITE_REACT_APP_GOOGLE_PLACES_API_KEY;
-
+  const passwordRegex =
+    /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
   const [formData, setFormData] = useState<FormData>({
     firstname: '',
     lastname: '',
@@ -25,11 +28,21 @@ function SignupForm() {
     address: '',
     password: '',
     confirmPassword: '',
+    error: false,
   });
 
   const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
-    setFormData((prevData) => ({ ...prevData, [name]: value }));
+    // Reset the error state when passwords are updated
+    if (name === 'password' || name === 'confirmPassword') {
+      setFormData((prevData) => ({
+        ...prevData,
+        [name]: value,
+        error: false,
+      }));
+    } else {
+      setFormData((prevData) => ({ ...prevData, [name]: value }));
+    }
   };
 
   const { ref: placesRef, autocompleteRef } = usePlacesWidget({
@@ -49,9 +62,23 @@ function SignupForm() {
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+    // Check if password and confirmPassword match
+    if (formData.password !== formData.confirmPassword) {
+      console.error('Passwords do not match');
+      // Optionally, you can show an error message to the user
+
+      setFormData((prevData) => ({
+        ...prevData,
+        error: true,
+      }));
+      return;
+    }
+
     try {
       // Your form submission logic
       console.log(formData);
+
+      console.log('🚀 ~   formData.error:', formData.error);
     } catch (error) {
       console.error('Error submitting form:', error);
     }
@@ -105,6 +132,11 @@ function SignupForm() {
         name="password"
         value={formData.password}
         onChange={handleChange}
+        inputProps={{
+          pattern: passwordRegex.source,
+          title:
+            'Password must be at least 8 characters long and include at least one uppercase letter, one lowercase letter, one digit, and one special character.',
+        }}
         required
       />
       <TextField
@@ -115,6 +147,12 @@ function SignupForm() {
         onChange={handleChange}
         required
       />
+      {formData.error && (
+        <Alert severity="warning">
+          <AlertTitle>Warning</AlertTitle>
+          Passwords do not match — <strong>check it out!</strong>
+        </Alert>
+      )}
       <Button type="submit" variant="contained" color="primary">
         Sign Up
       </Button>
