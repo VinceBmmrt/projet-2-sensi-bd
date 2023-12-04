@@ -14,6 +14,9 @@ type FormData = {
 };
 
 function SignupForm() {
+  // const googlePlacesAPIKey = import.meta.env
+  //   .VITE_REACT_APP_GOOGLE_PLACES_API_KEY;
+
   const [formData, setFormData] = useState<FormData>({
     firstname: '',
     lastname: '',
