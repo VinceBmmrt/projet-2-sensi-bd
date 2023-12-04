@@ -1,7 +1,7 @@
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 import React, { useState, ChangeEvent, FormEvent } from 'react';
-import GooglePlacesAutocomplete from 'react-google-autocomplete';
+import { usePlacesWidget } from 'react-google-autocomplete';
 
 type FormData = {
   firstname: string;
@@ -29,12 +29,20 @@ function SignupForm() {
     setFormData((prevData) => ({ ...prevData, [name]: value }));
   };
 
-  const handleAddressChange = (place) => {
-    setFormData((prevData) => ({
-      ...prevData,
-      address: place.formatted_address,
-    }));
-  };
+  const { ref: placesRef, autocompleteRef } = usePlacesWidget({
+    apiKey: 'YOUR_GOOGLE_MAPS_API_KEY',
+    onPlaceSelected: (place) => {
+      // Update the address in the form data when a place is selected
+      setFormData((prevData) => ({
+        ...prevData,
+        address: place.formatted_address,
+      }));
+    },
+    options: {
+      types: ['address'],
+      componentRestrictions: { country: 'FR' },
+    },
+  });
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -77,16 +85,16 @@ function SignupForm() {
         onChange={handleChange}
         required
       />
-      <GooglePlacesAutocomplete
-        apiKey="AIzaSyBe1bXbz2e6IzfLTVygUgInpIVCu3DC4ko"
-        selectProps={{
-          onChange: handleAddressChange,
-          placeholder: 'Start typing your address...',
-        }}
-        options={{
-          types: ['address'],
-          componentRestrictions: { country: 'FR' },
-        }}
+      {/* Use the placesRef for the input field */}
+      <input
+        ref={placesRef}
+        placeholder="Address"
+        autoComplete="off"
+        name="address"
+        type="text"
+        onChange={handleChange}
+        value={formData.address}
+        required
       />
       <TextField
         label="Password"
