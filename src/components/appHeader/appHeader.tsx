@@ -99,7 +99,6 @@ function AppHeader() {
           </Link>
         </div>
       </div>
-
       <div className="header__searchContainer">
         <form className="header__searchContainer-searchBar">
           <TextField
@@ -125,6 +124,7 @@ function AppHeader() {
           </IconButton>
         </div>
       </div>
+
       <Drawer
         sx={{
           width: drawerWidth,
@@ -147,21 +147,24 @@ function AppHeader() {
           </IconButton>
         </DrawerHeader>
         <Divider />
-        <div>
-          <h2>Filter Options</h2>
+        <div className="drawer">
+          <h2>Options de filtres</h2>
           <form onSubmit={handleSubmit}>
             <div>
-              <label>Distance Range</label>
+              <label>Distance autour de chez vous</label>
               <Slider
                 value={formData.distance}
                 onChange={handleSliderChange}
                 valueLabelDisplay="auto"
                 valueLabelFormat={(value) => `${value} km`}
                 max={10}
+                sx={{
+                  color: '#95C23D',
+                }}
               />
             </div>
-            <div>
-              <h3>Book Types</h3>
+            <div className="drawer__categories">
+              <h3>Catégories</h3>
               <FormGroup>
                 <FormControlLabel
                   control={
@@ -181,7 +184,7 @@ function AppHeader() {
                       onChange={() => handleCheckboxChange('bookType', 'book')}
                     />
                   }
-                  label="Book"
+                  label="Livres"
                 />
                 <FormControlLabel
                   control={
@@ -192,11 +195,11 @@ function AppHeader() {
                       }
                     />
                   }
-                  label="Comics"
+                  label="Bande dsessinée"
                 />
               </FormGroup>
             </div>
-            <div>
+            <div className="drawer__audience">
               <h3>Age</h3>
               <FormGroup>
                 <FormControlLabel
@@ -206,7 +209,7 @@ function AppHeader() {
                       onChange={() => handleCheckboxChange('age', 'adult')}
                     />
                   }
-                  label="adult"
+                  label="adultes"
                 />
                 <FormControlLabel
                   control={
@@ -215,11 +218,11 @@ function AppHeader() {
                       onChange={() => handleCheckboxChange('age', 'kid')}
                     />
                   }
-                  label="kid"
+                  label="enfants"
                 />
               </FormGroup>
             </div>
-            <div>
+            <div className="drawer__condition">
               <h3>Status</h3>
               <FormGroup>
                 <FormControlLabel
@@ -229,7 +232,7 @@ function AppHeader() {
                       onChange={() => handleCheckboxChange('status', 'good')}
                     />
                   }
-                  label="good"
+                  label="Comme neuf"
                 />
                 <FormControlLabel
                   control={
@@ -238,7 +241,7 @@ function AppHeader() {
                       onChange={() => handleCheckboxChange('status', 'ok')}
                     />
                   }
-                  label="ok"
+                  label="Bon état"
                 />
                 <FormControlLabel
                   control={
@@ -247,21 +250,22 @@ function AppHeader() {
                       onChange={() => handleCheckboxChange('status', 'bad')}
                     />
                   }
-                  label="bad"
+                  label="Abimé"
                 />
               </FormGroup>
             </div>
-            <div>
-              <h3>Reserved</h3>
-              <FormGroup>
-                <FormControlLabel
-                  control={<Checkbox />}
-                  label="Reserved"
-                  onChange={() => handleCheckboxChange('reserved', true)}
-                />
-              </FormGroup>
-            </div>
-            <Button type="submit" variant="contained" color="primary">
+
+            <Button
+              type="submit"
+              variant="contained"
+              color="primary"
+              sx={{
+                backgroundColor: '#95C23D', // Change this to the desired color
+                '&:hover': {
+                  backgroundColor: '#7E9D2D', // Change this to the desired hover color
+                },
+              }}
+            >
               Submit
             </Button>
           </form>

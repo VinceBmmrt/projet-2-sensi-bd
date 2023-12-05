@@ -48,6 +48,23 @@
   }
 }
 
+.css-fiov70 {
+  min-height: 30px;
+}
+
+.drawer {
+  margin-top: 0, 5rem;
+  padding: 1rem;
+  &__categories {
+    margin-bottom: 1rem;
+  }
+  &__audience {
+    margin-bottom: 1rem;
+  }
+  &__condition {
+    margin-bottom: 1rem;
+  }
+}
 //animation logo test pulse
 // .header__topContainer-logo-container {
 //   display: flex;
