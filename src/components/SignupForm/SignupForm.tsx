@@ -40,6 +40,21 @@ function SignupForm() {
     );
     const data = await response.json();
     console.log('🚀 ~ data:', data);
+    console.log('response', data.results);
+    console.log(
+      'Numéro de Rue :',
+      data.results[0].address_components[0].short_name
+    );
+    console.log(
+      'Nom de Rue :',
+      data.results[0].address_components[1].short_name
+    );
+    console.log(
+      'Code Postal :',
+      data.results[0].address_components[6].short_name
+    );
+    console.log('Ville :', data.results[0].address_components[2].short_name);
+    console.log('Pays :', data.results[0].address_components[5].short_name);
 
     if (data.results.length > 0) {
       const { location } = data.results[0].geometry;
@@ -81,25 +96,25 @@ function SignupForm() {
 
     const hashedPassword = await bcrypt.hash(formData.password, 10);
 
-    const addressParts = formData.address.split(',').map((part) => part.trim());
-    // Assurez-vous que l'adresse a au moins trois parties (rue, ville, pays)
-    if (addressParts.length >= 3) {
-      const [streetWithNumber, postalCodeCity, country] = addressParts;
-      // Sépare le numéro de rue et le nom de rue
-      const streetParts = streetWithNumber.split(' ');
-      const streetNumber = streetParts.shift(); // Premier élément est le numéro de rue
-      const streetName = streetParts.join(' '); // Les éléments restants sont le nom de rue
-      // Sépare le code postal et la ville
-      const [postalCode, city] = postalCodeCity.split(' ');
-      console.log('🚀 ~ formData.address:', formData.address);
-      console.log('Numéro de Rue :', streetNumber);
-      console.log('Nom de Rue :', streetName);
-      console.log('Code Postal :', postalCode);
-      console.log('Ville :', city);
-      console.log('Pays :', country);
-    } else {
-      console.error("Format d'adresse invalide");
-    }
+    // const addressParts = formData.address.split(',').map((part) => part.trim());
+    // // Assurez-vous que l'adresse a au moins trois parties (rue, ville, pays)
+    // if (addressParts.length >= 3) {
+    //   const [streetWithNumber, postalCodeCity, country] = addressParts;
+    //   // Sépare le numéro de rue et le nom de rue
+    //   const streetParts = streetWithNumber.split(' ');
+    //   const streetNumber = streetParts.shift(); // Premier élément est le numéro de rue
+    //   const streetName = streetParts.join(' '); // Les éléments restants sont le nom de rue
+    //   // Sépare le code postal et la ville
+    //   const [postalCode, city] = postalCodeCity.split(' ');
+    //   console.log('🚀 ~ formData.address:', formData.address);
+    //   console.log('Numéro de Rue :', streetNumber);
+    //   console.log('Nom de Rue :', streetName);
+    //   console.log('Code Postal :', postalCode);
+    //   console.log('Ville :', city);
+    //   console.log('Pays :', country);
+    // } else {
+    //   console.error("Format d'adresse invalide");
+    // }
 
     try {
       const coordinates = await getCoordinates(formData.address);
