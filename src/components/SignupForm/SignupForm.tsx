@@ -30,6 +30,7 @@ function SignupForm() {
     confirmPassword: '',
     error: false,
   });
+  const [address, setAddress] = useState('');
 
   const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
@@ -62,6 +63,25 @@ function SignupForm() {
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+    const addressParts = formData.address.split(',').map((part) => part.trim());
+    // Assurez-vous que l'adresse a au moins trois parties (rue, ville, pays)
+    if (addressParts.length >= 3) {
+      const [streetWithNumber, postalCodeCity, country] = addressParts;
+      // Sépare le numéro de rue et le nom de rue
+      const streetParts = streetWithNumber.split(' ');
+      const streetNumber = streetParts.shift(); // Premier élément est le numéro de rue
+      const streetName = streetParts.join(' '); // Les éléments restants sont le nom de rue
+      // Sépare le code postal et la ville
+      const [postalCode, city] = postalCodeCity.split(' ');
+
+      console.log('Numéro de Rue :', streetNumber);
+      console.log('Nom de Rue :', streetName);
+      console.log('Code Postal :', postalCode);
+      console.log('Ville :', city);
+      console.log('Pays :', country);
+    } else {
+      console.error("Format d'adresse invalide");
+    }
     // Check if password and confirmPassword match
     if (formData.password !== formData.confirmPassword) {
       console.error('Passwords do not match');
@@ -71,6 +91,7 @@ function SignupForm() {
         ...prevData,
         error: true,
       }));
+
       return;
     }
 
