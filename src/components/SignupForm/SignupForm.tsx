@@ -54,7 +54,7 @@ function SignupForm() {
       data.results[0].address_components[6].short_name
     );
     console.log('Ville :', data.results[0].address_components[2].short_name);
-    console.log('Pays :', data.results[0].address_components[5].short_name);
+    console.log('Pays :', data.results[0].address_components[5].long_name);
 
     if (data.results.length > 0) {
       const { location } = data.results[0].geometry;
@@ -134,17 +134,16 @@ function SignupForm() {
         error: true,
       }));
 
-      // Utilisez hashedPassword dans votre logique d'envoi au backend
-      try {
-        console.log('Mot de passe hashé :', hashedPassword);
-
-        // ... (autres logiques d'envoi au backend)
-      } catch (error) {
-        console.error("Erreur lors de l'envoi au backend :", error);
-      }
       return;
     }
+    // Utilisez hashedPassword dans votre logique d'envoi au backend
+    try {
+      console.log('Mot de passe hashé :', hashedPassword);
 
+      // ... (autres logiques d'envoi au backend)
+    } catch (error) {
+      console.error("Erreur lors de l'envoi au backend :", error);
+    }
     try {
       // Your form submission logic
       console.log(formData);
