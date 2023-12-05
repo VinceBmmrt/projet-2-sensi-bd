@@ -18,6 +18,7 @@ type FormData = {
 function SignupForm() {
   const googlePlacesAPIKey = import.meta.env.VITE_GOOGLE_API_KEY;
   console.log('🚀 ~ googlePlacesAPIKey:', googlePlacesAPIKey);
+
   const passwordRegex =
     /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
   const [formData, setFormData] = useState<FormData>({
@@ -30,8 +31,21 @@ function SignupForm() {
     confirmPassword: '',
     error: false,
   });
-  const [address, setAddress] = useState('');
+  const getCoordinates = async (address: string) => {
+    const response = await fetch(
+      `https://maps.googleapis.com/maps/api/geocode/json?address=${encodeURIComponent(
+        address
+      )}&key=${googlePlacesAPIKey}`
+    );
+    const data = await response.json();
+    console.log('🚀 ~ data:', data);
 
+    if (data.results.length > 0) {
+      const { location } = data.results[0].geometry;
+      return { lat: location.lat, lng: location.lng };
+    }
+    throw new Error('Adresse non trouvée');
+  };
   const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
     // Reset the error state when passwords are updated
@@ -81,6 +95,16 @@ function SignupForm() {
       console.log('Pays :', country);
     } else {
       console.error("Format d'adresse invalide");
+    }
+    console.log('🚀 ~ formData.address:1', formData.address);
+    try {
+      console.log('🚀 ~ formData.address:2', formData.address);
+      const coordinates = await getCoordinates(formData.address);
+      console.log('🚀 ~ formData.address:3', formData.address);
+      console.log('Coordonnées:', coordinates);
+      // Vous pouvez faire quelque chose avec les coordonnées, par exemple, les stocker dans le state
+    } catch (error) {
+      console.error('Erreur lors de la récupération des coordonnées:', error);
     }
     // Check if password and confirmPassword match
     if (formData.password !== formData.confirmPassword) {
