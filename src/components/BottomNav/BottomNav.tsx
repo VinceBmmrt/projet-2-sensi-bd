@@ -6,31 +6,30 @@ import FavorisIcon from '@mui/icons-material/Favorite';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
 import ChatBubbleIcon from '@mui/icons-material/ChatBubble';
 import PersonIcon from '@mui/icons-material/Person';
+import { Link } from 'react-router-dom';
 
 export default function LabelBottomNavigation() {
-  const [value, setValue] = React.useState('recents');
-
-  const handleChange = (event, newValue) => {
-    setValue(newValue);
-  };
-
   return (
     <BottomNavigation
       showLabels
-      value={value}
       style={{
         position: 'fixed',
         bottom: 0,
         width: '100%',
       }}
-      onChange={(event, newValue) => {
-        setValue(newValue);
-      }}
     >
-      <BottomNavigationAction label="Accueil" icon={<HomeIcon />} />
-      <BottomNavigationAction label="Favoris" icon={<FavorisIcon />} />
-      <BottomNavigationAction label="AddCircle" icon={<AddCircleIcon />} />
-      <BottomNavigationAction label="Messages" icon={<ChatBubbleIcon />} />
+      <Link to="/">
+        <BottomNavigationAction label="Accueil" icon={<HomeIcon />} />
+      </Link>
+      <Link to="/favoris">
+        <BottomNavigationAction label="Favoris" icon={<FavorisIcon />} />
+      </Link>
+      <Link to="/addPost">
+        <BottomNavigationAction label="AddCircle" icon={<AddCircleIcon />} />
+      </Link>
+      <Link to="/messages">
+        <BottomNavigationAction label="Messages" icon={<ChatBubbleIcon />} />
+      </Link>
 
       <BottomNavigationAction label="Connexion" icon={<PersonIcon />} />
     </BottomNavigation>
