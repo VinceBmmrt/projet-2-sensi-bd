@@ -21,7 +21,7 @@ export default function LabelBottomNavigation() {
       style={{
         position: 'fixed',
         bottom: 0,
-        width: '100%', // Pour prendre la largeur complète de l'écran
+        width: '100%',
       }}
       onChange={(event, newValue) => {
         setValue(newValue);

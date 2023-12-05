@@ -1,7 +1,7 @@
 import Posts from '../Posts/Posts';
 import AppHeader from '../appHeader/appHeader';
 import data from '../../data';
-
+import './Home.scss';
 // TO DO remplacer la data far un fetch axios
 // import { useAppSelector } from '../../hooks/redux';
 
