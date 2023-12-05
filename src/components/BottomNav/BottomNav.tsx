@@ -18,6 +18,11 @@ export default function LabelBottomNavigation() {
     <BottomNavigation
       showLabels
       value={value}
+      style={{
+        position: 'fixed',
+        bottom: 0,
+        width: '100%', // Pour prendre la largeur complète de l'écran
+      }}
       onChange={(event, newValue) => {
         setValue(newValue);
       }}

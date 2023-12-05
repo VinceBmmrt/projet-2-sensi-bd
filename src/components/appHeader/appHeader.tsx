@@ -151,6 +151,7 @@ function AppHeader() {
             src={logo}
             className="header__topContainer-logo"
             alt="Logo Leeaf"
+            style={{ width: '7rem', height: 'auto' }}
           />
         </div>
         <div className="header__topContainer-credit">
@@ -177,13 +178,13 @@ function AppHeader() {
           </Search>
         </form>
         <BottomNavigationAction
-          className="customLabelColor"
+          className="header__topContainer__filterButton"
           label="Filtres"
           icon={<TuneIcon style={{ fontSize: 18 }} />}
           onClick={handleDrawerOpen}
           sx={{
             ...(open && { display: 'none' }),
-            width: 200,
+
             color: 'blue',
 
             padding: 0,
