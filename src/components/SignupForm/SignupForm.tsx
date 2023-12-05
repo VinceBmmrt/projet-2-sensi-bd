@@ -3,6 +3,7 @@ import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 import React, { useState, ChangeEvent, FormEvent, LegacyRef } from 'react';
 import { usePlacesWidget } from 'react-google-autocomplete';
+import bcrypt from 'bcryptjs';
 
 type FormData = {
   firstname: string;
@@ -17,7 +18,6 @@ type FormData = {
 
 function SignupForm() {
   const googlePlacesAPIKey = import.meta.env.VITE_GOOGLE_API_KEY;
-  console.log('🚀 ~ googlePlacesAPIKey:', googlePlacesAPIKey);
 
   const passwordRegex =
     /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
@@ -31,6 +31,7 @@ function SignupForm() {
     confirmPassword: '',
     error: false,
   });
+
   const getCoordinates = async (address: string) => {
     const response = await fetch(
       `https://maps.googleapis.com/maps/api/geocode/json?address=${encodeURIComponent(
@@ -77,6 +78,9 @@ function SignupForm() {
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+
+    const hashedPassword = await bcrypt.hash(formData.password, 10);
+
     const addressParts = formData.address.split(',').map((part) => part.trim());
     // Assurez-vous que l'adresse a au moins trois parties (rue, ville, pays)
     if (addressParts.length >= 3) {
@@ -87,7 +91,7 @@ function SignupForm() {
       const streetName = streetParts.join(' '); // Les éléments restants sont le nom de rue
       // Sépare le code postal et la ville
       const [postalCode, city] = postalCodeCity.split(' ');
-
+      console.log('🚀 ~ formData.address:', formData.address);
       console.log('Numéro de Rue :', streetNumber);
       console.log('Nom de Rue :', streetName);
       console.log('Code Postal :', postalCode);
@@ -96,11 +100,10 @@ function SignupForm() {
     } else {
       console.error("Format d'adresse invalide");
     }
-    console.log('🚀 ~ formData.address:1', formData.address);
+
     try {
-      console.log('🚀 ~ formData.address:2', formData.address);
       const coordinates = await getCoordinates(formData.address);
-      console.log('🚀 ~ formData.address:3', formData.address);
+
       console.log('Coordonnées:', coordinates);
       // Vous pouvez faire quelque chose avec les coordonnées, par exemple, les stocker dans le state
     } catch (error) {
@@ -116,6 +119,14 @@ function SignupForm() {
         error: true,
       }));
 
+      // Utilisez hashedPassword dans votre logique d'envoi au backend
+      try {
+        console.log('Mot de passe hashé :', hashedPassword);
+
+        // ... (autres logiques d'envoi au backend)
+      } catch (error) {
+        console.error("Erreur lors de l'envoi au backend :", error);
+      }
       return;
     }
 
