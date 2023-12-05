@@ -36,7 +36,6 @@ function AppHeader() {
   const [distanceFilterValue, setDistanceFilterValue] = useState<number[]>([
     5, 50,
   ]);
-  const [drawerOpen, setDrawerOpen] = useState(false);
   const [formData, setFormData] = useState<FilterData>({
     distance: 5,
     bookType: '',
@@ -104,7 +103,7 @@ function AppHeader() {
       <div className="header__searchContainer">
         <form className="header__searchContainer-searchBar">
           <TextField
-            variant="outlined"
+            variant="standard"
             placeholder="ouvrage, code postal, ville"
             InputProps={{
               startAdornment: (
