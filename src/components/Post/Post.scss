@@ -1,0 +1,20 @@
+@use '../../styles/variables' as v;
+
+.post {
+  position: relative;
+  &__tag {
+    background-color: v.$color-accident;
+    color: white;
+    top: 10px;
+    height: 1.5rem;
+    border-radius: 0.3rem;
+    font-size: 0.7rem;
+    width: 3.5rem;
+    text-align: center;
+    line-height: 1.5rem;
+    position: absolute;
+    top: 15.9rem; // Adjust this value according to your preference
+    left: 1rem; // Adjust this value according to your preference
+    z-index: 1; // To ensure it appears on top of CardMedia
+  }
+}

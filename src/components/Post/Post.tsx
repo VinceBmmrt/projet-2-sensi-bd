@@ -1,4 +1,6 @@
 import * as React from 'react';
+import { formatDistanceToNow } from 'date-fns';
+import { fr } from 'date-fns/locale';
 import { styled } from '@mui/material/styles';
 import Card from '@mui/material/Card';
 import CardHeader from '@mui/material/CardHeader';
@@ -17,6 +19,7 @@ import MoreVertIcon from '@mui/icons-material/MoreVert';
 import Badge from '@mui/material/Badge';
 import ChatBubbleIcon from '@mui/icons-material/ChatBubble';
 import { Post as TPost } from '../../@types/post';
+import './Post.scss';
 
 const ExpandMore = styled((props) => {
   const { expand, ...other } = props;
@@ -38,63 +41,62 @@ export default function Post({ post }: PostProps) {
     setExpanded(!expanded);
   };
 
+  const formattedDate = formatDistanceToNow(new Date(post.created_at), {
+    locale: fr,
+    addSuffix: true,
+  });
+
   return (
-    <Card sx={{ maxWidth: 345 }}>
-      <CardHeader
-        avatar={
-          <Avatar sx={{ bgcolor: red[500] }} aria-label="recipe">
-            R
-          </Avatar>
-        }
-        action={
-          <IconButton aria-label="Contacter">
-            <ChatBubbleIcon />
-          </IconButton>
-        }
-        title="Michel"
-        subheader={post.created_at}
-      />
-      <Badge
-        color="primary"
-        badgeContent="Réservé "
-        anchorOrigin={{
-          vertical: 'top',
-          horizontal: 'right',
-        }}
-      >
+    <div className="post">
+      <Card sx={{ maxWidth: 345 }}>
+        <CardHeader
+          avatar={
+            <Avatar sx={{ bgcolor: red[500] }} aria-label="avatar">
+              R
+            </Avatar>
+          }
+          action={
+            <IconButton aria-label="Contacter">
+              <ChatBubbleIcon />
+            </IconButton>
+          }
+          title="Michel"
+          subheader={formattedDate}
+        />
+
         <CardMedia
           component="img"
           height="194"
           image={post.image}
-          alt="Leeaf"
+          alt="photo de l'ouvrage"
         />
-      </Badge>
-
-      <CardHeader title={post.post_title} subheader="50km" />
-      <CardActions disableSpacing>
-        <IconButton aria-label="add to favorites">
-          <FavoriteIcon />
-        </IconButton>
-        <IconButton aria-label="Signaler l'annonce">
-          <DangerousIcon />
-        </IconButton>
-        <ExpandMore
-          expand={expanded}
-          onClick={handleExpandClick}
-          aria-expanded={expanded}
-          aria-label="show more"
-        >
-          <ExpandMoreIcon />
-        </ExpandMore>
-      </CardActions>
-      <Collapse in={expanded} timeout="auto" unmountOnExit>
-        <CardContent>
-          <Typography paragraph>{post.book_title}</Typography>
-          <Typography paragraph>{post.book_author}</Typography>
-          <Typography>Description</Typography>
-          <Typography>{post.description}</Typography>
-        </CardContent>
-      </Collapse>
-    </Card>
+        <div className="post__tag">Réservé</div>
+        <CardHeader title={post.post_title} subheader="50km" />
+        <CardActions disableSpacing>
+          <IconButton aria-label="add to favorites">
+            <FavoriteIcon />
+          </IconButton>
+          <IconButton aria-label="Signaler l'annonce">
+            <DangerousIcon />
+          </IconButton>
+          <ExpandMore
+            expand={expanded}
+            onClick={handleExpandClick}
+            aria-expanded={expanded}
+            aria-label="show more"
+          >
+            <ExpandMoreIcon />
+          </ExpandMore>
+        </CardActions>
+        <Collapse in={expanded} timeout="auto" unmountOnExit>
+          <CardContent>
+            <Typography paragraph>{post.book_title}</Typography>
+            <Typography paragraph>{post.book_author}</Typography>
+            <Typography>Description</Typography>
+            <Typography>{post.description}</Typography>
+          </CardContent>
+        </Collapse>
+      </Card>
+    </div>
   );
 }
