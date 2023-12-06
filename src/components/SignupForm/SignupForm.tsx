@@ -110,7 +110,9 @@ function SignupForm() {
 
   return (
     <div className="signupForm">
-      <Typography variant="h2">Inscription</Typography>
+      <Typography variant="h2" sx={{ marginBottom: '1rem' }}>
+        Inscription
+      </Typography>
       <form
         onSubmit={handleSubmit}
         style={{
@@ -134,6 +136,7 @@ function SignupForm() {
             }}
             onChange={handleChange}
             required
+            sx={{ marginBottom: '1rem' }}
           />
         </div>
         <TextField
@@ -148,6 +151,7 @@ function SignupForm() {
           }}
           onChange={handleChange}
           required
+          sx={{ marginBottom: '1rem' }}
         />
         <TextField
           label="Pseudo"
@@ -161,6 +165,7 @@ function SignupForm() {
           }}
           onChange={handleChange}
           required
+          sx={{ marginBottom: '1rem' }}
         />
         <TextField
           label="Email"
@@ -174,6 +179,7 @@ function SignupForm() {
           }}
           onChange={handleChange}
           required
+          sx={{ marginBottom: '1rem' }}
         />
         <input
           ref={placesRef as unknown as LegacyRef<HTMLInputElement>}
@@ -197,6 +203,7 @@ function SignupForm() {
               /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/,
           }}
           required
+          sx={{ marginBottom: '1rem' }}
         />
         <TextField
           label="Confirmez le password"
@@ -205,6 +212,7 @@ function SignupForm() {
           value={userFormData.confirmPassword}
           onChange={handleChange}
           required
+          sx={{ marginBottom: '1rem' }}
         />
         {userFormData.error && (
           <Alert severity="warning">
