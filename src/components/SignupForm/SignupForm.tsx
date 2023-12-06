@@ -21,7 +21,7 @@ function SignupForm() {
 
   const passwordRegex =
     /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
-  const [formData, setFormData] = useState<FormData>({
+  const [userFormData, setUserFormData] = useState<FormData>({
     firstname: '',
     lastname: '',
     nickname: '',
@@ -39,26 +39,19 @@ function SignupForm() {
       )}&key=${googlePlacesAPIKey}`
     );
     const data = await response.json();
-    console.log('🚀 ~ data:', data);
-    console.log('response', data.results);
-    console.log(
-      'Numéro de Rue :',
-      data.results[0].address_components[0].short_name
-    );
-    console.log(
-      'Nom de Rue :',
-      data.results[0].address_components[1].short_name
-    );
-    console.log(
-      'Code Postal :',
-      data.results[0].address_components[6].short_name
-    );
-    console.log('Ville :', data.results[0].address_components[2].short_name);
-    console.log('Pays :', data.results[0].address_components[5].long_name);
 
     if (data.results.length > 0) {
       const { location } = data.results[0].geometry;
-      return { lat: location.lat, lng: location.lng };
+      return {
+        full_adress: data.results[0].formatted_address,
+        number: data.results[0].address_components[0].short_name,
+        street: data.results[0].address_components[1].short_name,
+        zipcode: data.results[0].address_components[6].short_name,
+        city: data.results[0].address_components[2].short_name,
+        country: data.results[0].address_components[5].long_name,
+        lat: location.lat,
+        lng: location.lng,
+      };
     }
     throw new Error('Adresse non trouvée');
   };
@@ -66,13 +59,13 @@ function SignupForm() {
     const { name, value } = event.target;
     // Reset the error state when passwords are updated
     if (name === 'password' || name === 'confirmPassword') {
-      setFormData((prevData) => ({
+      setUserFormData((prevData) => ({
         ...prevData,
         [name]: value,
         error: false,
       }));
     } else {
-      setFormData((prevData) => ({ ...prevData, [name]: value }));
+      setUserFormData((prevData) => ({ ...prevData, [name]: value }));
     }
   };
 
@@ -80,7 +73,7 @@ function SignupForm() {
     apiKey: googlePlacesAPIKey,
     onPlaceSelected: (place) => {
       // Update the address in the form data when a place is selected
-      setFormData((prevData) => ({
+      setUserFormData((prevData) => ({
         ...prevData,
         address: place.formatted_address,
       }));
@@ -94,63 +87,21 @@ function SignupForm() {
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
-    const hashedPassword = await bcrypt.hash(formData.password, 10);
-
-    // const addressParts = formData.address.split(',').map((part) => part.trim());
-    // // Assurez-vous que l'adresse a au moins trois parties (rue, ville, pays)
-    // if (addressParts.length >= 3) {
-    //   const [streetWithNumber, postalCodeCity, country] = addressParts;
-    //   // Sépare le numéro de rue et le nom de rue
-    //   const streetParts = streetWithNumber.split(' ');
-    //   const streetNumber = streetParts.shift(); // Premier élément est le numéro de rue
-    //   const streetName = streetParts.join(' '); // Les éléments restants sont le nom de rue
-    //   // Sépare le code postal et la ville
-    //   const [postalCode, city] = postalCodeCity.split(' ');
-    //   console.log('🚀 ~ formData.address:', formData.address);
-    //   console.log('Numéro de Rue :', streetNumber);
-    //   console.log('Nom de Rue :', streetName);
-    //   console.log('Code Postal :', postalCode);
-    //   console.log('Ville :', city);
-    //   console.log('Pays :', country);
-    // } else {
-    //   console.error("Format d'adresse invalide");
-    // }
-
     try {
-      const coordinates = await getCoordinates(formData.address);
-
-      console.log('Coordonnées:', coordinates);
-      // Vous pouvez faire quelque chose avec les coordonnées, par exemple, les stocker dans le state
+      const addressData = await getCoordinates(userFormData.address);
+      console.log('🚀 ~ adressData:', addressData);
+      console.log('🚀 ~ userFormData:', userFormData);
     } catch (error) {
       console.error('Erreur lors de la récupération des coordonnées:', error);
     }
     // Check if password and confirmPassword match
-    if (formData.password !== formData.confirmPassword) {
+    if (userFormData.password !== userFormData.confirmPassword) {
       console.error('Passwords do not match');
-      // Optionally, you can show an error message to the user
 
-      setFormData((prevData) => ({
+      setUserFormData((prevData) => ({
         ...prevData,
         error: true,
       }));
-
-      return;
-    }
-    // Utilisez hashedPassword dans votre logique d'envoi au backend
-    try {
-      console.log('Mot de passe hashé :', hashedPassword);
-
-      // ... (autres logiques d'envoi au backend)
-    } catch (error) {
-      console.error("Erreur lors de l'envoi au backend :", error);
-    }
-    try {
-      // Your form submission logic
-      console.log(formData);
-
-      console.log('🚀 ~   formData.error:', formData.error);
-    } catch (error) {
-      console.error('Error submitting form:', error);
     }
   };
 
@@ -168,7 +119,7 @@ function SignupForm() {
         <TextField
           label="First Name"
           name="firstname"
-          value={formData.firstname}
+          value={userFormData.firstname}
           onChange={handleChange}
           required
           sx={{ mb: 2 }} // Add margin-bottom for spacing
@@ -177,7 +128,7 @@ function SignupForm() {
       <TextField
         label="Last Name"
         name="lastname"
-        value={formData.lastname}
+        value={userFormData.lastname}
         onChange={handleChange}
         required
         sx={{ mb: 2 }} // Add margin-bottom for spacing
@@ -185,7 +136,7 @@ function SignupForm() {
       <TextField
         label="Nickname"
         name="nickname"
-        value={formData.nickname}
+        value={userFormData.nickname}
         onChange={handleChange}
         required
         sx={{ mb: 2 }} // Add margin-bottom for spacing
@@ -194,7 +145,7 @@ function SignupForm() {
         label="Email"
         type="email"
         name="email"
-        value={formData.email}
+        value={userFormData.email}
         onChange={handleChange}
         required
         sx={{ mb: 2 }} // Add margin-bottom for spacing
@@ -207,7 +158,7 @@ function SignupForm() {
         name="address"
         type="text"
         onChange={handleChange}
-        value={formData.address}
+        value={userFormData.address}
         required
         style={{ marginBottom: '16px' }} // Add margin-bottom for spacing
       />
@@ -215,7 +166,7 @@ function SignupForm() {
         label="Password"
         type="password"
         name="password"
-        value={formData.password}
+        value={userFormData.password}
         onChange={handleChange}
         inputProps={{
           pattern: passwordRegex.source,
@@ -229,12 +180,12 @@ function SignupForm() {
         label="Confirm Password"
         type="password"
         name="confirmPassword"
-        value={formData.confirmPassword}
+        value={userFormData.confirmPassword}
         onChange={handleChange}
         required
         sx={{ mb: 2 }} // Add margin-bottom for spacing
       />
-      {formData.error && (
+      {userFormData.error && (
         <Alert severity="warning">
           <AlertTitle>Warning</AlertTitle>
           Passwords do not match — <strong>check it out!</strong>
