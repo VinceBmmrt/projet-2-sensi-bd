@@ -9,7 +9,7 @@ import './SignupForm.scss';
 type UserData = {
   firstname: string;
   lastname: string;
-  nickname: string;
+  pseudonym: string;
   email: string;
   address: string;
   password: string;
@@ -23,7 +23,7 @@ function SignupForm() {
   const [userFormData, setUserFormData] = useState<UserData>({
     firstname: '',
     lastname: '',
-    nickname: '',
+    pseudonym: '',
     email: '',
     address: '',
     password: '',
@@ -48,8 +48,8 @@ function SignupForm() {
         zipcode: data.results[0].address_components[6].short_name,
         city: data.results[0].address_components[2].short_name,
         country: data.results[0].address_components[5].long_name,
-        lat: location.lat,
-        lng: location.lng,
+        latitude: location.lat,
+        longitude: location.lng,
       };
     }
     throw new Error('Adresse non trouvée');
@@ -87,6 +87,15 @@ function SignupForm() {
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
+    try {
+      const addressData = await getCoordinates(userFormData.address);
+      console.log('🚀 ~ userFormData:', userFormData);
+      console.log('🚀 ~ adressData:', addressData);
+
+      axios.post('http://localhost:3000/users', { userFormData, addressData });
+    } catch (error) {
+      console.error('Erreur lors de la récupération des coordonnées:', error);
+    }
     // Check if password and confirmPassword match
     if (userFormData.password !== userFormData.confirmPassword) {
       console.error('Passwords match incorrect');
@@ -95,16 +104,6 @@ function SignupForm() {
         ...prevData,
         error: true,
       }));
-    }
-
-    try {
-      const addressData = await getCoordinates(userFormData.address);
-      console.log('🚀 ~ userFormData:', userFormData);
-      console.log('🚀 ~ adressData:', addressData);
-
-      axios.post('/user', { userFormData, addressData });
-    } catch (error) {
-      console.error('Erreur lors de la récupération des coordonnées:', error);
     }
   };
 
@@ -156,7 +155,7 @@ function SignupForm() {
         <TextField
           label="Pseudo"
           name="pseudonym"
-          value={userFormData.nickname}
+          value={userFormData.pseudonym}
           InputProps={{
             inputProps: {
               minLength: 2,
@@ -200,7 +199,7 @@ function SignupForm() {
           onChange={handleChange}
           inputProps={{
             pattern:
-              /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/,
+              '^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,}$',
           }}
           required
           sx={{ marginBottom: '1rem' }}
