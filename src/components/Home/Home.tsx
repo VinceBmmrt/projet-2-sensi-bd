@@ -1,8 +1,8 @@
+import { useAppSelector } from '../../hooks/redux';
 import Posts from '../Posts/Posts';
 import AppHeader from '../appHeader/appHeader';
 // import data from '../../data';
 import './Home.scss';
-import { useAppSelector } from '../../hooks/redux';
 
 function Home() {
   const posts = useAppSelector((state) => state.posts.list);

@@ -78,7 +78,7 @@ function AppHeader() {
   const handleSubmitSearchValue = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     console.log('formulaire soumis');
-    dispatch(fetchPosts(searchText));
+    dispatch(fetchPosts());
   };
 
   const handleChangeSearchValue = (
@@ -86,6 +86,10 @@ function AppHeader() {
   ) => {
     dispatch(setSearchText(event.target.value));
   };
+
+  function handleSubmit(event: FormEvent<HTMLFormElement>): void {
+    console.log('formulaire soumis');
+  }
 
   return (
     <header className="header">

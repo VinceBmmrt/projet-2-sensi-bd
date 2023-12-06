@@ -14,13 +14,10 @@ const initialState: PostsState = {
   searchText: '',
 };
 
-export const fetchPosts = createAsyncThunk(
-  'posts/fetch',
-  async (searchText: string) => {
-    const { data } = await axios.get<TPost[]>(`URL/posts?search=${searchText}`);
-    return data;
-  }
-);
+export const fetchPosts = createAsyncThunk('posts/fetch', async () => {
+  const { data } = await axios.get<TPost[]>(`http://localhost:3000/posts`);
+  return data;
+});
 
 const postsReducer = createSlice({
   name: 'posts',
