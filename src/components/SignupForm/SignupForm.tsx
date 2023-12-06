@@ -1,11 +1,12 @@
-import { Alert, AlertTitle } from '@mui/material';
+import { Alert, AlertTitle, Typography } from '@mui/material';
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
+import axios from 'axios';
 import React, { useState, ChangeEvent, FormEvent, LegacyRef } from 'react';
 import { usePlacesWidget } from 'react-google-autocomplete';
-import bcrypt from 'bcryptjs';
+import './SignupForm.scss';
 
-type FormData = {
+type UserData = {
   firstname: string;
   lastname: string;
   nickname: string;
@@ -19,9 +20,7 @@ type FormData = {
 function SignupForm() {
   const googlePlacesAPIKey = import.meta.env.VITE_GOOGLE_API_KEY;
 
-  const passwordRegex =
-    /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
-  const [userFormData, setUserFormData] = useState<FormData>({
+  const [userFormData, setUserFormData] = useState<UserData>({
     firstname: '',
     lastname: '',
     nickname: '',
@@ -55,6 +54,7 @@ function SignupForm() {
     }
     throw new Error('Adresse non trouvée');
   };
+
   const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
     // Reset the error state when passwords are updated
@@ -69,7 +69,7 @@ function SignupForm() {
     }
   };
 
-  const { ref: placesRef, autocompleteRef } = usePlacesWidget({
+  const { ref: placesRef } = usePlacesWidget({
     apiKey: googlePlacesAPIKey,
     onPlaceSelected: (place) => {
       // Update the address in the form data when a place is selected
@@ -87,114 +87,145 @@ function SignupForm() {
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
-    try {
-      const addressData = await getCoordinates(userFormData.address);
-      console.log('🚀 ~ adressData:', addressData);
-      console.log('🚀 ~ userFormData:', userFormData);
-    } catch (error) {
-      console.error('Erreur lors de la récupération des coordonnées:', error);
-    }
     // Check if password and confirmPassword match
     if (userFormData.password !== userFormData.confirmPassword) {
-      console.error('Passwords do not match');
+      console.error('Passwords match incorrect');
 
       setUserFormData((prevData) => ({
         ...prevData,
         error: true,
       }));
     }
+
+    try {
+      const addressData = await getCoordinates(userFormData.address);
+      console.log('🚀 ~ userFormData:', userFormData);
+      console.log('🚀 ~ adressData:', addressData);
+
+      axios.post('/user', { userFormData, addressData });
+    } catch (error) {
+      console.error('Erreur lors de la récupération des coordonnées:', error);
+    }
   };
 
   return (
-    <form
-      onSubmit={handleSubmit}
-      style={{
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-        justifyContent: 'center',
-      }}
-    >
-      <div style={{ paddingTop: '20px' }}>
+    <div className="signupForm">
+      <Typography variant="h2">Inscription</Typography>
+      <form
+        onSubmit={handleSubmit}
+        style={{
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          justifyContent: 'center',
+        }}
+      >
+        <div>
+          <TextField
+            className="signupForm__input"
+            label="Prénom (non visible sur le site)"
+            name="firstname"
+            value={userFormData.firstname}
+            InputProps={{
+              inputProps: {
+                minLength: 2,
+                maxLength: 20,
+              },
+            }}
+            onChange={handleChange}
+            required
+          />
+        </div>
         <TextField
-          label="First Name"
-          name="firstname"
-          value={userFormData.firstname}
+          label="Nom (non visible sur le site)"
+          name="lastname"
+          value={userFormData.lastname}
+          InputProps={{
+            inputProps: {
+              minLength: 2,
+              maxLength: 20,
+            },
+          }}
           onChange={handleChange}
           required
-          sx={{ mb: 2 }} // Add margin-bottom for spacing
         />
-      </div>
-      <TextField
-        label="Last Name"
-        name="lastname"
-        value={userFormData.lastname}
-        onChange={handleChange}
-        required
-        sx={{ mb: 2 }} // Add margin-bottom for spacing
-      />
-      <TextField
-        label="Nickname"
-        name="nickname"
-        value={userFormData.nickname}
-        onChange={handleChange}
-        required
-        sx={{ mb: 2 }} // Add margin-bottom for spacing
-      />
-      <TextField
-        label="Email"
-        type="email"
-        name="email"
-        value={userFormData.email}
-        onChange={handleChange}
-        required
-        sx={{ mb: 2 }} // Add margin-bottom for spacing
-      />
-      {/* Use the placesRef for the input field */}
-      <input
-        ref={placesRef as unknown as LegacyRef<HTMLInputElement>}
-        placeholder="Address"
-        autoComplete="off"
-        name="address"
-        type="text"
-        onChange={handleChange}
-        value={userFormData.address}
-        required
-        style={{ marginBottom: '16px' }} // Add margin-bottom for spacing
-      />
-      <TextField
-        label="Password"
-        type="password"
-        name="password"
-        value={userFormData.password}
-        onChange={handleChange}
-        inputProps={{
-          pattern: passwordRegex.source,
-          title:
-            'Password must be at least 8 characters long and include at least one uppercase letter, one lowercase letter, one digit, and one special character.',
-        }}
-        required
-        sx={{ mb: 2 }} // Add margin-bottom for spacing
-      />
-      <TextField
-        label="Confirm Password"
-        type="password"
-        name="confirmPassword"
-        value={userFormData.confirmPassword}
-        onChange={handleChange}
-        required
-        sx={{ mb: 2 }} // Add margin-bottom for spacing
-      />
-      {userFormData.error && (
-        <Alert severity="warning">
-          <AlertTitle>Warning</AlertTitle>
-          Passwords do not match — <strong>check it out!</strong>
-        </Alert>
-      )}
-      <Button type="submit" variant="contained" color="primary">
-        Sign Up
-      </Button>
-    </form>
+        <TextField
+          label="Pseudo"
+          name="pseudonym"
+          value={userFormData.nickname}
+          InputProps={{
+            inputProps: {
+              minLength: 2,
+              maxLength: 20,
+            },
+          }}
+          onChange={handleChange}
+          required
+        />
+        <TextField
+          label="Email"
+          type="email"
+          name="email"
+          value={userFormData.email}
+          InputProps={{
+            inputProps: {
+              pattern: '[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}',
+            },
+          }}
+          onChange={handleChange}
+          required
+        />
+        <input
+          ref={placesRef as unknown as LegacyRef<HTMLInputElement>}
+          className="signupForm__address"
+          placeholder="Addresse*"
+          autoComplete="off"
+          name="address"
+          type="text"
+          onChange={handleChange}
+          value={userFormData.address}
+          required
+        />
+        <TextField
+          label="Password"
+          type="password"
+          name="password"
+          value={userFormData.password}
+          onChange={handleChange}
+          inputProps={{
+            pattern:
+              /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/,
+          }}
+          required
+        />
+        <TextField
+          label="Confirmez le password"
+          type="password"
+          name="confirmPassword"
+          value={userFormData.confirmPassword}
+          onChange={handleChange}
+          required
+        />
+        {userFormData.error && (
+          <Alert severity="warning">
+            <AlertTitle>Warning</AlertTitle>
+            Les passwords indiqués ne correspondent pas !
+          </Alert>
+        )}
+        <Button
+          type="submit"
+          variant="contained"
+          sx={{
+            backgroundColor: '#95C23D', // Change this to the desired color
+            '&:hover': {
+              backgroundColor: '#7E9D2D', // Change this to the desired hover color
+            },
+          }}
+        >
+          Sign Up
+        </Button>
+      </form>
+    </div>
   );
 }
 
