@@ -78,7 +78,7 @@ function AppHeader() {
   const handleSubmitSearchValue = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     console.log('formulaire soumis');
-    dispatch(fetchPosts({ searchText }));
+    dispatch(fetchPosts(searchText));
   };
 
   const handleChangeSearchValue = (
