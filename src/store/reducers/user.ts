@@ -20,7 +20,7 @@ interface UserState {
 // const userData = LocalStorage.getItem('user');
 
 export const initialState: UserState = {
-  isLogged: true,
+  isLogged: false,
   credentials: {
     email: '',
     password: '',

@@ -1,16 +1,15 @@
 import Posts from '../Posts/Posts';
 import AppHeader from '../appHeader/appHeader';
-import data from '../../data';
+// import data from '../../data';
 import './Home.scss';
-// TO DO remplacer la data far un fetch axios
-// import { useAppSelector } from '../../hooks/redux';
+import { useAppSelector } from '../../hooks/redux';
 
 function Home() {
-  // const recipes = useAppSelector((state) => state.recipes.list);
+  const posts = useAppSelector((state) => state.posts.list);
   return (
     <div className="home">
       <AppHeader />
-      <Posts posts={data} />
+      <Posts posts={posts} />
     </div>
   );
 }

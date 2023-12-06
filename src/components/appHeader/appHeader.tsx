@@ -15,12 +15,14 @@ import {
   Slider,
   TextField,
 } from '@mui/material';
-import { useState } from 'react';
+import { ChangeEvent, FormEvent, useState } from 'react';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import logo from '../../assets/leaf_color.png';
 import leafIcon from '../../../public/feuille.png';
 import './appHeader.scss';
+import { fetchPosts, setSearchText } from '../../store/reducers/posts';
+import { useAppDispatch, useAppSelector } from '../../hooks/redux';
 
 type FilterData = {
   distance: number | number[];
@@ -33,9 +35,9 @@ function AppHeader() {
   const drawerWidth = 340;
   const theme = useTheme();
   const [open, setOpen] = useState(false);
-  const [distanceFilterValue, setDistanceFilterValue] = useState<number[]>([
-    5, 50,
-  ]);
+  const dispatch = useAppDispatch();
+  const searchText = useAppSelector((state) => state.posts.searchText);
+
   const [formData, setFormData] = useState<FilterData>({
     distance: 5,
     bookType: '',
@@ -71,11 +73,20 @@ function AppHeader() {
     }));
   };
 
-  const handleSubmit = (event: Event) => {
+  // gestion de la barre de recherche et soumission du formulaire de recherche
+
+  const handleSubmitSearchValue = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    console.log(formData);
-    // Add your form submission logic here
+    console.log('formulaire soumis');
+    dispatch(fetchPosts({ searchText }));
   };
+
+  const handleChangeSearchValue = (
+    event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
+    dispatch(setSearchText(event.target.value));
+  };
+
   return (
     <header className="header">
       <div className="header__topContainer">
@@ -100,10 +111,15 @@ function AppHeader() {
         </div>
       </div>
       <div className="header__searchContainer">
-        <form className="header__searchContainer-searchBar">
+        <form
+          className="header__searchContainer-searchBar"
+          onSubmit={handleSubmitSearchValue}
+        >
           <TextField
             variant="standard"
             placeholder="ouvrage, code postal, ville"
+            value={searchText}
+            onChange={handleChangeSearchValue}
             InputProps={{
               startAdornment: (
                 <SearchIcon
