@@ -134,7 +134,14 @@ export default function SignIn() {
             type="submit"
             fullWidth
             variant="contained"
-            sx={{ mt: 3, mb: 2 }}
+            sx={{
+              mt: 3,
+              mb: 2,
+              backgroundColor: '#95C23D', // Change this to the desired color
+              '&:hover': {
+                backgroundColor: '#7E9D2D', // Change this to the desired hover color
+              },
+            }}
             onClick={handleSignIn}
           >
             se connecter
