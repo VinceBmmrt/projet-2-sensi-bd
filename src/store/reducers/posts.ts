@@ -6,18 +6,25 @@ type PostsState = {
   isLoading: boolean;
   list: TPost[];
   searchText: string;
+  currentPage: number;
 };
 
 const initialState: PostsState = {
   isLoading: true,
   list: [],
   searchText: '',
+  currentPage: 1,
 };
 
-export const fetchPosts = createAsyncThunk('posts/fetch', async () => {
-  const { data } = await axios.get<TPost[]>(`http://localhost:3000/posts`);
-  return data;
-});
+export const fetchPosts = createAsyncThunk(
+  'posts/fetch',
+  async (page: number) => {
+    const { data } = await axios.get<TPost[]>(
+      `http://localhost:3000/posts?page=${page}&per_page=10`
+    );
+    return data;
+  }
+);
 
 const postsReducer = createSlice({
   name: 'posts',
@@ -30,8 +37,9 @@ const postsReducer = createSlice({
   extraReducers(builder) {
     builder
       .addCase(fetchPosts.fulfilled, (state, action) => {
-        state.list = action.payload;
+        state.list = [...state.list, ...action.payload];
         state.isLoading = false;
+        state.currentPage += 1;
       })
       .addCase(fetchPosts.pending, (state) => {
         state.isLoading = true;
