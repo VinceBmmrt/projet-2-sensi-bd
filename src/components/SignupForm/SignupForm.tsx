@@ -95,7 +95,7 @@ function SignupForm() {
       const combinedUserInfo = { ...userFormData, ...addressData };
       console.log(combinedUserInfo);
 
-      axios.post('http://localhost:3000/users', { userFormData, addressData });
+      axios.post('http://localhost:3000/users', { combinedUserInfo });
     } catch (error) {
       console.error('Erreur lors de la récupération des coordonnées:', error);
     }
