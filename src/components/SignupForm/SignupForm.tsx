@@ -88,7 +88,7 @@ function SignupForm() {
     event.preventDefault();
 
     try {
-      const addressData = await getCoordinates(userFormData.address);
+      const addressData = await getCoordinates(userFormData.full_address);
       console.log('🚀 ~ userFormData:', userFormData);
       console.log('🚀 ~ adressData:', addressData);
 
@@ -191,7 +191,7 @@ function SignupForm() {
           name="full_address"
           type="text"
           onChange={handleChange}
-          value={userFormData.address}
+          value={userFormData.full_address}
           required
         />
         <TextField
