@@ -11,7 +11,7 @@ type UserData = {
   lastname: string;
   pseudonym: string;
   email: string;
-  address: string;
+  full_address: string;
   password: string;
   confirmPassword: string;
   error: boolean;
@@ -25,7 +25,7 @@ function SignupForm() {
     lastname: '',
     pseudonym: '',
     email: '',
-    address: '',
+    full_address: '',
     password: '',
     confirmPassword: '',
     error: false,
@@ -42,7 +42,7 @@ function SignupForm() {
     if (data.results.length > 0) {
       const { location } = data.results[0].geometry;
       return {
-        full_adress: data.results[0].formatted_address,
+        // full_adress: data.results[0].formatted_address,
         number: data.results[0].address_components[0].short_name,
         street: data.results[0].address_components[1].short_name,
         zipcode: data.results[0].address_components[6].short_name,
@@ -91,6 +91,9 @@ function SignupForm() {
       const addressData = await getCoordinates(userFormData.address);
       console.log('🚀 ~ userFormData:', userFormData);
       console.log('🚀 ~ adressData:', addressData);
+
+      const combinedUserInfo = { ...userFormData, ...addressData };
+      console.log(combinedUserInfo);
 
       axios.post('http://localhost:3000/users', { userFormData, addressData });
     } catch (error) {
@@ -185,7 +188,7 @@ function SignupForm() {
           className="signupForm__address"
           placeholder="Addresse*"
           autoComplete="off"
-          name="address"
+          name="full_address"
           type="text"
           onChange={handleChange}
           value={userFormData.address}
