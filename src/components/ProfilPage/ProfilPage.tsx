@@ -11,6 +11,7 @@ import {
   Box,
 } from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
+import AWS from 'aws-sdk';
 
 function EditableField({ label, value, onSave }) {
   const [isEditing, setIsEditing] = useState(false);
