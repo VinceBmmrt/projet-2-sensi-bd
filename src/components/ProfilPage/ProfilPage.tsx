@@ -11,8 +11,28 @@ import {
   Box,
 } from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
-import AWS from 'aws-sdk';
 
+import {
+  ListBucketsCommand,
+  S3Client,
+  PutObjectCommand,
+  S3,
+} from '@aws-sdk/client-s3';
+
+const {
+  VITE_AWS_BUCKET_NAME,
+  VITE_AWS_BUCKET_REGION,
+  VITE_AWS_ACCESS_KEY,
+  VITE_AWS_SECRET_KEY,
+} = import.meta.env;
+
+const s3Client = new S3Client({
+  region: VITE_AWS_BUCKET_REGION,
+  credentials: {
+    accessKeyId: VITE_AWS_ACCESS_KEY,
+    secretAccessKey: VITE_AWS_SECRET_KEY,
+  },
+});
 function EditableField({ label, value, onSave }) {
   const [isEditing, setIsEditing] = useState(false);
   const [fieldValue, setFieldValue] = useState(value);
@@ -71,14 +91,28 @@ function UserProfilePage() {
     // Ajoutez ici la logique de sauvegarde des modifications
     console.log('newInfo', userData);
   };
-  const handleImageUpload = (event) => {
+  const handleImageUpload = async (event) => {
     const file = event.target.files[0];
+    const fileName = ` avatars/${file.name}`;
 
     // Update the avatar source dynamically
     setAvatarSrc(URL.createObjectURL(file));
 
     // Handle the file upload logic here
     console.log('Uploaded file:', file);
+
+    const command = new PutObjectCommand({
+      Bucket: 'sensibd-images',
+      Key: 'AKIARUCTLWHTGASKDSMO',
+      Body: file,
+    });
+
+    try {
+      const response = await s3Client.send(command);
+      console.log(response);
+    } catch (err) {
+      console.error(err);
+    }
   };
   return (
     <Box
