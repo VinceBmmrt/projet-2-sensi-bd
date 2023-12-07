@@ -20,7 +20,7 @@ export const fetchPosts = createAsyncThunk(
   'posts/fetch',
   async (page: number) => {
     const { data } = await axios.get<TPost[]>(
-      `http://localhost:3000/posts?page=${page}&per_page=10`
+      `http://localhost:3000/posts?page=${page}&pageSize=10`
     );
     return data;
   }
