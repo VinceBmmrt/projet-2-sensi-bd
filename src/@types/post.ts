@@ -7,4 +7,6 @@ export type Post = {
   image: string;
   slug: string;
   created_at: string;
+  pseudonym: string;
+  avatar: string;
 };

@@ -36,7 +36,6 @@ type PostProps = {
 };
 export default function Post({ post }: PostProps) {
   const [expanded, setExpanded] = React.useState(false);
-
   const handleExpandClick = () => {
     setExpanded(!expanded);
   };
@@ -51,8 +50,12 @@ export default function Post({ post }: PostProps) {
       <Card sx={{ maxWidth: 345 }}>
         <CardHeader
           avatar={
-            <Avatar sx={{ bgcolor: red[500] }} aria-label="avatar">
-              R
+            <Avatar
+              alt="User Avatar"
+              src={post.avatar}
+              sx={{ bgcolor: red[500] }}
+            >
+              {post.pseudonym.charAt(0).toUpperCase()}
             </Avatar>
           }
           action={
@@ -60,7 +63,7 @@ export default function Post({ post }: PostProps) {
               <ChatBubbleIcon />
             </IconButton>
           }
-          title="Michel"
+          title={post.pseudonym}
           subheader={formattedDate}
         />
 
