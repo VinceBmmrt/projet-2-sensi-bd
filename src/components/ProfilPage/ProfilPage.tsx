@@ -53,15 +53,33 @@ function EditableField({ label, value, onSave }) {
   );
 }
 
-async function postImage({ image, description }) {
+async function postImage({ image, description, avatarSrc }) {
   const formData = new FormData();
-  formData.append('image', image);
+
+  if (image) {
+    formData.append('image', image);
+  }
   formData.append('description', description);
 
-  const result = await axios.post('http://localhost:3000/images', formData, {
-    headers: { 'Content-Type': 'multipart/form-data' },
-  });
-  return result.data;
+  if (image) {
+    try {
+      const result = await axios.post(
+        'http://localhost:3000/images',
+        formData,
+        {
+          headers: { 'Content-Type': 'multipart/form-data' },
+        }
+      );
+      console.log(result.data);
+
+      return result.data;
+    } catch (error) {
+      console.error('Error uploading the image', error);
+      throw error;
+    }
+  } else {
+    return null;
+  }
 }
 
 function UserProfilePage() {
