@@ -15,11 +15,10 @@ import { red } from '@mui/material/colors';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import DangerousIcon from '@mui/icons-material/Dangerous';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import MoreVertIcon from '@mui/icons-material/MoreVert';
-import Badge from '@mui/material/Badge';
 import ChatBubbleIcon from '@mui/icons-material/ChatBubble';
 import { Post as TPost } from '../../@types/post';
 import './Post.scss';
+import { useAppSelector } from '../../hooks/redux';
 
 const ExpandMore = styled((props) => {
   const { expand, ...other } = props;
@@ -31,11 +30,13 @@ const ExpandMore = styled((props) => {
     duration: theme.transitions.duration.shortest,
   }),
 }));
+
 type PostProps = {
   post: TPost;
 };
 export default function Post({ post }: PostProps) {
   const [expanded, setExpanded] = React.useState(false);
+  const isLogged = useAppSelector((state) => state.user.isLogged);
   const handleExpandClick = () => {
     setExpanded(!expanded);
   };
@@ -59,7 +60,7 @@ export default function Post({ post }: PostProps) {
             </Avatar>
           }
           action={
-            <IconButton aria-label="Contacter">
+            <IconButton aria-label="Contacter" disabled={!isLogged}>
               <ChatBubbleIcon />
             </IconButton>
           }
@@ -73,13 +74,13 @@ export default function Post({ post }: PostProps) {
           image={post.image}
           alt="photo de l'ouvrage"
         />
-        <div className="post__tag">Réservé</div>
+        {/* <div className="post__tag">Réservé</div> */}
         <CardHeader title={post.post_title} subheader="50km" />
         <CardActions disableSpacing>
-          <IconButton aria-label="add to favorites">
+          <IconButton aria-label="add to favorites" disabled={!isLogged}>
             <FavoriteIcon />
           </IconButton>
-          <IconButton aria-label="Signaler l'annonce">
+          <IconButton aria-label="Signaler l'annonce" disabled={!isLogged}>
             <DangerousIcon />
           </IconButton>
           <ExpandMore
@@ -88,7 +89,7 @@ export default function Post({ post }: PostProps) {
             aria-expanded={expanded}
             aria-label="show more"
           >
-            <ExpandMoreIcon />
+            <ExpandMoreIcon sx={{ color: '#555' }} />
           </ExpandMore>
         </CardActions>
         <Collapse in={expanded} timeout="auto" unmountOnExit>

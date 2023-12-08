@@ -7,9 +7,11 @@ import AddCircleIcon from '@mui/icons-material/AddCircle';
 import ChatBubbleIcon from '@mui/icons-material/ChatBubble';
 import PersonIcon from '@mui/icons-material/Person';
 import { useState } from 'react';
+import { useAppSelector } from '../../hooks/redux';
 
-export default function LabelBottomNavigation() {
+export default function BottomNav() {
   const [value, setValue] = useState<number>(0);
+  const isLogged = useAppSelector((state) => state.user.isLogged);
 
   function handleButtonNavClick(newValue: number) {
     setValue(newValue);
@@ -27,7 +29,11 @@ export default function LabelBottomNavigation() {
         window.location.replace('/messages');
         break;
       case 4:
-        window.location.replace('/login');
+        if (isLogged) {
+          window.location.replace('/profil');
+        } else {
+          window.location.replace('/login');
+        }
         break;
       default:
         break;
@@ -48,10 +54,28 @@ export default function LabelBottomNavigation() {
       }}
     >
       <BottomNavigationAction label="Accueil" icon={<HomeIcon />} />
-      <BottomNavigationAction label="Favoris" icon={<FavorisIcon />} />
-      <BottomNavigationAction label="AddCircle" icon={<AddCircleIcon />} />
-      <BottomNavigationAction label="Messages" icon={<ChatBubbleIcon />} />
-      <BottomNavigationAction label="Connexion" icon={<PersonIcon />} />
+      <BottomNavigationAction
+        label="Favoris"
+        icon={<FavorisIcon />}
+        disabled={!isLogged}
+        sx={isLogged ? {} : { color: '#bbb' }}
+      />
+      <BottomNavigationAction
+        label="AddCircle"
+        icon={<AddCircleIcon />}
+        disabled={!isLogged}
+        sx={isLogged ? {} : { color: '#bbb' }}
+      />
+      <BottomNavigationAction
+        label="Messages"
+        icon={<ChatBubbleIcon />}
+        disabled={!isLogged}
+        sx={isLogged ? {} : { color: '#bbb' }}
+      />
+      <BottomNavigationAction
+        label={isLogged ? 'Profil' : 'Connexion'}
+        icon={<PersonIcon />}
+      />
     </BottomNavigation>
   );
 }

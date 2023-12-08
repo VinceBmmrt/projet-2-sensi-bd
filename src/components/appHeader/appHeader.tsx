@@ -126,17 +126,14 @@ function AppHeader() {
             onChange={handleChangeSearchValue}
             InputProps={{
               startAdornment: (
-                <SearchIcon
-                  color="action"
-                  sx={{ color: theme.palette.common.black }}
-                />
+                <SearchIcon color="action" sx={{ color: '#555' }} />
               ),
             }}
           />
         </form>
         <div className="header__searchContainer-filterButton">
           <IconButton
-            sx={{ color: theme.palette.common.black }}
+            sx={{ color: '#555' }}
             aria-label="Filters"
             onClick={handleDrawerOpen}
           >
