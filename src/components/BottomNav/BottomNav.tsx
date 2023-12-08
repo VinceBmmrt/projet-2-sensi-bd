@@ -61,7 +61,7 @@ export default function BottomNav() {
         sx={isLogged ? {} : { color: '#bbb' }}
       />
       <BottomNavigationAction
-        label="AddCircle"
+        label="Ajouter"
         icon={<AddCircleIcon />}
         disabled={!isLogged}
         sx={isLogged ? {} : { color: '#bbb' }}
