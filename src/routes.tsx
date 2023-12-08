@@ -4,6 +4,7 @@ import Home from './components/Home/Home';
 import Login from './components/Login/Login';
 import AddPostPage from './components/AddPostPage/AddPostPage';
 import UserProfilePage from './components/ProfilPage/ProfilPage';
+import Upload from './components/upload/upload';
 
 // eslint-disable-next-line import/prefer-default-export
 export const router = createBrowserRouter([
@@ -24,6 +25,10 @@ export const router = createBrowserRouter([
       {
         path: '/profil',
         element: <UserProfilePage />,
+      },
+      {
+        path: '/upload',
+        element: <Upload />,
       },
     ],
   },

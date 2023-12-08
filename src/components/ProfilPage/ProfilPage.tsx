@@ -1,4 +1,6 @@
 import React, { useState } from 'react';
+import axios from 'axios';
+
 import {
   Paper,
   Typography,
@@ -12,27 +14,6 @@ import {
 } from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
 
-import {
-  ListBucketsCommand,
-  S3Client,
-  PutObjectCommand,
-  S3,
-} from '@aws-sdk/client-s3';
-
-const {
-  VITE_AWS_BUCKET_NAME,
-  VITE_AWS_BUCKET_REGION,
-  VITE_AWS_ACCESS_KEY,
-  VITE_AWS_SECRET_KEY,
-} = import.meta.env;
-
-const s3Client = new S3Client({
-  region: VITE_AWS_BUCKET_REGION,
-  credentials: {
-    accessKeyId: VITE_AWS_ACCESS_KEY,
-    secretAccessKey: VITE_AWS_SECRET_KEY,
-  },
-});
 function EditableField({ label, value, onSave }) {
   const [isEditing, setIsEditing] = useState(false);
   const [fieldValue, setFieldValue] = useState(value);
@@ -72,6 +53,17 @@ function EditableField({ label, value, onSave }) {
   );
 }
 
+async function postImage({ image, description }) {
+  const formData = new FormData();
+  formData.append('image', image);
+  formData.append('description', description);
+
+  const result = await axios.post('http://localhost:3000/images', formData, {
+    headers: { 'Content-Type': 'multipart/form-data' },
+  });
+  return result.data;
+}
+
 function UserProfilePage() {
   const [userData, setUserData] = useState({
     firstName: 'John',
@@ -82,37 +74,37 @@ function UserProfilePage() {
     postedAds: 5,
   });
   const [avatarSrc, setAvatarSrc] = useState('/path/to/avatar.jpg'); // Initial avatar source
+  const [file, setFile] = useState();
+  const [description, setDescription] = useState('');
+  const [images, setImages] = useState([]);
 
   const handleInputChange = (field, value) => {
     setUserData((prevData) => ({ ...prevData, [field]: value }));
   };
 
-  const handleSaveClick = () => {
+  const handleSaveClick = async (event) => {
     // Ajoutez ici la logique de sauvegarde des modifications
+    event.preventDefault();
+    try {
+      const result = await postImage({ image: file, description });
+      const imageUrl = result.location; // Assurez-vous que 'location' est la clé retournée par votre serveur avec l'URL de l'image
+      setImages([imageUrl, ...images]);
+    } catch (error) {
+      console.error("Erreur lors de l'upload de l'image", error);
+      // Gérer l'erreur, par exemple en affichant un message à l'utilisateur
+    }
     console.log('newInfo', userData);
   };
+
   const handleImageUpload = async (event) => {
     const file = event.target.files[0];
-    const fileName = ` avatars/${file.name}`;
+    setFile(file);
 
     // Update the avatar source dynamically
     setAvatarSrc(URL.createObjectURL(file));
 
     // Handle the file upload logic here
     console.log('Uploaded file:', file);
-
-    const command = new PutObjectCommand({
-      Bucket: 'sensibd-images',
-      Key: 'AKIARUCTLWHTGASKDSMO',
-      Body: file,
-    });
-
-    try {
-      const response = await s3Client.send(command);
-      console.log(response);
-    } catch (err) {
-      console.error(err);
-    }
   };
   return (
     <Box
