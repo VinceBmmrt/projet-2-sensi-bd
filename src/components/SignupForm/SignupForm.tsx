@@ -11,7 +11,7 @@ type UserData = {
   lastname: string;
   pseudonym: string;
   email: string;
-  full_address: string;
+  address: string;
   password: string;
   confirmPassword: string;
   error: boolean;
@@ -25,7 +25,7 @@ function SignupForm() {
     lastname: '',
     pseudonym: '',
     email: '',
-    full_address: '',
+    address: '',
     password: '',
     confirmPassword: '',
     error: false,
@@ -88,14 +88,14 @@ function SignupForm() {
     event.preventDefault();
 
     try {
-      const addressData = await getCoordinates(userFormData.full_address);
+      const addressData = await getCoordinates(userFormData.address);
       console.log('🚀 ~ userFormData:', userFormData);
       console.log('🚀 ~ adressData:', addressData);
 
-      const combinedUserInfo = { ...userFormData, ...addressData };
-      console.log(combinedUserInfo);
-
-      axios.post('http://localhost:3000/users', { combinedUserInfo });
+      axios.post('http://localhost:3000/users/', {
+        ...userFormData,
+        ...addressData,
+      });
     } catch (error) {
       console.error('Erreur lors de la récupération des coordonnées:', error);
     }
@@ -174,11 +174,6 @@ function SignupForm() {
           type="email"
           name="email"
           value={userFormData.email}
-          InputProps={{
-            inputProps: {
-              pattern: '[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}',
-            },
-          }}
           onChange={handleChange}
           required
           sx={{ marginBottom: '1rem' }}
@@ -188,10 +183,10 @@ function SignupForm() {
           className="signupForm__address"
           placeholder="Addresse*"
           autoComplete="off"
-          name="full_address"
+          name="address"
           type="text"
           onChange={handleChange}
-          value={userFormData.full_address}
+          value={userFormData.address}
           required
         />
         <TextField
@@ -232,7 +227,7 @@ function SignupForm() {
             },
           }}
         >
-          Sign Up
+          S'inscrire
         </Button>
       </form>
     </div>
