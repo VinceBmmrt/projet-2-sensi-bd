@@ -1,7 +1,7 @@
 import { Alert, AlertTitle, Typography } from '@mui/material';
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
-import axios from 'axios';
+import axios, { AxiosResponse } from 'axios';
 import React, { useState, ChangeEvent, FormEvent, LegacyRef } from 'react';
 import { usePlacesWidget } from 'react-google-autocomplete';
 import './SignupForm.scss';
@@ -92,10 +92,28 @@ function SignupForm() {
       console.log('🚀 ~ userFormData:', userFormData);
       console.log('🚀 ~ adressData:', addressData);
 
-      axios.post('http://localhost:3000/users/', {
-        ...userFormData,
-        ...addressData,
-      });
+      const response: AxiosResponse = await axios?.post(
+        'http://localhost:3000/users/',
+        {
+          ...userFormData,
+          ...addressData,
+        }
+      );
+      // Vérifiez si la variable response est définie avant d'accéder à la propriété status
+      if (response && response.status >= 200 && response.status < 300) {
+        // Afficher un message de réussite (par exemple, avec Material-UI Snackbar)
+        console.log('Inscription réussie !');
+
+        // Rediriger l'utilisateur vers la page de connexion
+        window.location.replace('/login');
+      } else {
+        // La requête a échoué ou response n'est pas défini
+        console.error(
+          'Échec de la requête avec le code de statut:',
+          response?.status
+        );
+        // Gérer d'autres cas de réponse si nécessaire
+      }
     } catch (error) {
       console.error('Erreur lors de la récupération des coordonnées:', error);
     }
