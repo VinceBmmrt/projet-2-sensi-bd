@@ -1,10 +1,14 @@
-import { Alert, AlertTitle, Typography } from '@mui/material';
+import { AlertTitle, Typography } from '@mui/material';
+import Stack from '@mui/material/Stack';
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 import axios, { AxiosResponse } from 'axios';
 import React, { useState, ChangeEvent, FormEvent, LegacyRef } from 'react';
 import { usePlacesWidget } from 'react-google-autocomplete';
+import Snackbar from '@mui/material/Snackbar';
+import MuiAlert, { AlertProps } from '@mui/material/Alert';
 import './SignupForm.scss';
+import CustomToast from '../CustomToast/CustomToast';
 
 type UserData = {
   firstname: string;
@@ -19,7 +23,27 @@ type UserData = {
 
 function SignupForm() {
   const googlePlacesAPIKey = import.meta.env.VITE_GOOGLE_API_KEY;
+  // const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(
+  //   props,
+  //   ref
+  // ) {
+  //   return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
+  // });
+  // const [open, setOpen] = React.useState(false);
 
+  const [warningOpen, setWarningOpen] = React.useState(false);
+  const [successOpen, setSuccessOpen] = React.useState(false);
+
+  // const handleClose = (
+  //   event?: React.SyntheticEvent | Event,
+  //   reason?: string
+  // ) => {
+  //   if (reason === 'clickaway') {
+  //     return;
+  //   }
+
+  //   setOpen(false);
+  // };
   const [userFormData, setUserFormData] = useState<UserData>({
     firstname: '',
     lastname: '',
@@ -99,10 +123,13 @@ function SignupForm() {
           ...addressData,
         }
       );
+
       // Vérifiez si la variable response est définie avant d'accéder à la propriété status
       if (response && response.status >= 200 && response.status < 300) {
         // Afficher un message de réussite (par exemple, avec Material-UI Snackbar)
         console.log('Inscription réussie !');
+        // open the success toast
+        setSuccessOpen(true);
 
         // Rediriger l'utilisateur vers la page de connexion
         window.location.replace('/login');
@@ -116,6 +143,7 @@ function SignupForm() {
       }
     } catch (error) {
       console.error('Erreur lors de la récupération des coordonnées:', error);
+      setWarningOpen(true);
     }
     // Check if password and confirmPassword match
     if (userFormData.password !== userFormData.confirmPassword) {
@@ -229,12 +257,13 @@ function SignupForm() {
           required
           sx={{ marginBottom: '1rem' }}
         />
-        {userFormData.error && (
+        {/* {userFormData.error && (
           <Alert severity="warning">
             <AlertTitle>Warning</AlertTitle>
             Les passwords indiqués ne correspondent pas !
           </Alert>
-        )}
+        )} */}
+
         <Button
           type="submit"
           variant="contained"
@@ -247,6 +276,30 @@ function SignupForm() {
         >
           S'inscrire
         </Button>
+        {/* <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
+          <Alert
+            onClose={handleClose}
+            severity="success"
+            sx={{ width: '100%' }}
+          >
+            This is a success message!
+          </Alert>
+        </Snackbar> */}
+        <CustomToast
+          open={successOpen}
+          onClose={() => setSuccessOpen(false)}
+          severity="success"
+        >
+          Inscription réussie !
+        </CustomToast>
+        {/* Toast pour l'avertissement */}
+        <CustomToast
+          open={warningOpen}
+          onClose={() => setWarningOpen(false)}
+          severity="warning"
+        >
+          Les mots de passe ne correspondent pas !
+        </CustomToast>
       </form>
     </div>
   );
