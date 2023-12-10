@@ -33,6 +33,7 @@ function SignupForm() {
 
   const [warningOpen, setWarningOpen] = React.useState(false);
   const [successOpen, setSuccessOpen] = React.useState(false);
+  const [errorOpen, setErrorOpen] = React.useState(false);
 
   // const handleClose = (
   //   event?: React.SyntheticEvent | Event,
@@ -110,6 +111,22 @@ function SignupForm() {
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+    // Check if password and confirmPassword match
+    if (userFormData.password !== userFormData.confirmPassword) {
+      console.error('Passwords match incorrect');
+      setWarningOpen(true);
+
+      setUserFormData((prevData) => ({
+        ...prevData,
+        error: true,
+      }));
+    }
+    // Check if there is an error in the form data
+    if (userFormData.error) {
+      // Don't submit the form if there is an error
+
+      return;
+    }
 
     try {
       const addressData = await getCoordinates(userFormData.address);
@@ -123,16 +140,22 @@ function SignupForm() {
           ...addressData,
         }
       );
-
+      if (response && response.data && response.data.error) {
+        console.error("Erreur lors de l'inscription:", response.data.message);
+        // Display an error toast
+        setErrorOpen(true);
+        return; // Stop further execution
+      }
       // Vérifiez si la variable response est définie avant d'accéder à la propriété status
       if (response && response.status >= 200 && response.status < 300) {
-        // Afficher un message de réussite (par exemple, avec Material-UI Snackbar)
         console.log('Inscription réussie !');
         // open the success toast
         setSuccessOpen(true);
 
         // Rediriger l'utilisateur vers la page de connexion
-        window.location.replace('/login');
+        setTimeout(() => {
+          window.location.replace('/login');
+        }, 2000);
       } else {
         // La requête a échoué ou response n'est pas défini
         console.error(
@@ -143,16 +166,7 @@ function SignupForm() {
       }
     } catch (error) {
       console.error('Erreur lors de la récupération des coordonnées:', error);
-      setWarningOpen(true);
-    }
-    // Check if password and confirmPassword match
-    if (userFormData.password !== userFormData.confirmPassword) {
-      console.error('Passwords match incorrect');
-
-      setUserFormData((prevData) => ({
-        ...prevData,
-        error: true,
-      }));
+      setErrorOpen(true);
     }
   };
 
@@ -274,7 +288,7 @@ function SignupForm() {
             },
           }}
         >
-          S'inscrire
+          S&apos;inscrire
         </Button>
         {/* <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
           <Alert
@@ -299,6 +313,13 @@ function SignupForm() {
           severity="warning"
         >
           Les mots de passe ne correspondent pas !
+        </CustomToast>
+        <CustomToast
+          open={errorOpen}
+          onClose={() => setErrorOpen(false)}
+          severity="error"
+        >
+          Une erreur s&apos;est produite lors de l&apos;inscription.
         </CustomToast>
       </form>
     </div>
