@@ -125,6 +125,7 @@ function SignupForm() {
         });
     } catch (error) {
       console.error('Erreur lors de la récupération des coordonnées:', error);
+      throw error;
     }
     // // Check if password and confirmPassword match
     // if (userFormData.password !== userFormData.confirmPassword) {
