@@ -19,6 +19,7 @@ import ChatBubbleIcon from '@mui/icons-material/ChatBubble';
 import { Post as TPost } from '../../@types/post';
 import './Post.scss';
 import { useAppSelector } from '../../hooks/redux';
+import { Skeleton } from '@mui/material';
 
 const ExpandMore = styled((props) => {
   const { expand, ...other } = props;
@@ -37,6 +38,8 @@ type PostProps = {
 export default function Post({ post }: PostProps) {
   const [expanded, setExpanded] = React.useState(false);
   const isLogged = useAppSelector((state) => state.user.isLogged);
+  const isLoading = useAppSelector((state) => state.posts.isLoading);
+
   const handleExpandClick = () => {
     setExpanded(!expanded);
   };
@@ -51,46 +54,112 @@ export default function Post({ post }: PostProps) {
       <Card sx={{ maxWidth: 345 }}>
         <CardHeader
           avatar={
-            <Avatar
-              alt="User Avatar"
-              src={post.avatar}
-              sx={{ bgcolor: red[500] }}
-            >
-              {post.pseudonym.charAt(0).toUpperCase()}
-            </Avatar>
+            isLoading ? (
+              <Skeleton
+                animation="wave"
+                variant="circular"
+                width={40}
+                height={40}
+              />
+            ) : (
+              <Avatar
+                alt="User Avatar"
+                src={post.avatar}
+                sx={{ bgcolor: red[500] }}
+              >
+                {post.pseudonym.charAt(0).toUpperCase()}
+              </Avatar>
+            )
           }
           action={
-            <IconButton aria-label="Contacter" disabled={!isLogged}>
-              <ChatBubbleIcon />
-            </IconButton>
+            isLoading ? null : (
+              <IconButton aria-label="Contacter" disabled={!isLogged}>
+                <ChatBubbleIcon />
+              </IconButton>
+            )
           }
-          title={post.pseudonym}
-          subheader={formattedDate}
+          title={
+            isLoading ? (
+              <Skeleton
+                animation="wave"
+                height={10}
+                width="80%"
+                style={{ marginBottom: 6 }}
+              />
+            ) : (
+              post.pseudonym
+            )
+          }
+          subheader={
+            isLoading ? (
+              <Skeleton animation="wave" height={10} width="40%" />
+            ) : (
+              formattedDate
+            )
+          }
         />
 
-        <CardMedia
-          component="img"
-          height="194"
-          image={post.image}
-          alt="photo de l'ouvrage"
-        />
+        {isLoading ? (
+          <Skeleton
+            sx={{ height: 190 }}
+            animation="wave"
+            variant="rectangular"
+          />
+        ) : (
+          <CardMedia
+            component="img"
+            height="194"
+            image={post.image}
+            alt="photo de l'ouvrage"
+          />
+        )}
         {/* <div className="post__tag">Réservé</div> */}
-        <CardHeader title={post.post_title} subheader="50km" />
+        <CardHeader
+          title={
+            isLoading ? (
+              <Skeleton
+                animation="wave"
+                height={10}
+                width="80%"
+                style={{ marginBottom: 6 }}
+              />
+            ) : (
+              post.post_title
+            )
+          }
+          subheader={
+            isLoading ? (
+              <Skeleton animation="wave" height={10} width="40%" />
+            ) : (
+              '50km'
+            )
+          }
+        />
         <CardActions disableSpacing>
-          <IconButton aria-label="add to favorites" disabled={!isLogged}>
-            <FavoriteIcon />
-          </IconButton>
-          <IconButton aria-label="Signaler l'annonce" disabled={!isLogged}>
-            <DangerousIcon />
-          </IconButton>
-          <ExpandMore
-            expand={expanded}
-            onClick={handleExpandClick}
-            aria-expanded={expanded}
-            aria-label="show more"
-          >
-            <ExpandMoreIcon sx={{ color: '#555' }} />
-          </ExpandMore>
+          {isLoading ? (
+            <>
+              <Skeleton variant="circular" width={40} height={40} />
+              <Skeleton variant="circular" width={40} height={40} />
+              <Skeleton variant="circular" width={40} height={40} />
+            </>
+          ) : (
+            <>
+              <IconButton aria-label="add to favorites" disabled={!isLogged}>
+                <FavoriteIcon />
+              </IconButton>
+              <IconButton aria-label="Signaler l'annonce" disabled={!isLogged}>
+                <DangerousIcon />
+              </IconButton>
+              <ExpandMore
+                expand={expanded}
+                onClick={handleExpandClick}
+                aria-expanded={expanded}
+                aria-label="show more"
+              >
+                <ExpandMoreIcon sx={{ color: '#555' }} />
+              </ExpandMore>
+            </>
+          )}
         </CardActions>
         <Collapse in={expanded} timeout="auto" unmountOnExit>
           <CardContent>
