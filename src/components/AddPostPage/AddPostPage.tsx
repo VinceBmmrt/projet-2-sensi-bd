@@ -110,7 +110,7 @@ function AddPostPage() {
       <Paper elevation={3} style={{ padding: 16, marginBottom: 16 }}>
         <form onSubmit={handleSubmit}>
           <Grid container spacing={2}>
-            <Grid item xs={12}>
+            <Grid item xs={12} md={3} lg={4} sx={{ flexDirection: 'column' }}>
               <TextField
                 label="Titre de l'annonce"
                 fullWidth
@@ -303,3 +303,30 @@ function AddPostPage() {
 }
 
 export default AddPostPage;
+// exemple d utilisation du token dans le local storage
+// const createNewAd = async (adData) => {
+//   try {
+//     // Récupérez le token du stockage local ou de tout autre endroit où vous le stockez
+//     const token = localStorage.getItem('userToken');
+
+//     // Assurez-vous que vous avez le token avant d'envoyer la requête
+//     if (!token) {
+//       // Gérer le cas où le token n'est pas disponible
+//       return;
+//     }
+
+//     // Ajoutez le token aux en-têtes de la requête
+//     const headers = {
+//       Authorization: `Bearer ${token}`,
+//     };
+
+//     // Envoyez la requête POST avec les données de l'annonce et les en-têtes
+//     const response = await axios.post('votre-url/api/post', adData, { headers });
+
+//     // Traitez la réponse comme nécessaire
+//     console.log(response.data);
+//   } catch (error) {
+//     // Gérez les erreurs de la requête
+//     console.error('Erreur lors de la création de l\'annonce :', error);
+//   }
+// };
