@@ -12,28 +12,33 @@ import {
   Checkbox,
 } from '@mui/material';
 import { Add as AddIcon } from '@mui/icons-material';
+import axios from 'axios';
 
+// coté back :
+// post_title, slug, description, image, book_title, book_author, user_id, category_id, audience_id, condition_id
 type FormData = {
-  title: string;
+  post_title: string;
   description: string;
   book_title: string;
-  author: string;
-  photos: File[];
-  bookType: string;
-  age: string;
-  status: string;
+  book_author: string;
+  image: File[];
+  category_id: number | null;
+  audience_id: number | null;
+  condition_id: number | null;
+  slug: string;
 };
 
 function AddPostPage() {
   const [formData, setFormData] = useState<FormData>({
-    title: '',
+    post_title: '',
     description: '',
     book_title: '',
-    author: '',
-    photos: [],
-    bookType: '',
-    age: '',
-    status: '',
+    book_author: '',
+    image: [],
+    category_id: null,
+    audience_id: null,
+    condition_id: null,
+    slug: '',
   });
 
   const handleInputChange =
@@ -50,23 +55,23 @@ function AddPostPage() {
     if (files) {
       setFormData((prevData) => ({
         ...prevData,
-        photos: [...prevData.photos, ...Array.from(files)],
+        image: [...prevData.image, ...Array.from(files)],
       }));
     }
   };
 
   const handleRemovePhoto = (index: number) => {
     setFormData((prevData) => {
-      const updatedPhotos = [...prevData.photos];
+      const updatedPhotos = [...prevData.image];
       updatedPhotos.splice(index, 1);
       return {
         ...prevData,
-        photos: updatedPhotos,
+        image: updatedPhotos,
       };
     });
   };
 
-  const handleCheckboxChange = (category: keyof FormData, value: string) => {
+  const handleCheckboxChange = (category: keyof FormData, value: number) => {
     setFormData((prevData) => ({
       ...prevData,
       [category]: prevData[category] === value ? '' : value,
@@ -76,6 +81,25 @@ function AddPostPage() {
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     console.log('Form Data:', formData);
+
+    try {
+      axios
+        .post('http://localhost:3000/post', {
+          ...formData,
+        })
+        .then((response) => {
+          console.log('🚀 ~ Response:', response.data);
+
+          setTimeout(() => {
+            window.location.replace('/');
+          }, 2000);
+        })
+        .catch((error) => {
+          console.error('Erreur lors de la requête POST:', error);
+        });
+    } catch (error) {
+      console.error('Erreur lors de la récupération des coordonnées:', error);
+    }
   };
 
   return (
@@ -90,8 +114,8 @@ function AddPostPage() {
               <TextField
                 label="Titre de l'annonce"
                 fullWidth
-                value={formData.title}
-                onChange={handleInputChange('title')}
+                value={formData.post_title}
+                onChange={handleInputChange('post_title')}
               />
             </Grid>
             <Grid item xs={12}>
@@ -120,8 +144,8 @@ function AddPostPage() {
                 multiline
                 rows={4}
                 fullWidth
-                value={formData.author}
-                onChange={handleInputChange('author')}
+                value={formData.book_author}
+                onChange={handleInputChange('book_author')}
               />
             </Grid>
             <Grid item xs={12}>
@@ -143,11 +167,11 @@ function AddPostPage() {
                 </Button>
               </label>
             </Grid>
-            {formData.photos.map((photo, index) => (
+            {formData.image.map((photo, index) => (
               <Grid item xs={3} key={index}>
                 <img
                   src={URL.createObjectURL(photo)}
-                  alt={`Photo ${index + 1}`}
+                  alt={`annonce ${index + 1}`}
                   style={{ width: '100%', height: 'auto', marginBottom: 8 }}
                 />
                 <IconButton onClick={() => handleRemovePhoto(index)}>
@@ -176,15 +200,14 @@ function AddPostPage() {
               }}
             >
               <div>
-                <h3>Type d'ouvrage</h3>
+                <h3>Catégorie</h3>
+                {/* //1=BD  2 = livre 3=Magasine */}
                 <FormGroup style={{ display: 'flex', flexDirection: 'row' }}>
                   <FormControlLabel
                     control={
                       <Checkbox
-                        checked={formData.bookType === 'magazine'}
-                        onChange={() =>
-                          handleCheckboxChange('bookType', 'magazine')
-                        }
+                        checked={formData.category_id === 3}
+                        onChange={() => handleCheckboxChange('category_id', 3)}
                       />
                     }
                     label="Magazine"
@@ -192,10 +215,8 @@ function AddPostPage() {
                   <FormControlLabel
                     control={
                       <Checkbox
-                        checked={formData.bookType === 'livre'}
-                        onChange={() =>
-                          handleCheckboxChange('bookType', 'livre')
-                        }
+                        checked={formData.category_id === 2}
+                        onChange={() => handleCheckboxChange('category_id', 2)}
                       />
                     }
                     label="Livre"
@@ -203,8 +224,8 @@ function AddPostPage() {
                   <FormControlLabel
                     control={
                       <Checkbox
-                        checked={formData.bookType === 'bd'}
-                        onChange={() => handleCheckboxChange('bookType', 'bd')}
+                        checked={formData.category_id === 1}
+                        onChange={() => handleCheckboxChange('category_id', 1)}
                       />
                     }
                     label="Bande dessinée"
@@ -212,36 +233,38 @@ function AddPostPage() {
                 </FormGroup>
               </div>
               <div>
-                <h3>Age</h3>
+                <h3>Audience</h3>
+                {/* 1 = tout public 2 = jeunesse */}
                 <FormGroup style={{ display: 'flex', flexDirection: 'row' }}>
                   <FormControlLabel
                     control={
                       <Checkbox
-                        checked={formData.age === 'tous'}
-                        onChange={() => handleCheckboxChange('age', 'tous')}
+                        checked={formData.audience_id === 1}
+                        onChange={() => handleCheckboxChange('audience_id', 1)}
                       />
                     }
-                    label="Adulte"
+                    label="Tout public"
                   />
                   <FormControlLabel
                     control={
                       <Checkbox
-                        checked={formData.age === 'enfant'}
-                        onChange={() => handleCheckboxChange('age', 'enfant')}
+                        checked={formData.audience_id === 2}
+                        onChange={() => handleCheckboxChange('audience_id', 2)}
                       />
                     }
-                    label="enfant"
+                    label="Jeunesse"
                   />
                 </FormGroup>
               </div>
               <div>
-                <h3>Status</h3>
+                <h3>Condition</h3>
+                {/* 1 = neuf  2= légerement abimé 3 = abimé   */}
                 <FormGroup style={{ display: 'flex', flexDirection: 'row' }}>
                   <FormControlLabel
                     control={
                       <Checkbox
-                        checked={formData.status === 'neuf'}
-                        onChange={() => handleCheckboxChange('status', 'neuf')}
+                        checked={formData.condition_id === 1}
+                        onChange={() => handleCheckboxChange('condition_id', 1)}
                       />
                     }
                     label="Comme  neuf"
@@ -249,8 +272,8 @@ function AddPostPage() {
                   <FormControlLabel
                     control={
                       <Checkbox
-                        checked={formData.status === 'bon'}
-                        onChange={() => handleCheckboxChange('status', 'bon')}
+                        checked={formData.condition_id === 2}
+                        onChange={() => handleCheckboxChange('condition_id', 2)}
                       />
                     }
                     label="Bon état"
@@ -258,8 +281,8 @@ function AddPostPage() {
                   <FormControlLabel
                     control={
                       <Checkbox
-                        checked={formData.status === 'abime'}
-                        onChange={() => handleCheckboxChange('status', 'abime')}
+                        checked={formData.condition_id === 3}
+                        onChange={() => handleCheckboxChange('condition_id', 3)}
                       />
                     }
                     label="Abimé"
