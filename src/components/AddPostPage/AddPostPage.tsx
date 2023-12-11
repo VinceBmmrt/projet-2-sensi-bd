@@ -12,6 +12,7 @@ import {
   Checkbox,
 } from '@mui/material';
 import { Add as AddIcon } from '@mui/icons-material';
+import axios from 'axios';
 
 type FormData = {
   title: string;
@@ -23,6 +24,27 @@ type FormData = {
   age: string;
   status: string;
 };
+
+async function postImage({ image, description }) {
+  const imgFormData = new FormData();
+
+  if (image) {
+    imgFormData.append('image', image);
+  }
+  imgFormData.append('description', description);
+
+  if (image) {
+    const result = await axios.post(
+      'http://localhost:3000/images',
+      imgFormData,
+      {
+        headers: { 'Content-Type': 'multipart/form-data' },
+      }
+    );
+    return result.data;
+  }
+  return null;
+}
 
 function AddPostPage() {
   const [formData, setFormData] = useState<FormData>({
@@ -73,9 +95,17 @@ function AddPostPage() {
     }));
   };
 
-  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     console.log('Form Data:', formData);
+    try {
+      const result = await postImage({ image: file, description });
+      const imageUrl = result.location; // Assurez-vous que 'location' est la clé retournée par votre serveur avec l'URL de l'image
+      setImages([imageUrl, ...images]);
+    } catch (error) {
+      console.error("Erreur lors de l'upload de l'image", error);
+      // Gérer l'erreur, par exemple en affichant un message à l'utilisateur
+    }
   };
 
   return (
