@@ -27,7 +27,38 @@ type FormData = {
   condition_id: number | null;
   slug: string;
 };
+// async function postImageToAWS({ image, description }) {
+//   const formData = new FormData();
 
+//   if (image) {
+//     formData.append('image', image);
+//   }
+//   formData.append('description', description);
+
+//   if (image) {
+//     try {
+//       const result = await axios.post(
+//         'http://localhost:3000/images',
+//         formData,
+//         {
+//           headers: { 'Content-Type': 'multipart/form-data' },
+//         }
+//       );
+//       console.log(result.data);
+
+//       // Vérifier si result et result.location existent
+//       if (result && result.location) {
+//         return result.data;
+//       }
+//       throw new Error('Location not found in the response');
+//     } catch (error) {
+//       console.error('Error uploading the image', error);
+//       throw error;
+//     }
+//   } else {
+//     return null;
+//   }
+// }
 function AddPostPage() {
   const [formData, setFormData] = useState<FormData>({
     post_title: '',
@@ -40,7 +71,9 @@ function AddPostPage() {
     condition_id: null,
     slug: '',
   });
-
+  const [file, setFile] = useState();
+  const [description, setDescription] = useState('');
+  const [images, setImages] = useState([]);
   const handleInputChange =
     (field: keyof FormData) =>
     (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -78,9 +111,21 @@ function AddPostPage() {
     }));
   };
 
-  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     console.log('Form Data:', formData);
+
+    // try {
+    //   const imageUrl = await postImageToAWS({
+    //     image: formData.image[0],
+    //     description,
+    //   });
+    //   console.log('Image URL:', imageUrl);
+
+    //   // Continuez avec le reste de votre logique d'envoi de formulaire ici
+    // } catch (error) {
+    //   console.error("Erreur lors de l'upload de l'image", error);
+    // }
 
     try {
       axios
