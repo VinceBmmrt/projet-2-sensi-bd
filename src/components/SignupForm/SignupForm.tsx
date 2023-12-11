@@ -107,10 +107,20 @@ function SignupForm() {
       console.log('🚀 ~ userFormData:', userFormData);
       console.log('🚀 ~ adressData:', addressData);
 
-      axios.post('http://localhost:3000/users/', {
-        ...userFormData,
-        ...addressData,
-      });
+      axios
+        .post('http://localhost:3000/users/', {
+          ...userFormData,
+          ...addressData,
+        })
+        .then((response) => {
+          console.log('🚀 ~ Response:', response.data);
+          console.log(response.data);
+          // setSuccessOpen(true);
+        })
+        .catch((error) => {
+          console.error('Erreur lors de la requête POST:', error);
+          // setErrorOpen(true);
+        });
     } catch (error) {
       console.error('Erreur lors de la récupération des coordonnées:', error);
     }
