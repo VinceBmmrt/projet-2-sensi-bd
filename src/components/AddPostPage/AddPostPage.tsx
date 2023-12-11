@@ -29,6 +29,17 @@ type FormData = {
   file: File | null; // New state for managing the selected file
 };
 
+const slugify = (text) =>
+  text
+    .toString()
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .toLowerCase()
+    .trim()
+    .replace(/\s+/g, '-')
+    .replace(/[^\w-]+/g, '')
+    .replace(/--+/g, '-');
+
 async function postImage({ file, description }) {
   const imgFormData = new FormData();
 
@@ -91,6 +102,10 @@ function AddPostPage() {
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+    setFormData((prevData) => ({
+      ...prevData,
+      slug: slugify(formData.post_title),
+    }));
     console.log('Form Data:', formData);
 
     try {
