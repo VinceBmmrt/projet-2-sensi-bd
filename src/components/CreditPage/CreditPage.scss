@@ -1,0 +1,20 @@
+.creditPage__container {
+  display: 'flex';
+  flex-direction: 'column';
+  align-items: 'center';
+  justify-content: 'center';
+  min-height: '100vh';
+  text-align: 'center';
+}
+.creditsHeader {
+  text-align: 'left';
+  margin-bottom: '20px';
+}
+.creditsExplanation {
+  text-align: 'center';
+}
+.header__topContainer-credit-logo {
+}
+.MuiStepLabel-iconContainer {
+  color: #bbb;
+}
