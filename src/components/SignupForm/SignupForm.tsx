@@ -5,6 +5,7 @@ import axios from 'axios';
 import React, { useState, ChangeEvent, FormEvent, LegacyRef } from 'react';
 import { usePlacesWidget } from 'react-google-autocomplete';
 import './SignupForm.scss';
+import CustomToast from '../CustomToast/CustomToast';
 
 type UserData = {
   firstname: string;
@@ -19,6 +20,9 @@ type UserData = {
 
 function SignupForm() {
   const googlePlacesAPIKey = import.meta.env.VITE_GOOGLE_API_KEY;
+  const [warningOpen, setWarningOpen] = useState(false);
+  const [successOpen, setSuccessOpen] = useState(false);
+  const [errorOpen, setErrorOpen] = useState(false);
 
   const [userFormData, setUserFormData] = useState<UserData>({
     firstname: '',
@@ -87,6 +91,17 @@ function SignupForm() {
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
+    if (userFormData.password !== userFormData.confirmPassword) {
+      console.error('Passwords match incorrect');
+      setWarningOpen(true);
+
+      setUserFormData((prevData) => ({
+        ...prevData,
+        error: true,
+      }));
+      return;
+    }
+
     try {
       const addressData = await getCoordinates(userFormData.address);
       console.log('🚀 ~ userFormData:', userFormData);
@@ -99,15 +114,15 @@ function SignupForm() {
     } catch (error) {
       console.error('Erreur lors de la récupération des coordonnées:', error);
     }
-    // Check if password and confirmPassword match
-    if (userFormData.password !== userFormData.confirmPassword) {
-      console.error('Passwords match incorrect');
+    // // Check if password and confirmPassword match
+    // if (userFormData.password !== userFormData.confirmPassword) {
+    //   console.error('Passwords match incorrect');
 
-      setUserFormData((prevData) => ({
-        ...prevData,
-        error: true,
-      }));
-    }
+    //   setUserFormData((prevData) => ({
+    //     ...prevData,
+    //     error: true,
+    //   }));
+    // }
   };
 
   return (
@@ -211,12 +226,12 @@ function SignupForm() {
           required
           sx={{ marginBottom: '1rem' }}
         />
-        {userFormData.error && (
+        {/* {userFormData.error && (
           <Alert severity="warning">
             <AlertTitle>Warning</AlertTitle>
             Les passwords indiqués ne correspondent pas !
           </Alert>
-        )}
+        )} */}
         <Button
           type="submit"
           variant="contained"
@@ -230,6 +245,13 @@ function SignupForm() {
           S'inscrire
         </Button>
       </form>
+      <CustomToast
+        open={warningOpen}
+        onClose={() => setWarningOpen(false)}
+        severity="warning"
+      >
+        Les mots de passe ne correspondent pas !
+      </CustomToast>
     </div>
   );
 }
