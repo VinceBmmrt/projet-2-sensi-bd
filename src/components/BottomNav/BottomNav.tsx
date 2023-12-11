@@ -6,28 +6,76 @@ import FavorisIcon from '@mui/icons-material/Favorite';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
 import ChatBubbleIcon from '@mui/icons-material/ChatBubble';
 import PersonIcon from '@mui/icons-material/Person';
+import { useState } from 'react';
+import { useAppSelector } from '../../hooks/redux';
 
-export default function LabelBottomNavigation() {
-  const [value, setValue] = React.useState('recents');
+export default function BottomNav() {
+  const [value, setValue] = useState<number>(0);
+  const isLogged = useAppSelector((state) => state.user.isLogged);
 
-  const handleChange = (event, newValue) => {
+  function handleButtonNavClick(newValue: number) {
     setValue(newValue);
-  };
+    switch (newValue) {
+      case 0:
+        window.location.replace('/');
+        break;
+      case 1:
+        window.location.replace('/favoris');
+        break;
+      case 2:
+        window.location.replace('/addPost');
+        break;
+      case 3:
+        window.location.replace('/messages');
+        break;
+      case 4:
+        if (isLogged) {
+          window.location.replace('/profil');
+        } else {
+          window.location.replace('/login');
+        }
+        break;
+      default:
+        break;
+    }
+  }
 
   return (
     <BottomNavigation
       showLabels
       value={value}
       onChange={(event, newValue) => {
-        setValue(newValue);
+        handleButtonNavClick(newValue);
+      }}
+      style={{
+        position: 'fixed',
+        bottom: 0,
+        width: '100%',
       }}
     >
       <BottomNavigationAction label="Accueil" icon={<HomeIcon />} />
-      <BottomNavigationAction label="Favoris" icon={<FavorisIcon />} />
-      <BottomNavigationAction label="AddCircle" icon={<AddCircleIcon />} />
-      <BottomNavigationAction label="Messages" icon={<ChatBubbleIcon />} />
-
-      <BottomNavigationAction label="Connexion" icon={<PersonIcon />} />
+      <BottomNavigationAction
+        label="Favoris"
+        icon={<FavorisIcon />}
+        disabled={!isLogged}
+        sx={isLogged ? {} : { color: '#bbb' }}
+      />
+      <BottomNavigationAction
+        label="Ajouter"
+        icon={<AddCircleIcon />}
+        disabled={!isLogged}
+        sx={isLogged ? {} : { color: '#bbb' }}
+      />
+      <BottomNavigationAction
+        label="Messages"
+        icon={<ChatBubbleIcon />}
+        disabled={!isLogged}
+        sx={isLogged ? {} : { color: '#bbb' }}
+      />
+      <BottomNavigationAction
+        label={isLogged ? 'Profil' : 'Connexion'}
+        icon={<PersonIcon />}
+      />
     </BottomNavigation>
   );
 }

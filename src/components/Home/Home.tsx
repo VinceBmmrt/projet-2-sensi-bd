@@ -1,16 +1,16 @@
+import { useEffect } from 'react';
+import { useAppDispatch, useAppSelector } from '../../hooks/redux';
 import Posts from '../Posts/Posts';
 import AppHeader from '../appHeader/appHeader';
-import data from '../../data';
-
-// TO DO remplacer la data far un fetch axios
-// import { useAppSelector } from '../../hooks/redux';
+// import data from '../../data';
+import './Home.scss';
+import { fetchPosts } from '../../store/reducers/posts';
 
 function Home() {
-  // const recipes = useAppSelector((state) => state.recipes.list);
   return (
     <div className="home">
       <AppHeader />
-      <Posts posts={data} />
+      <Posts />
     </div>
   );
 }

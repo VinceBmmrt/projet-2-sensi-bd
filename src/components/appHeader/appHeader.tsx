@@ -1,32 +1,28 @@
 import * as React from 'react';
-import { styled, alpha, useTheme } from '@mui/material/styles';
+import { styled, useTheme } from '@mui/material/styles';
+import { Link } from 'react-router-dom';
 
 import SearchIcon from '@mui/icons-material/Search';
-
-import InputBase from '@mui/material/InputBase';
 import TuneIcon from '@mui/icons-material/Tune';
 import {
-  BottomNavigationAction,
-  Box,
   Button,
   Checkbox,
   Divider,
   Drawer,
   FormControlLabel,
   FormGroup,
-  FormLabel,
   IconButton,
   Slider,
   TextField,
-  Typography,
 } from '@mui/material';
-import { useState } from 'react';
+import { ChangeEvent, FormEvent, useState } from 'react';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import logo from '../../assets/leaf_color.png';
 import leafIcon from '../../../public/feuille.png';
 import './appHeader.scss';
-import Posts from '../Posts/Posts';
+import { fetchPosts, setSearchText } from '../../store/reducers/posts';
+import { useAppDispatch, useAppSelector } from '../../hooks/redux';
 
 type FilterData = {
   distance: number | number[];
@@ -36,24 +32,12 @@ type FilterData = {
   reserved: boolean;
 };
 function AppHeader() {
-  // const handleSubmitSearchMessage: React.FormEventHandler<HTMLFormElement> | undefined(event: FormEvent<HTMLFormElement>) => {
-
-  //   console.log('test');
-  // }
-
-  // const handleChangeInputValue = (event: ChangeEvent<HTMLInputElement>) => {
-  //   const newValue = event.target.value;
-
-  //   // J'emet l'intention de changer la valeur de mon input avec sa nouvelle valeur
-  //   dispatch(changeInputValue(newValue));
-  // };
   const drawerWidth = 340;
   const theme = useTheme();
   const [open, setOpen] = useState(false);
-  const [distanceFilterValue, setDistanceFilterValue] = useState<number[]>([
-    5, 50,
-  ]);
-  const [drawerOpen, setDrawerOpen] = useState(false);
+  const dispatch = useAppDispatch();
+  const searchText = useAppSelector((state) => state.posts.searchText);
+
   const [formData, setFormData] = useState<FilterData>({
     distance: 5,
     bookType: '',
@@ -70,49 +54,6 @@ function AppHeader() {
     justifyContent: 'flex-start',
   }));
 
-  const Search = styled('div')(() => ({
-    position: 'relative',
-    borderRadius: theme.shape.borderRadius,
-    backgroundColor: alpha(theme.palette.common.white, 0.15),
-    '&:hover': {
-      backgroundColor: alpha(theme.palette.common.white, 0.25),
-      border: '1px solid green',
-    },
-    marginRight: theme.spacing(2),
-    marginLeft: 0,
-    width: '100%',
-    height: '100%', // Ajustez la hauteur selon vos préférences
-    alignItems: 'center', // Alignement vertical du contenu
-    [theme.breakpoints.up('sm')]: {
-      marginLeft: theme.spacing(3),
-      width: 'auto',
-    },
-    border: '1px solid grey',
-  }));
-
-  const SearchIconWrapper = styled('div')(() => ({
-    padding: theme.spacing(0, 0),
-    height: '100%',
-    position: 'absolute',
-    pointerEvents: 'none',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-  }));
-
-  const StyledInputBase = styled(InputBase)(() => ({
-    color: 'inherit',
-    '& .MuiInputBase-input': {
-      // padding: theme.spacing(1, 1, 1, 0),
-      // vertical padding + font size from searchIcon
-      paddingLeft: `calc(1em + ${theme.spacing(4)})`,
-      transition: theme.transitions.create('width'),
-      width: '100%',
-      [theme.breakpoints.up('md')]: {
-        width: '20ch',
-      },
-    },
-  }));
   const handleDrawerOpen = () => {
     setOpen(true);
   };
@@ -120,13 +61,7 @@ function AppHeader() {
   const handleDrawerClose = () => {
     setOpen(false);
   };
-  // const handleChangeDistanceFilterValue = (
-  //   event: Event,
-  //   newValue: number | number[]
-  // ) => {
-  //   setDistanceFilterValue(newValue as number[]);
-  //   console.log(distanceFilterValue);
-  // };
+
   const handleSliderChange = (event: Event, newValue: number | number[]) => {
     setFormData({ ...formData, distance: newValue });
   };
@@ -138,60 +73,75 @@ function AppHeader() {
     }));
   };
 
-  const handleSubmit = (event: Event) => {
+  // gestion de la barre de recherche et soumission du formulaire de recherche
+
+  const handleSubmitSearchValue = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    console.log(formData);
-    // Add your form submission logic here
+    console.log('formulaire soumis');
+    dispatch(fetchPosts());
   };
+
+  const handleChangeSearchValue = (
+    event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
+    dispatch(setSearchText(event.target.value));
+  };
+
+  function handleSubmit(event: FormEvent<HTMLFormElement>): void {
+    console.log('formulaire soumis');
+  }
+
   return (
     <header className="header">
       <div className="header__topContainer">
-        <img
-          src={logo}
-          className="header__topContainer-logo"
-          alt="Logo Leeaf"
-        />
+        <div className="header__topContainer-logo-container">
+          <Link to="/">
+            <img
+              src={logo}
+              className="header__topContainer-logo"
+              alt="Logo Leeaf"
+            />
+          </Link>
+        </div>
         <div className="header__topContainer-credit">
-          <div className="header__topContainer-creditCount">9999</div>
-          <img
-            src={leafIcon}
-            className="header__topContainer-creditLogo"
-            alt="Logo Leeaf"
-            style={{ maxWidth: '50%', width: '100%', height: 'auto' }}
+          <div className="header__topContainer-credit-count">10</div>
+          <Link to="/credits">
+            <img
+              src={leafIcon}
+              className="header__topContainer-credit-logo"
+              alt="Logo Leeaf"
+            />
+          </Link>
+        </div>
+      </div>
+      <div className="header__searchContainer">
+        <form
+          className="header__searchContainer-searchBar"
+          onSubmit={handleSubmitSearchValue}
+        >
+          <TextField
+            variant="standard"
+            placeholder="ouvrage, code postal, ville"
+            value={searchText}
+            onChange={handleChangeSearchValue}
+            InputProps={{
+              startAdornment: (
+                <SearchIcon color="action" sx={{ color: '#555' }} />
+              ),
+            }}
           />
+        </form>
+        <div className="header__searchContainer-filterButton">
+          <IconButton
+            sx={{ color: '#555' }}
+            aria-label="Filters"
+            onClick={handleDrawerOpen}
+          >
+            <TuneIcon />
+          </IconButton>
         </div>
       </div>
 
-      <div className="header__searchContainer">
-        <form className="form">
-          <Search>
-            <SearchIconWrapper>
-              <SearchIcon />
-            </SearchIconWrapper>
-            <StyledInputBase
-              placeholder="Search…"
-              inputProps={{ 'aria-label': 'search' }}
-            />
-          </Search>
-        </form>
-        <BottomNavigationAction
-          className="customLabelColor"
-          label="Filtres"
-          icon={<TuneIcon style={{ fontSize: 18 }} />}
-          onClick={handleDrawerOpen}
-          sx={{
-            ...(open && { display: 'none' }),
-            width: 200,
-            color: 'blue',
-
-            padding: 0,
-
-            '& .MuiBottomNavigationAction-label': {
-              opacity: 1,
-            },
-          }}
-        />
-      </div>
       <Drawer
         sx={{
           width: drawerWidth,
@@ -214,21 +164,24 @@ function AppHeader() {
           </IconButton>
         </DrawerHeader>
         <Divider />
-        <div>
-          <h2>Filter Options</h2>
+        <div className="drawer">
+          <h2>Options de filtres</h2>
           <form onSubmit={handleSubmit}>
             <div>
-              <label>Distance Range</label>
+              <label>Distance autour de chez vous</label>
               <Slider
                 value={formData.distance}
                 onChange={handleSliderChange}
                 valueLabelDisplay="auto"
                 valueLabelFormat={(value) => `${value} km`}
                 max={10}
+                sx={{
+                  color: '#95C23D',
+                }}
               />
             </div>
-            <div>
-              <h3>Book Types</h3>
+            <div className="drawer__categories">
+              <h3>Catégories</h3>
               <FormGroup>
                 <FormControlLabel
                   control={
@@ -248,7 +201,7 @@ function AppHeader() {
                       onChange={() => handleCheckboxChange('bookType', 'book')}
                     />
                   }
-                  label="Book"
+                  label="Livres"
                 />
                 <FormControlLabel
                   control={
@@ -259,11 +212,11 @@ function AppHeader() {
                       }
                     />
                   }
-                  label="Comics"
+                  label="Bande dsessinée"
                 />
               </FormGroup>
             </div>
-            <div>
+            <div className="drawer__audience">
               <h3>Age</h3>
               <FormGroup>
                 <FormControlLabel
@@ -273,7 +226,7 @@ function AppHeader() {
                       onChange={() => handleCheckboxChange('age', 'adult')}
                     />
                   }
-                  label="adult"
+                  label="adultes"
                 />
                 <FormControlLabel
                   control={
@@ -282,11 +235,11 @@ function AppHeader() {
                       onChange={() => handleCheckboxChange('age', 'kid')}
                     />
                   }
-                  label="kid"
+                  label="enfants"
                 />
               </FormGroup>
             </div>
-            <div>
+            <div className="drawer__condition">
               <h3>Status</h3>
               <FormGroup>
                 <FormControlLabel
@@ -296,7 +249,7 @@ function AppHeader() {
                       onChange={() => handleCheckboxChange('status', 'good')}
                     />
                   }
-                  label="good"
+                  label="Comme neuf"
                 />
                 <FormControlLabel
                   control={
@@ -305,7 +258,7 @@ function AppHeader() {
                       onChange={() => handleCheckboxChange('status', 'ok')}
                     />
                   }
-                  label="ok"
+                  label="Bon état"
                 />
                 <FormControlLabel
                   control={
@@ -314,21 +267,22 @@ function AppHeader() {
                       onChange={() => handleCheckboxChange('status', 'bad')}
                     />
                   }
-                  label="bad"
+                  label="Abimé"
                 />
               </FormGroup>
             </div>
-            <div>
-              <h3>Reserved</h3>
-              <FormGroup>
-                <FormControlLabel
-                  control={<Checkbox />}
-                  label="Reserved"
-                  onChange={() => handleCheckboxChange('reserved', true)}
-                />
-              </FormGroup>
-            </div>
-            <Button type="submit" variant="contained" color="primary">
+
+            <Button
+              type="submit"
+              variant="contained"
+              color="primary"
+              sx={{
+                backgroundColor: '#95C23D', // Change this to the desired color
+                '&:hover': {
+                  backgroundColor: '#7E9D2D', // Change this to the desired hover color
+                },
+              }}
+            >
               Submit
             </Button>
           </form>
