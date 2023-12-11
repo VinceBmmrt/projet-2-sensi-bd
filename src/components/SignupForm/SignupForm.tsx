@@ -114,12 +114,14 @@ function SignupForm() {
         })
         .then((response) => {
           console.log('🚀 ~ Response:', response.data);
-          console.log(response.data);
-          // setSuccessOpen(true);
+          setSuccessOpen(true);
+          setTimeout(() => {
+            window.location.replace('/login');
+          }, 2000);
         })
         .catch((error) => {
           console.error('Erreur lors de la requête POST:', error);
-          // setErrorOpen(true);
+          setErrorOpen(true);
         });
     } catch (error) {
       console.error('Erreur lors de la récupération des coordonnées:', error);
@@ -261,6 +263,20 @@ function SignupForm() {
         severity="warning"
       >
         Les mots de passe ne correspondent pas !
+      </CustomToast>
+      <CustomToast
+        open={successOpen}
+        onClose={() => setSuccessOpen(false)}
+        severity="success"
+      >
+        Inscription réussie !
+      </CustomToast>
+      <CustomToast
+        open={errorOpen}
+        onClose={() => setErrorOpen(false)}
+        severity="error"
+      >
+        Erreur à la soumission du formulaire !
       </CustomToast>
     </div>
   );
