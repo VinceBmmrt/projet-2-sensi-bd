@@ -24,6 +24,7 @@ type FormData = {
   category_id: number | null;
   audience_id: number | null;
   condition_id: number | null;
+  user_id: number;
   slug: string;
   file: File | null; // New state for managing the selected file
 };
@@ -59,6 +60,7 @@ function AddPostPage() {
     category_id: null,
     audience_id: null,
     condition_id: null,
+    user_id: 1,
     slug: '',
     file: null, // Initialize the file state
   });
@@ -100,6 +102,18 @@ function AddPostPage() {
       const imageUrl = result.location;
       console.log('Image URL:', imageUrl);
       // Further logic based on the server response
+
+      axios
+        .post('http://localhost:3000/posts/', {
+          ...formData,
+        })
+        .then((response) => {
+          console.log('Response:', response.data);
+
+          // setTimeout(() => {
+          //   window.location.replace('/');
+          // }, 2000);
+        });
     } catch (error) {
       console.error("Erreur lors de l'upload de l'image", error);
       // Handle the error
