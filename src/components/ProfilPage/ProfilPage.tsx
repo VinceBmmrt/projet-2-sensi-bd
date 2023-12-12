@@ -142,12 +142,9 @@ function UserProfilePage() {
       justifyContent="center"
       minHeight="100vh"
     >
-      <Paper
-        elevation={3}
+      <div
         style={{
-          padding: 16,
-          maxWidth: 600,
-          width: '100%',
+          padding: '1rem',
         }}
       >
         <input
@@ -219,7 +216,17 @@ function UserProfilePage() {
         <div
           style={{ marginTop: 16, display: 'flex', justifyContent: 'center' }}
         >
-          <Button variant="contained" color="primary" onClick={handleSaveClick}>
+          <Button
+            variant="contained"
+            sx={{
+              mb: 6,
+              backgroundColor: '#95C23D', // Change this to the desired color
+              '&:hover': {
+                backgroundColor: '#7E9D2D', // Change this to the desired hover color
+              },
+            }}
+            onClick={handleSaveClick}
+          >
             Enregistrer les modifications
           </Button>
         </div>
@@ -232,7 +239,7 @@ function UserProfilePage() {
             Me déconnecter
           </Link>
         </div>
-      </Paper>
+      </div>
     </Box>
   );
 }
