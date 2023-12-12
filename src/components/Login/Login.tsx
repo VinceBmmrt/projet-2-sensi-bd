@@ -78,6 +78,8 @@ export default function SignIn() {
     const credentials = { email: emailValue, password: passwordValue };
     dispatch(login(credentials));
 
+    setSuccessOpen(true);
+
     setTimeout(() => {
       window.location.replace('/');
     }, 2000);
@@ -85,7 +87,6 @@ export default function SignIn() {
 
   return (
     <Container component="main" maxWidth="xs">
-      <CssBaseline />
       <Box
         sx={{
           display: 'flex',
@@ -93,7 +94,6 @@ export default function SignIn() {
           alignItems: 'center',
         }}
       >
-        <Avatar alt="Icone feuille" src="./public/feuille.png" />
         <Typography component="h1" variant="h5">
           Se connecter
         </Typography>
@@ -161,15 +161,15 @@ export default function SignIn() {
               </Link>
             </Grid>
           </Grid>
-          <CustomToast
-            open={successOpen}
-            onClose={() => setSuccessOpen(false)}
-            severity="success"
-          >
-            Connexion réussie !
-          </CustomToast>
         </Box>
       </Box>
+      <CustomToast
+        open={successOpen}
+        onClose={() => setSuccessOpen(false)}
+        severity="success"
+      >
+        Connexion réussie !
+      </CustomToast>
     </Container>
   );
 }

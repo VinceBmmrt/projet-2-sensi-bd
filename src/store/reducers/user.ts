@@ -7,6 +7,7 @@ type UserData = {
   token: string;
   isLogged: boolean;
   role: number;
+  userId: number;
 };
 
 interface UserState {
@@ -18,6 +19,7 @@ interface UserState {
   checked: boolean;
   isLoading: boolean;
   error?: string;
+  userId?: number;
   // loggedMessage?: string;
 }
 
@@ -29,6 +31,7 @@ export const initialState: UserState = {
   token: undefined,
   role: undefined,
   isLogged: false,
+  userId: undefined,
   credentials: {
     email: '',
     password: '',
@@ -102,6 +105,7 @@ const userReducer = createSlice({
       state.pseudo = undefined;
       state.token = undefined;
       state.role = undefined;
+      state.userId = undefined;
     },
   },
   extraReducers(builder) {
@@ -120,6 +124,7 @@ const userReducer = createSlice({
       state.token = action.payload.token;
       state.isLogged = action.payload.isLogged;
       state.role = action.payload.role;
+      state.userId = action.payload.userId;
       // state.loggedMessage = 'vous êtes connecté';
     });
   },

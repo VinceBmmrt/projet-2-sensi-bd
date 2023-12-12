@@ -92,7 +92,7 @@ function UserProfilePage() {
     email: 'johndoe@example.com',
     credits: 100,
     postedAds: 5,
-    full_address: '4, rue de la brasserie, Nantes, France',
+    address: '4, rue de la brasserie, Nantes, France',
   });
   const [avatarSrc, setAvatarSrc] = useState('/path/to/avatar.jpg'); // Initial avatar source
   const [file, setFile] = useState();
@@ -183,7 +183,7 @@ function UserProfilePage() {
           <Typography>Nom: {userData.lastName}</Typography>
           <Typography>Pseudo: {userData.pseudonym}</Typography>
           <Typography>Email: {userData.email}</Typography>
-          <Typography>Addresse: {userData.full_address}</Typography>
+          <Typography>Addresse: {userData.address}</Typography>
         </div>
         <Grid container spacing={2} style={{ marginTop: 16 }}>
           <EditableField
@@ -208,8 +208,8 @@ function UserProfilePage() {
           />
           <EditableField
             label="Adresse"
-            value={userData.full_address}
-            onSave={(value) => handleInputChange('full_address', value)}
+            value={userData.address}
+            onSave={(value) => handleInputChange('address', value)}
           />
         </Grid>
 
@@ -219,7 +219,7 @@ function UserProfilePage() {
           <Button
             variant="contained"
             sx={{
-              mb: 6,
+              mb: 1,
               backgroundColor: '#95C23D', // Change this to the desired color
               '&:hover': {
                 backgroundColor: '#7E9D2D', // Change this to the desired hover color
@@ -230,7 +230,13 @@ function UserProfilePage() {
             Enregistrer les modifications
           </Button>
         </div>
-        <div style={{ marginTop: 16, textAlign: 'center' }}>
+        <div
+          style={{
+            marginTop: '0.5rem',
+            textAlign: 'center',
+            marginBottom: '4.5rem',
+          }}
+        >
           <Link to="/mes-annonces">Mes annonces</Link>
           <span style={{ margin: '0 8px' }}>|</span>
           <Link to="/mes-favoris">Mes favoris</Link>
