@@ -125,9 +125,9 @@ function AddPostPage() {
         .then((response) => {
           console.log('Response:', response.data);
 
-          // setTimeout(() => {
-          //   window.location.replace('/');
-          // }, 2000);
+          setTimeout(() => {
+            window.location.replace('/');
+          }, 2000);
         });
     } catch (error) {
       console.error("Erreur lors de l'upload de l'image", error);

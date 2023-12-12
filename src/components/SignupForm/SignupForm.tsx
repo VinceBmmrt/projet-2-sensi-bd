@@ -115,9 +115,9 @@ function SignupForm() {
         .then((response) => {
           console.log('🚀 ~ Response:', response.data);
           setSuccessOpen(true);
-          // setTimeout(() => {
-          //   window.location.replace('/login');
-          // }, 2000);
+          setTimeout(() => {
+            window.location.replace('/login');
+          }, 2000);
         })
         .catch((error) => {
           console.error('Erreur lors de la requête POST:', error);

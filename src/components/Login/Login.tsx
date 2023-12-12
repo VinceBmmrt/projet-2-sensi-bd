@@ -10,13 +10,10 @@ import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
-import { ChangeEvent, useEffect } from 'react';
+import { ChangeEvent, useEffect, useState } from 'react';
 import { useAppDispatch, useAppSelector } from '../../hooks/redux';
-import {
-  changeCheckedValue,
-  changeCredentialValue,
-  getCredentialsFromStorage,
-} from '../../store/reducers/user';
+import { changeCredentialValue, login } from '../../store/reducers/user';
+import CustomToast from '../CustomToast/CustomToast';
 
 export default function SignIn() {
   const dispatch = useAppDispatch();
@@ -24,11 +21,12 @@ export default function SignIn() {
   const passwordValue = useAppSelector(
     (state) => state.user.credentials.password
   );
-  const checkedValue = useAppSelector((state) => state.user.checked);
+  const [successOpen, setSuccessOpen] = useState(false);
+  // const checkedValue = useAppSelector((state) => state.user.checked);
 
-  useEffect(() => {
-    dispatch(getCredentialsFromStorage());
-  }, [dispatch]);
+  // useEffect(() => {
+  //   dispatch(getCredentialsFromStorage());
+  // }, [dispatch]);
 
   const handleChangeEmail = (
     event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -54,11 +52,11 @@ export default function SignIn() {
     );
   };
 
-  const handleChangeRememberMe = (
-    event: React.ChangeEvent<HTMLInputElement>
-  ) => {
-    dispatch(changeCheckedValue());
-  };
+  // const handleChangeRememberMe = (
+  //   event: React.ChangeEvent<HTMLInputElement>
+  // ) => {
+  //   dispatch(changeCheckedValue());
+  // };
 
   const handleSignIn = (event) => {
     event.preventDefault();
@@ -66,18 +64,23 @@ export default function SignIn() {
     // Logique de connexion ici
     console.log('Email:', emailValue);
     console.log('Password:', passwordValue);
-    console.log('Remember Me:', checkedValue);
 
     // Stockage local (localStorage) - à ajuster selon vos besoins
-    if (checkedValue) {
-      localStorage.setItem('Email', emailValue);
-      localStorage.setItem('Password', passwordValue);
-    } else {
-      localStorage.removeItem('Email');
-      localStorage.removeItem('Password');
-    }
+    // if (checkedValue) {
+    //   localStorage.setItem('Email', emailValue);
+    //   localStorage.setItem('Password', passwordValue);
+    // } else {
+    //   localStorage.removeItem('Email');
+    //   localStorage.removeItem('Password');
+    // }
 
     // Autres actions de connexion...
+    const credentials = { email: emailValue, password: passwordValue };
+    dispatch(login(credentials));
+
+    setTimeout(() => {
+      window.location.replace('/');
+    }, 2000);
   };
 
   return (
@@ -119,7 +122,7 @@ export default function SignIn() {
             value={passwordValue}
             onChange={handleChangePassword}
           />
-          <FormControlLabel
+          {/* <FormControlLabel
             control={
               <Checkbox
                 checked={checkedValue}
@@ -128,7 +131,7 @@ export default function SignIn() {
               />
             }
             label="Se souvenir de moi"
-          />
+          /> */}
 
           <Button
             type="submit"
@@ -158,6 +161,13 @@ export default function SignIn() {
               </Link>
             </Grid>
           </Grid>
+          <CustomToast
+            open={successOpen}
+            onClose={() => setSuccessOpen(false)}
+            severity="success"
+          >
+            Connexion réussie !
+          </CustomToast>
         </Box>
       </Box>
     </Container>

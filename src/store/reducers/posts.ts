@@ -1,6 +1,7 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import axios from 'axios';
 import { Post as TPost } from '../../@types/post';
+import { axiosInstance } from '../../utils/axios';
 
 type PostsState = {
   isLoading: boolean;

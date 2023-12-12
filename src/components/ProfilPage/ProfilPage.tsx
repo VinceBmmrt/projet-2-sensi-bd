@@ -7,12 +7,14 @@ import {
   Avatar,
   IconButton,
   TextField,
-  Link,
   Button,
   Grid,
   Box,
 } from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
+import { Link } from 'react-router-dom';
+import { handleLogout } from '../../store/reducers/user';
+import { useAppDispatch } from '../../hooks/redux';
 
 function EditableField({ label, value, onSave }) {
   const [isEditing, setIsEditing] = useState(false);
@@ -86,15 +88,17 @@ function UserProfilePage() {
   const [userData, setUserData] = useState({
     firstName: 'John',
     lastName: 'Doe',
-    username: 'johndoe123',
+    pseudonym: 'johndoe123',
     email: 'johndoe@example.com',
     credits: 100,
     postedAds: 5,
+    full_address: '4, rue de la brasserie, Nantes, France',
   });
   const [avatarSrc, setAvatarSrc] = useState('/path/to/avatar.jpg'); // Initial avatar source
   const [file, setFile] = useState();
   const [description, setDescription] = useState('');
   const [images, setImages] = useState([]);
+  const dispatch = useAppDispatch();
 
   const handleInputChange = (field, value) => {
     setUserData((prevData) => ({ ...prevData, [field]: value }));
@@ -124,6 +128,12 @@ function UserProfilePage() {
     // Handle the file upload logic here
     console.log('Uploaded file:', file);
   };
+  const handleDisconnect = (
+    event: MouseEvent<HTMLAnchorElement, MouseEvent>
+  ) => {
+    dispatch(handleLogout());
+  };
+
   return (
     <Box
       display="flex"
@@ -162,7 +172,7 @@ function UserProfilePage() {
         </label>
         <div style={{ textAlign: 'center' }}>
           <Typography variant="h5" gutterBottom>
-            {userData.username}
+            {userData.pseudonym}
           </Typography>
           <Typography>
             Crédits: {userData.credits} | Annonces postées: {userData.postedAds}
@@ -174,8 +184,9 @@ function UserProfilePage() {
           </Typography>
           <Typography>Prénom: {userData.firstName}</Typography>
           <Typography>Nom: {userData.lastName}</Typography>
-          <Typography>Pseudo: {userData.username}</Typography>
+          <Typography>Pseudo: {userData.pseudonym}</Typography>
           <Typography>Email: {userData.email}</Typography>
+          <Typography>Addresse: {userData.full_address}</Typography>
         </div>
         <Grid container spacing={2} style={{ marginTop: 16 }}>
           <EditableField
@@ -190,13 +201,18 @@ function UserProfilePage() {
           />
           <EditableField
             label="Pseudo"
-            value={userData.username}
-            onSave={(value) => handleInputChange('username', value)}
+            value={userData.pseudonym}
+            onSave={(value) => handleInputChange('pseudonym', value)}
           />
           <EditableField
             label="Adresse email"
             value={userData.email}
             onSave={(value) => handleInputChange('email', value)}
+          />
+          <EditableField
+            label="Adresse"
+            value={userData.full_address}
+            onSave={(value) => handleInputChange('full_address', value)}
           />
         </Grid>
 
@@ -208,10 +224,13 @@ function UserProfilePage() {
           </Button>
         </div>
         <div style={{ marginTop: 16, textAlign: 'center' }}>
-          <Link href="/mes-annonces">Mes annonces</Link>
+          <Link to="/mes-annonces">Mes annonces</Link>
           <span style={{ margin: '0 8px' }}>|</span>
-          <Link href="/mes-favoris">Mes favoris</Link>
-          <Link href="/">Me déconnecter</Link>
+          <Link to="/mes-favoris">Mes favoris</Link>
+          <span style={{ margin: '0 8px' }}>|</span>
+          <Link to="/" onClick={handleDisconnect}>
+            Me déconnecter
+          </Link>
         </div>
       </Paper>
     </Box>
