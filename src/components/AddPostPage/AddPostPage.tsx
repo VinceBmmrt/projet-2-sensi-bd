@@ -136,11 +136,11 @@ function AddPostPage() {
   };
 
   return (
-    <Container>
+    <div className="postForm" style={{ padding: '1rem' }}>
       <Typography variant="h4" align="center" gutterBottom>
         Publier une Annonce
       </Typography>
-      <Paper elevation={3} style={{ padding: 16, marginBottom: 16 }}>
+      <div style={{ marginBottom: 16 }}>
         <form onSubmit={handleSubmit}>
           <Grid container spacing={2}>
             <Grid item xs={12}>
@@ -324,14 +324,25 @@ function AddPostPage() {
               </div>
             </Grid>
             <Grid item xs={12}>
-              <Button variant="contained" color="primary" type="submit">
+              <Button
+                variant="contained"
+                color="primary"
+                type="submit"
+                sx={{
+                  mb: 6,
+                  backgroundColor: '#95C23D', // Change this to the desired color
+                  '&:hover': {
+                    backgroundColor: '#7E9D2D', // Change this to the desired hover color
+                  },
+                }}
+              >
                 Publier
               </Button>
             </Grid>
           </Grid>
         </form>
-      </Paper>
-    </Container>
+      </div>
+    </div>
   );
 }
 
