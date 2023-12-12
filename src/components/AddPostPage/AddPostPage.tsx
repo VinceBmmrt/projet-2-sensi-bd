@@ -14,6 +14,8 @@ import {
 } from '@mui/material';
 import { Add as AddIcon } from '@mui/icons-material';
 import axios from 'axios';
+import { axiosInstance } from '../../utils/axios';
+import { useAppSelector } from '../../hooks/redux';
 
 type FormData = {
   post_title: string;
@@ -24,7 +26,7 @@ type FormData = {
   category_id: number | null;
   audience_id: number | null;
   condition_id: number | null;
-  user_id: number;
+  user_id: number | undefined;
   slug: string;
   file: File | null; // New state for managing the selected file
 };
@@ -49,7 +51,7 @@ async function postImage({ file, description }) {
   imgFormData.append('description', description);
 
   if (file) {
-    const result = await axios.post(
+    const result = await axiosInstance.post(
       'http://localhost:3000/images',
       imgFormData,
       {
@@ -71,10 +73,12 @@ function AddPostPage() {
     category_id: null,
     audience_id: null,
     condition_id: null,
-    user_id: 1,
+    user_id: null,
     slug: '',
     file: null, // Initialize the file state
   });
+
+  const userId = useAppSelector((state) => state.user.userId);
 
   const handleInputChange =
     (field: keyof FormData) =>
@@ -105,6 +109,7 @@ function AddPostPage() {
     setFormData((prevData) => ({
       ...prevData,
       slug: slugify(formData.post_title),
+      user_id: userId,
     }));
     console.log('Form Data:', formData);
 

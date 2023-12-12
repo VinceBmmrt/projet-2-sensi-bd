@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 
 import {
@@ -14,7 +14,8 @@ import {
 import EditIcon from '@mui/icons-material/Edit';
 import { Link } from 'react-router-dom';
 import { handleLogout } from '../../store/reducers/user';
-import { useAppDispatch } from '../../hooks/redux';
+import { useAppDispatch, useAppSelector } from '../../hooks/redux';
+import { axiosInstance } from '../../utils/axios';
 
 function EditableField({ label, value, onSave }) {
   const [isEditing, setIsEditing] = useState(false);
@@ -86,19 +87,31 @@ async function postImage({ image, description, avatarSrc }) {
 
 function UserProfilePage() {
   const [userData, setUserData] = useState({
-    firstName: 'John',
-    lastName: 'Doe',
-    pseudonym: 'johndoe123',
-    email: 'johndoe@example.com',
-    credits: 100,
-    postedAds: 5,
-    address: '4, rue de la brasserie, Nantes, France',
+    firstName: '',
+    lastName: '',
+    pseudonym: '',
+    email: '',
+    credits: undefined,
+    postedAds: undefined,
+    address: '',
   });
   const [avatarSrc, setAvatarSrc] = useState('/path/to/avatar.jpg'); // Initial avatar source
   const [file, setFile] = useState();
   const [description, setDescription] = useState('');
   const [images, setImages] = useState([]);
   const dispatch = useAppDispatch();
+  const userId = useAppSelector((state) => state.user.userId);
+
+  useEffect(() => {
+    axiosInstance
+      .get(`http://localhost:3000/users/${userId}`)
+      .then((response) => {
+        console.log('Data received:', response.data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }, [userId]);
 
   const handleInputChange = (field, value) => {
     setUserData((prevData) => ({ ...prevData, [field]: value }));
