@@ -73,12 +73,10 @@ function AddPostPage() {
     category_id: null,
     audience_id: null,
     condition_id: null,
-    user_id: null,
     slug: '',
+    user_id: 10,
     file: null, // Initialize the file state
   });
-
-  const userId = useAppSelector((state) => state.user.userId);
 
   const handleInputChange =
     (field: keyof FormData) =>
@@ -106,14 +104,12 @@ function AddPostPage() {
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    setFormData((prevData) => ({
-      ...prevData,
-      slug: slugify(formData.post_title),
-      user_id: userId,
-    }));
-    console.log('Form Data:', formData);
 
     try {
+      setFormData((prevData) => ({
+        ...prevData,
+        slug: slugify(formData.post_title),
+      }));
       // Pass the file and description to the postImage function
       const result = await postImage({
         file: formData.file,
@@ -123,7 +119,7 @@ function AddPostPage() {
       console.log('Image URL:', imageUrl);
       // Further logic based on the server response
 
-      axios
+      axiosInstance
         .post('http://localhost:3000/posts/', {
           ...formData,
         })
