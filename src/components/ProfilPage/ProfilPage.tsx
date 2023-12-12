@@ -87,13 +87,14 @@ async function postImage({ image, description, avatarSrc }) {
 
 function UserProfilePage() {
   const [userData, setUserData] = useState({
-    firstName: '',
-    lastName: '',
+    firstname: '',
+    lastname: '',
     pseudonym: '',
     email: '',
     credits: undefined,
     postedAds: undefined,
     address: '',
+    score: undefined,
   });
   const [avatarSrc, setAvatarSrc] = useState('/path/to/avatar.jpg'); // Initial avatar source
   const [file, setFile] = useState();
@@ -106,7 +107,20 @@ function UserProfilePage() {
     axiosInstance
       .get(`http://localhost:3000/users/${userId}`)
       .then((response) => {
-        console.log('Data received:', response.data);
+        console.log('Data received:', response.data[0]);
+        const { firstname, lastname, pseudonym, email, address, score } =
+          response.data[0];
+        console.log(firstname, lastname, pseudonym, email, address, score);
+
+        setUserData((prevData) => ({
+          ...prevData,
+          firstname,
+          lastname,
+          pseudonym,
+          email,
+          address,
+          score,
+        }));
       })
       .catch((error) => {
         console.log(error);
@@ -184,16 +198,14 @@ function UserProfilePage() {
           <Typography variant="h5" gutterBottom>
             {userData.pseudonym}
           </Typography>
-          <Typography>
-            Crédits: {userData.credits} | Annonces postées: {userData.postedAds}
-          </Typography>
+          <Typography>Crédits: {userData.score}</Typography>
         </div>
         <div style={{ marginTop: 16, textAlign: 'center' }}>
           <Typography variant="h6" gutterBottom>
             Récapitulatif des informations
           </Typography>
-          <Typography>Prénom: {userData.firstName}</Typography>
-          <Typography>Nom: {userData.lastName}</Typography>
+          <Typography>Prénom: {userData.firstname}</Typography>
+          <Typography>Nom: {userData.lastname}</Typography>
           <Typography>Pseudo: {userData.pseudonym}</Typography>
           <Typography>Email: {userData.email}</Typography>
           <Typography>Addresse: {userData.address}</Typography>
@@ -201,12 +213,12 @@ function UserProfilePage() {
         <Grid container spacing={2} style={{ marginTop: 16 }}>
           <EditableField
             label="Prénom"
-            value={userData.firstName}
+            value={userData.firstname}
             onSave={(value) => handleInputChange('firstName', value)}
           />
           <EditableField
             label="Nom"
-            value={userData.lastName}
+            value={userData.lastname}
             onSave={(value) => handleInputChange('lastName', value)}
           />
           <EditableField
