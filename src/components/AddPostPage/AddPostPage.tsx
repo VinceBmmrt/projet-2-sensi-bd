@@ -138,7 +138,7 @@ function AddPostPage() {
 
       // Further logic based on the server response
       await axiosInstance
-        .post('http://localhost:3000/posts/', {
+        .post('/posts', {
           ...formData,
         })
         .then((response) => {

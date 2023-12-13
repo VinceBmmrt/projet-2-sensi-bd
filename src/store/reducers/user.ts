@@ -47,7 +47,10 @@ type LoginCredentials = { email: string; password: string };
 export const login = createAsyncThunk(
   'LoginForm',
   async (credentials: LoginCredentials) => {
-    const { data } = await axiosInstance.post<UserData>('/login', credentials);
+    const { data } = await axiosInstance.post<UserData>(
+      '/users/login',
+      credentials
+    );
 
     // Lorsque je me connecte, je stocke le token d'authorization dans axios
     // Ce header sera envoyé automatiquement à chaque requête avec `axiosInstance`

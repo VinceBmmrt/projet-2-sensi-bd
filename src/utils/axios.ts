@@ -5,7 +5,7 @@ import { LocalStorage } from './LocalStorage';
 // je crée une instance d'axios préconfiguré
 // Cela permet de spécifier une configuration pour toutes les requêtes effectuées avec cette instance
 export const axiosInstance = axios.create({
-  baseURL: 'http://localhost:3000/users',
+  baseURL: 'http://localhost:3000',
 });
 
 // Je rajoute un intercepteur, cela me permet avant que la requête soit faite de modifier la configuration
