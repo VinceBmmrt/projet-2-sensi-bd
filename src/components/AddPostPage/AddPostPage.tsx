@@ -3,20 +3,16 @@ import {
   Typography,
   TextField,
   Button,
-  Container,
   Grid,
-  Paper,
   IconButton,
   FormGroup,
   FormControlLabel,
   Checkbox,
-  formControlClasses,
 } from '@mui/material';
 import { Add as AddIcon } from '@mui/icons-material';
-import axios from 'axios';
-import { sl } from 'date-fns/locale';
 import { axiosInstance } from '../../utils/axios';
 import { useAppSelector } from '../../hooks/redux';
+import CustomToast from '../CustomToast/CustomToast';
 
 type FormData = {
   post_title: string;
@@ -32,7 +28,7 @@ type FormData = {
   file: File | null; // New state for managing the selected file
 };
 
-const slugify = (text) =>
+const slugify = (text: string) =>
   text
     .toString()
     .normalize('NFD')
@@ -43,7 +39,8 @@ const slugify = (text) =>
     .replace(/[^\w-]+/g, '')
     .replace(/--+/g, '-');
 
-async function postImage({ file, description }) {
+type FileData = { file: File | null; description: string };
+async function postImage({ file, description }: FileData) {
   const imgFormData = new FormData();
 
   if (file) {
@@ -79,6 +76,7 @@ function AddPostPage() {
     file: null, // Initialize the file state
   });
   const userId = useAppSelector((state) => state.user.userId);
+  const [successOpen, setSuccessOpen] = useState(false);
 
   useEffect(() => {
     setFormData((prevData) => ({
@@ -128,16 +126,6 @@ function AddPostPage() {
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
-    // try {
-    //   // Update the state with the slug
-    //   setFormData((prevData) => ({
-    //     ...prevData,
-    //     slug: slugify(prevData.post_title),
-    //   }));
-    // } catch (error) {
-    //   console.log(error);
-    // }
-
     try {
       // Pass the file and description to the postImage function
       const result = await postImage({
@@ -149,17 +137,26 @@ function AddPostPage() {
       console.log('Image URL:', imageUrl);
 
       // Further logic based on the server response
-      await axiosInstance.post('http://localhost:3000/posts/', {
-        ...formData,
-      });
-
-      console.log('Post request completed successfully');
-      // Optionally redirect or perform other actions after a successful API call
+      await axiosInstance
+        .post('http://localhost:3000/posts/', {
+          ...formData,
+        })
+        .then((response) => {
+          if (response && response.status >= 200 && response.status < 300) {
+            console.log('Request was successful:', response.data);
+            setSuccessOpen(true);
+            setTimeout(() => {
+              window.location.replace('/');
+            }, 2000);
+          } else {
+            console.log(
+              'Request was not successful. Status code:',
+              response.status
+            );
+          }
+        });
     } catch (error) {
-      console.error(
-        "Erreur lors de l'upload de l'image ou de la soumission de l'annonce",
-        error
-      );
+      console.error('An error occurred:', error);
     }
   };
 
@@ -369,6 +366,13 @@ function AddPostPage() {
             </Grid>
           </Grid>
         </form>
+        <CustomToast
+          open={successOpen}
+          onClose={() => setSuccessOpen(false)}
+          severity="success"
+        >
+          Connexion réussie !
+        </CustomToast>
       </div>
     </div>
   );
