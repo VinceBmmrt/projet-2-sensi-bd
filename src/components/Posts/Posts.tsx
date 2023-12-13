@@ -21,13 +21,8 @@ function Posts() {
   }, [dispatch]);
 
   const handleScroll = (event) => {
-    console.log('Scroll Event:', event);
     const { scrollTop, clientHeight, scrollHeight } = event.currentTarget;
-    console.log('Scroll Top:', scrollTop);
-    console.log('Client Height:', clientHeight);
-    console.log('Scroll Height:', scrollHeight);
     if (scrollHeight - scrollTop === clientHeight && !isLoading) {
-      console.log('Fetching More Posts...');
       dispatch(fetchPosts(currentPage));
     }
   };
