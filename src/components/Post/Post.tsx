@@ -15,11 +15,11 @@ import { red } from '@mui/material/colors';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import DangerousIcon from '@mui/icons-material/Dangerous';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import { Skeleton } from '@mui/material';
 import ChatBubbleIcon from '@mui/icons-material/ChatBubble';
 import { Post as TPost } from '../../@types/post';
 import './Post.scss';
 import { useAppSelector } from '../../hooks/redux';
-import { Skeleton } from '@mui/material';
 
 const ExpandMore = styled((props) => {
   const { expand, ...other } = props;
@@ -35,10 +35,10 @@ const ExpandMore = styled((props) => {
 type PostProps = {
   post: TPost;
 };
-export default function Post({ post }: PostProps) {
+export default function Post({ post, isLoading }: PostProps) {
   const [expanded, setExpanded] = React.useState(false);
   const isLogged = useAppSelector((state) => state.user.isLogged);
-  const isLoading = useAppSelector((state) => state.posts.isLoading);
+  // const isLoading = useAppSelector((state) => state.posts.isLoading);
 
   const handleExpandClick = () => {
     setExpanded(!expanded);

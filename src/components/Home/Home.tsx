@@ -5,12 +5,13 @@ import AppHeader from '../appHeader/appHeader';
 // import data from '../../data';
 import './Home.scss';
 import { fetchPosts } from '../../store/reducers/posts';
+import Posts2 from '../Posts2/Posts2';
 
 function Home() {
   return (
     <div className="home">
       <AppHeader />
-      <Posts />
+      <Posts2 />
     </div>
   );
 }
