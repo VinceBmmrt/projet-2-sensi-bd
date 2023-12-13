@@ -262,7 +262,7 @@ function UserProfilePage() {
             marginBottom: '4.5rem',
           }}
         >
-          <Link to="/mes-annonces">Mes annonces</Link>
+          <Link to="/myPosts">Mes annonces</Link>
           <span style={{ margin: '0 8px' }}>|</span>
           <Link to="/mes-favoris">Mes favoris</Link>
           <span style={{ margin: '0 8px' }}>|</span>
