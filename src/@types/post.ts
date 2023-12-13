@@ -9,4 +9,5 @@ export type Post = {
   created_at: string;
   pseudonym: string;
   avatar: string;
+  user_id: number;
 };

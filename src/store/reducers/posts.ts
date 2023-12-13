@@ -40,6 +40,8 @@ const postsReducer = createSlice({
       .addCase(fetchPosts.fulfilled, (state, action) => {
         state.list = [...state.list, ...action.payload];
         state.isLoading = false;
+        console.log('🚀 ~  state.isLoading:', state.isLoading);
+
         state.currentPage += 1;
       })
       .addCase(fetchPosts.pending, (state) => {

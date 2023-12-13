@@ -1,4 +1,5 @@
 import * as React from 'react';
+
 import { formatDistanceToNow } from 'date-fns';
 import { fr } from 'date-fns/locale';
 import { styled } from '@mui/material/styles';
@@ -17,6 +18,7 @@ import DangerousIcon from '@mui/icons-material/Dangerous';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { Skeleton } from '@mui/material';
 import ChatBubbleIcon from '@mui/icons-material/ChatBubble';
+
 import { Post as TPost } from '../../@types/post';
 import './Post.scss';
 import { useAppSelector } from '../../hooks/redux';
@@ -34,11 +36,18 @@ const ExpandMore = styled((props) => {
 
 type PostProps = {
   post: TPost;
+  id: number;
+  user_id: number;
+  isLoading: boolean;
 };
-export default function Post({ post, isLoading }: PostProps) {
+export default function Post({ post, isLoading, id, user_id }: PostProps) {
   const [expanded, setExpanded] = React.useState(false);
   const isLogged = useAppSelector((state) => state.user.isLogged);
+
+  console.log('🚀 ~ userId:', id);
+  console.log('🚀 ~ postId:', user_id);
   // const isLoading = useAppSelector((state) => state.posts.isLoading);
+  console.log('🚀 ~ isLoading:', isLoading);
 
   const handleExpandClick = () => {
     setExpanded(!expanded);
@@ -48,7 +57,11 @@ export default function Post({ post, isLoading }: PostProps) {
     locale: fr,
     addSuffix: true,
   });
-
+  const handleChangePage = (
+    event: MouseEvent<HTMLButtonElement, MouseEvent>
+  ) => {
+    window.location.replace(`/conversation/${id}/${user_id}`);
+  };
   return (
     <div className="post">
       <Card sx={{ maxWidth: 345 }}>
@@ -73,7 +86,11 @@ export default function Post({ post, isLoading }: PostProps) {
           }
           action={
             isLoading ? null : (
-              <IconButton aria-label="Contacter" disabled={!isLogged}>
+              <IconButton
+                aria-label="Contacter"
+                disabled={!isLogged}
+                onClick={handleChangePage}
+              >
                 <ChatBubbleIcon />
               </IconButton>
             )

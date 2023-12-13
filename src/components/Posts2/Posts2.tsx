@@ -58,7 +58,13 @@ function Posts2() {
     >
       {items &&
         items.map((item) => (
-          <Post post={item} key={item.id} isLoading={isLoading} />
+          <Post
+            post={item}
+            key={item.id}
+            isLoading={isLoading}
+            id={item.id}
+            user_id={item.user_id}
+          />
         ))}
     </InfiniteScroll>
   );
