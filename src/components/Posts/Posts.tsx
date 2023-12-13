@@ -22,7 +22,7 @@ function Posts() {
 
   const handleScroll = (event) => {
     const { scrollTop, clientHeight, scrollHeight } = event.currentTarget;
-    if (scrollHeight - scrollTop === clientHeight && !isLoading) {
+    if (scrollHeight - scrollTop <= clientHeight && !isLoading) {
       dispatch(fetchPosts(currentPage));
     }
   };
