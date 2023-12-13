@@ -108,7 +108,7 @@ export default function Post({ post, isLoading }: PostProps) {
         ) : (
           <CardMedia
             component="img"
-            height="194"
+            height="250"
             image={post.image}
             alt="photo de l'ouvrage"
           />

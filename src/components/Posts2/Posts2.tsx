@@ -49,19 +49,18 @@ function Posts2() {
   console.log(items);
 
   return (
-    <div className="posts">
-      <InfiniteScroll
-        dataLength={items.length}
-        next={fetchMoreData}
-        hasMore={hasMore}
-        loader={<Loader />}
-      >
-        {items &&
-          items.map((item) => (
-            <Post post={item} key={item.id} isLoading={isLoading} />
-          ))}
-      </InfiniteScroll>
-    </div>
+    <InfiniteScroll
+      className="posts"
+      dataLength={items.length}
+      next={fetchMoreData}
+      hasMore={hasMore}
+      loader={<Loader />}
+    >
+      {items &&
+        items.map((item) => (
+          <Post post={item} key={item.id} isLoading={isLoading} />
+        ))}
+    </InfiniteScroll>
   );
 }
 
