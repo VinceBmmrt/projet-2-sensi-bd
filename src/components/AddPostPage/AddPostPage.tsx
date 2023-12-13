@@ -1,4 +1,4 @@
-import React, { ChangeEvent, FormEvent, useState } from 'react';
+import React, { ChangeEvent, FormEvent, useEffect, useState } from 'react';
 import {
   Typography,
   TextField,
@@ -14,6 +14,7 @@ import {
 } from '@mui/material';
 import { Add as AddIcon } from '@mui/icons-material';
 import axios from 'axios';
+import { sl } from 'date-fns/locale';
 import { axiosInstance } from '../../utils/axios';
 import { useAppSelector } from '../../hooks/redux';
 
@@ -74,9 +75,17 @@ function AddPostPage() {
     audience_id: null,
     condition_id: null,
     slug: '',
-    user_id: 10,
+    user_id: undefined,
     file: null, // Initialize the file state
   });
+  const userId = useAppSelector((state) => state.user.userId);
+
+  useEffect(() => {
+    setFormData((prevData) => ({
+      ...prevData,
+      user_id: userId,
+    }));
+  }, [userId]);
 
   const handleInputChange =
     (field: keyof FormData) =>
@@ -86,6 +95,20 @@ function AddPostPage() {
         [field]: event.target.value,
       }));
     };
+
+  const handletitleAndSlugChange = (
+    event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
+    const inputValue = event.target.value;
+    const inputValueSlug = slugify(inputValue);
+    console.log(inputValue);
+    console.log(inputValueSlug);
+    setFormData((prevData) => ({
+      ...prevData,
+      post_title: event.target.value,
+      slug: inputValueSlug,
+    }));
+  };
 
   const handleFileChange = (event: ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0] || null;
@@ -105,34 +128,38 @@ function AddPostPage() {
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
+    // try {
+    //   // Update the state with the slug
+    //   setFormData((prevData) => ({
+    //     ...prevData,
+    //     slug: slugify(prevData.post_title),
+    //   }));
+    // } catch (error) {
+    //   console.log(error);
+    // }
+
     try {
-      setFormData((prevData) => ({
-        ...prevData,
-        slug: slugify(formData.post_title),
-      }));
       // Pass the file and description to the postImage function
       const result = await postImage({
         file: formData.file,
         description: formData.description,
       });
+
       const imageUrl = result.location;
       console.log('Image URL:', imageUrl);
+
       // Further logic based on the server response
+      await axiosInstance.post('http://localhost:3000/posts/', {
+        ...formData,
+      });
 
-      axiosInstance
-        .post('http://localhost:3000/posts/', {
-          ...formData,
-        })
-        .then((response) => {
-          console.log('Response:', response.data);
-
-          setTimeout(() => {
-            window.location.replace('/');
-          }, 2000);
-        });
+      console.log('Post request completed successfully');
+      // Optionally redirect or perform other actions after a successful API call
     } catch (error) {
-      console.error("Erreur lors de l'upload de l'image", error);
-      // Handle the error
+      console.error(
+        "Erreur lors de l'upload de l'image ou de la soumission de l'annonce",
+        error
+      );
     }
   };
 
@@ -149,7 +176,7 @@ function AddPostPage() {
                 label="Titre de l'annonce"
                 fullWidth
                 value={formData.post_title}
-                onChange={handleInputChange('post_title')}
+                onChange={handletitleAndSlugChange}
               />
             </Grid>
             <Grid item xs={12}>

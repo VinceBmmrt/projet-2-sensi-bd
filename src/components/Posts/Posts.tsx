@@ -18,7 +18,7 @@ function Posts() {
 
   useEffect(() => {
     dispatch(fetchPosts(1)); // Chargement initial, page 1
-  }, [dispatch]);
+  }, []);
 
   const handleScroll = (event) => {
     const { scrollTop, clientHeight, scrollHeight } = event.currentTarget;
