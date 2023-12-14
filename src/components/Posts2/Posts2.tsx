@@ -8,7 +8,7 @@ import './Posts2.scss';
 function Posts2() {
   const [items, setItems] = useState([]);
   const [hasMore, setHasMore] = useState(true);
-  const [index, setIndex] = useState(2);
+  const [index, setIndex] = useState(1);
   const [isLoading, setIsLoading] = useState(false);
 
   const handleScroll = () => {
