@@ -8,15 +8,8 @@ import './Posts2.scss';
 function Posts2() {
   const [items, setItems] = useState([]);
   const [hasMore, setHasMore] = useState(true);
-  const [index, setIndex] = useState(2);
+  const [index, setIndex] = useState(1);
   const [isLoading, setIsLoading] = useState(false);
-
-  const handleScroll = () => {
-    const { scrollTop, clientHeight, scrollHeight } = document.documentElement;
-    if (scrollHeight - scrollTop <= clientHeight && !isLoading) {
-      fetchMoreData();
-    }
-  };
 
   useEffect(() => {
     console.log('Component mounted');
@@ -55,7 +48,12 @@ function Posts2() {
   };
 
   console.log(items);
-
+  const handleScroll = () => {
+    const { scrollTop, clientHeight, scrollHeight } = document.documentElement;
+    if (scrollHeight - scrollTop <= clientHeight && !isLoading) {
+      fetchMoreData();
+    }
+  };
   return (
     <div>
       <InfiniteScroll

@@ -44,8 +44,8 @@ export default function Post({ post, isLoading, id, user_id }: PostProps) {
   const [expanded, setExpanded] = React.useState(false);
   const isLogged = useAppSelector((state) => state.user.isLogged);
 
-  console.log('🚀 ~ userId:', id);
-  console.log('🚀 ~ postId:', user_id);
+  console.log('🚀 ~ userId:', user_id);
+  console.log('🚀 ~ postId:', id);
   // const isLoading = useAppSelector((state) => state.posts.isLoading);
   console.log('🚀 ~ isLoading:', isLoading);
 

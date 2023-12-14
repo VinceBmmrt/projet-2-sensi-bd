@@ -22,6 +22,7 @@ export default function SignIn() {
     (state) => state.user.credentials.password
   );
   const [successOpen, setSuccessOpen] = useState(false);
+  const [errorOpen, setErrorOpen] = useState(false);
   // const checkedValue = useAppSelector((state) => state.user.checked);
 
   // useEffect(() => {
@@ -58,7 +59,7 @@ export default function SignIn() {
   //   dispatch(changeCheckedValue());
   // };
 
-  const handleSignIn = (event) => {
+  const handleSignIn = async (event) => {
     event.preventDefault();
 
     // Logique de connexion ici
@@ -76,13 +77,18 @@ export default function SignIn() {
 
     // Autres actions de connexion...
     const credentials = { email: emailValue, password: passwordValue };
-    dispatch(login(credentials));
 
-    setSuccessOpen(true);
+    try {
+      const data = await dispatch(login(credentials));
+      console.log('🚀 ~ data:', data.error);
 
-    setTimeout(() => {
-      window.location.replace('/');
-    }, 2000);
+      setSuccessOpen(true);
+      setTimeout(() => {
+        window.location.replace('/');
+      }, 2000);
+    } catch (error) {
+      setErrorOpen(true);
+    }
   };
 
   return (
@@ -169,6 +175,13 @@ export default function SignIn() {
         severity="success"
       >
         Connexion réussie !
+      </CustomToast>
+      <CustomToast
+        open={errorOpen}
+        onClose={() => setErrorOpen(false)}
+        severity="error"
+      >
+        Identifiant ou mot de passe incorrect
       </CustomToast>
     </Container>
   );

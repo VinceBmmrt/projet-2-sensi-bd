@@ -133,7 +133,7 @@ function AddPostPage() {
         description: formData.description,
       });
 
-      const imageUrl = result.location;
+      const imageUrl = result?.location;
       console.log('Image URL:', imageUrl);
 
       // Further logic based on the server response
@@ -371,7 +371,7 @@ function AddPostPage() {
           onClose={() => setSuccessOpen(false)}
           severity="success"
         >
-          Connexion réussie !
+          Ajout réussi !
         </CustomToast>
       </div>
     </div>
