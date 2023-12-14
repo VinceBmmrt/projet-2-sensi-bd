@@ -26,15 +26,26 @@ export const fetchMessages = createAsyncThunk(
     const response = await axiosInstance.get<TMessage[]>(
       `/messages/${postId}/${userId}`
     );
-    console.log('🚀 ~ data:', data);
+    console.log('🚀 ~ response:', response);
+    console.log('🚀 ~ data:', response.data);
     return response.data;
   }
 );
 // Créer une action asynchrone pour envoyer un message
 export const sendMessage = createAsyncThunk(
   'messages/sendMessage',
-  async (messageContent: string) => {
-    const response = await axios.post('/messages', { content: messageContent });
+  async ({
+    postId,
+    userId,
+    messageContent,
+  }: {
+    postId: number;
+    userId: number;
+    messageContent: string;
+  }) => {
+    const response = await axiosInstance.post(`/messages/${postId}/${userId}`, {
+      content: messageContent,
+    });
     return response.data;
   }
 );

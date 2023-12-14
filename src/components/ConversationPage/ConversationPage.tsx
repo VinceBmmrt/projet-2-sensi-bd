@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { formatRelative } from 'date-fns';
 import { fr } from 'date-fns/locale';
+import { useParams } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../../hooks/redux';
 import {
   fetchMessages,
@@ -10,17 +11,14 @@ import {
   setSenderId,
   setPostId,
 } from '../../store/reducers/messages';
-import dataMessagetest from '../../dataMessageTest';
+// import dataMessagetest from '../../dataMessageTest';
 import './ConversationPage.scss';
-import { useParams } from 'react-router-dom';
 
 function ConversationPage() {
   const dispatch = useAppDispatch();
   const { postId, userId } = useParams();
   const messages = useAppSelector((state) => state.messages.messagesList);
-  // const senderId = useAppSelector((state) => state.messages.senderId);
-  // const postId = useAppSelector((state) => state.messages.postId);
-  // state pour le message a envoyer
+
   const [messageContent, setMessageContent] = useState('');
   useEffect(() => {
     // Dispatch l'action pour récupérer les messages
@@ -34,9 +32,10 @@ function ConversationPage() {
   const handleSendClick = () => {
     // Assurez-vous que le messageContent n'est pas vide avant de l'envoyer
     if (messageContent.trim() !== '') {
-      dispatch(sendMessage(messageContent));
+      dispatch(sendMessage({ postId, userId, messageContent }));
       console.log('🚀 ~ messageContent:', messageContent);
       setMessageContent(''); // Réinitialiser le champ après l'envoi
+      window.location.reload();
     }
   };
   return (
