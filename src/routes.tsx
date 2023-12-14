@@ -8,6 +8,7 @@ import UserProfilePage from './components/ProfilPage/ProfilPage';
 import CreditPage from './components/CreditPage/CreditPage';
 import MyPostsPage from './components/MyPostsPage/MyPostsPage';
 import ConversationPage from './components/ConversationPage/ConversationPage';
+import DiscussionsPage from './components/DiscussionsPage/DiscussionsPage';
 // eslint-disable-next-line import/prefer-default-export
 export const router = createBrowserRouter([
   {
@@ -46,8 +47,12 @@ export const router = createBrowserRouter([
         element: <MyPostsPage />,
       },
       {
-        path: '/conversation/:postId/:userId',
+        path: '/messages/:postId/:userId',
         element: <ConversationPage />,
+      },
+      {
+        path: '/messages',
+        element: <DiscussionsPage />,
       },
     ],
   },

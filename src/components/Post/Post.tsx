@@ -60,7 +60,7 @@ export default function Post({ post, isLoading, id, user_id }: PostProps) {
   const handleChangePage = (
     event: MouseEvent<HTMLButtonElement, MouseEvent>
   ) => {
-    window.location.replace(`/conversation/${id}/${user_id}`);
+    window.location.replace(`/messages/${id}/${user_id}`);
   };
   return (
     <div className="post">
