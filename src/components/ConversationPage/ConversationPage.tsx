@@ -17,6 +17,7 @@ import './ConversationPage.scss';
 function ConversationPage() {
   const dispatch = useAppDispatch();
   const { postId, userId } = useParams();
+  const myID = useAppSelector((state) => state.user.userId);
   const messages = useAppSelector((state) => state.messages.messagesList);
 
   const [messageContent, setMessageContent] = useState('');
@@ -25,9 +26,9 @@ function ConversationPage() {
     dispatch(fetchMessages({ postId, userId }));
   }, [dispatch, postId, userId]);
 
-  // const formatTimestampRelative = (timestamp: Date) => {
-  //   return formatRelative(new Date(timestamp), new Date(), { locale: fr });
-  // };
+  const formatTimestampRelative = (timestamp: Date) => {
+    return formatRelative(new Date(timestamp), new Date(), { locale: fr });
+  };
 
   const handleSendClick = () => {
     // Assurez-vous que le messageContent n'est pas vide avant de l'envoyer
@@ -44,23 +45,24 @@ function ConversationPage() {
         <h2>Chat</h2>
         <ul>
           {messages.map((message) => {
+            console.log(message.created_at);
             return (
               <li
                 key={message.id}
-                // className={
-                //   message.sender_id === 1 ? 'myMessage' : 'interlocutorMessage'
-                // }
+                className={
+                  message.sender_id === myID
+                    ? 'myMessage'
+                    : 'interlocutorMessage'
+                }
               >
                 {/* Afficher l'auteur du message */}
                 <div className="messageHeader">
-                  {/* Auteur:{' '}
-                  {message.sender_id === 1
-                    ? 'Moi'
-                    : `Utilisateur ${message.receiver_id}`} */}
+                  Auteur:{' '}
+                  {message.sender_id === myID ? 'Moi' : ` ${message.pseudonym}`}
                 </div>
                 {/* Afficher le contenu du message */}
                 <div>{message.content}</div>
-                {/* <div>envoyé: {formatTimestampRelative(message.timestamp)}</div> */}
+                <div>envoyé: {formatTimestampRelative(message.created_at)}</div>
               </li>
             );
           })}
