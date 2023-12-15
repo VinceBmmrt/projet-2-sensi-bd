@@ -19,7 +19,7 @@ import { ChangeEvent, FormEvent, useState } from 'react';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import logo from '../../assets/leaf_color.png';
-import leafIcon from '../../../public/feuille.png';
+import leafIcon from '../../assets/feuille.png';
 import './appHeader.scss';
 import { fetchPosts, setSearchText } from '../../store/reducers/posts';
 import { useAppDispatch, useAppSelector } from '../../hooks/redux';
@@ -37,6 +37,7 @@ function AppHeader() {
   const [open, setOpen] = useState(false);
   const dispatch = useAppDispatch();
   const searchText = useAppSelector((state) => state.posts.searchText);
+  const isLogged = useAppSelector((state) => state.user.isLogged);
 
   const [formData, setFormData] = useState<FilterData>({
     distance: 5,
@@ -104,7 +105,11 @@ function AppHeader() {
           </Link>
         </div>
         <div className="header__topContainer-credit">
-          <div className="header__topContainer-credit-count">10</div>
+          {isLogged ? (
+            <div className="header__topContainer-credit-count">10</div>
+          ) : (
+            ''
+          )}
           <Link to="/credits">
             <img
               src={leafIcon}

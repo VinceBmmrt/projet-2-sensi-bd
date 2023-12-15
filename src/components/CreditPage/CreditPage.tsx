@@ -5,7 +5,7 @@ import Step from '@mui/material/Step';
 import StepButton from '@mui/material/StepButton';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
-import leafIcon from '../../../public/feuille.png';
+import leafIcon from '../../assets/feuille.png';
 import './CreditPage.scss';
 
 const steps = ['Vos 10 crédits', 'Vos demandes', 'Vos dons'];
