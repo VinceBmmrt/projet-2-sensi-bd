@@ -43,8 +43,8 @@ export default function Post({ post, id, user_id }: PostProps) {
   const [expanded, setExpanded] = React.useState(false);
   const isLogged = useAppSelector((state) => state.user.isLogged);
 
-  console.log('🚀 ~ userId:', user_id);
-  console.log('🚀 ~ postId:', id);
+  // console.log('🚀 ~ userId:', user_id);
+  // console.log('🚀 ~ postId:', id);
 
   const handleExpandClick = () => {
     setExpanded(!expanded);

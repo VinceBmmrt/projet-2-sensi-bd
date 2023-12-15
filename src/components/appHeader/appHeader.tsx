@@ -86,6 +86,8 @@ function AppHeader() {
     event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
     dispatch(setSearchText(event.target.value));
+    // TODO envoyer le event target.value dans le call api
+    console.log('🚀 ~ event.target.value:', event.target.value);
   };
 
   function handleSubmit(event: FormEvent<HTMLFormElement>): void {
