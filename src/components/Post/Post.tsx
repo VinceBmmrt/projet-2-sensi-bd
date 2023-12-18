@@ -38,6 +38,7 @@ type PostProps = {
   post: TPost;
   id: number;
   user_id: number;
+  isLoading: boolean;
 };
 export default function Post({ post, id, user_id }: PostProps) {
   const [expanded, setExpanded] = React.useState(false);

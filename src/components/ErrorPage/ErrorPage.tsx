@@ -1,12 +1,12 @@
 import './ErrorPage.scss';
 
-function ErrorPage() {
+function ErrorPage(message) {
   return (
     <div className="not-found">
-      <h1>404</h1>
+      <h1>500</h1>
       <p>Désolé, une erreur inattendue est survenue.</p>
       <p>
-        <i>Not Found</i>
+        <i>{message}</i>
       </p>
     </div>
   );
