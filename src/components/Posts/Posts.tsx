@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import Post from '../Post/Post';
 import Loader from '../Loader/Loader';
