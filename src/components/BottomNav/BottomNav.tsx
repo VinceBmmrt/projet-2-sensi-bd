@@ -11,8 +11,11 @@ import { useAppSelector } from '../../hooks/redux';
 
 export default function BottomNav() {
   const [value, setValue] = useState<number>(0);
+  // Si l'utilisateur n'est pas loggé certaines icônes de la navbar sont désactivées
   const isLogged = useAppSelector((state) => state.user.isLogged);
 
+  // En fonction de l'icone cliquée, le composant retourne un index
+  // On utilise switch pour gérer le cas pour chaque index
   function handleButtonNavClick(newValue: number) {
     setValue(newValue);
     switch (newValue) {
