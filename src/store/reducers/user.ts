@@ -47,24 +47,28 @@ type LoginCredentials = { email: string; password: string };
 export const login = createAsyncThunk(
   'LoginForm',
   async (credentials: LoginCredentials) => {
-    const { data } = await axiosInstance.post<UserData>(
-      '/users/login',
-      credentials
-    );
+    try {
+      const { data } = await axiosInstance.post<UserData>(
+        '/users/login',
+        credentials
+      );
 
-    // Lorsque je me connecte, je stocke le token d'authorization dans axios
-    // Ce header sera envoyé automatiquement à chaque requête avec `axiosInstance`
-    // axiosInstance.defaults.headers.common.Authorization = `Bearer ${data.token}`;
+      // Lorsque je me connecte, je stocke le token d'authorization dans axios
+      // Ce header sera envoyé automatiquement à chaque requête avec `axiosInstance`
+      // axiosInstance.defaults.headers.common.Authorization = `Bearer ${data.token}`;
 
-    // Je vais enregistrer dans le localStorage les données de l'utilisateur
-    // comme ça au rafraichissement de la page, il reste connecté
-    // je stocke une information sur le navigateur en lmode clé/valeur
-    // La clé me permet de pouvoir récupérer / modifier / supprimer la valeur
-    // La valeur DOIT être une chaine de caractère. On transforme donc notre objet en chaines de caractères
-    LocalStorage.setItem('user', data);
+      // Je vais enregistrer dans le localStorage les données de l'utilisateur
+      // comme ça au rafraichissement de la page, il reste connecté
+      // je stocke une information sur le navigateur en lmode clé/valeur
+      // La clé me permet de pouvoir récupérer / modifier / supprimer la valeur
+      // La valeur DOIT être une chaine de caractère. On transforme donc notre objet en chaines de caractères
+      LocalStorage.setItem('user', data);
 
-    // Je retourne les données récupérer depuis mon API
-    return data;
+      // Je retourne les données récupérer depuis mon API
+      return data;
+    } catch (error) {
+      console.log(error);
+    }
   }
 );
 
