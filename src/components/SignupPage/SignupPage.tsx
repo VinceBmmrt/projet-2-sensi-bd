@@ -4,7 +4,7 @@ import TextField from '@mui/material/TextField';
 import axios from 'axios';
 import React, { useState, ChangeEvent, FormEvent, LegacyRef } from 'react';
 import { usePlacesWidget } from 'react-google-autocomplete';
-import './SignupForm.scss';
+import './SignupPage.scss';
 import CustomToast from '../CustomToast/CustomToast';
 
 type UserData = {
@@ -18,7 +18,7 @@ type UserData = {
   error: boolean;
 };
 
-function SignupForm() {
+function SignupPage() {
   const googlePlacesAPIKey = import.meta.env.VITE_GOOGLE_API_KEY;
   const [warningOpen, setWarningOpen] = useState(false);
   const [successOpen, setSuccessOpen] = useState(false);
@@ -283,4 +283,4 @@ function SignupForm() {
   );
 }
 
-export default SignupForm;
+export default SignupPage;

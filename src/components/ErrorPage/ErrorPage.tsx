@@ -1,6 +1,6 @@
-import './NotFound.scss';
+import './ErrorPage.scss';
 
-function NotFound() {
+function ErrorPage() {
   return (
     <div className="not-found">
       <h1>404</h1>
@@ -12,4 +12,4 @@ function NotFound() {
   );
 }
 
-export default NotFound;
+export default ErrorPage;

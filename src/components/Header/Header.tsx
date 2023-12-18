@@ -20,7 +20,7 @@ import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import logo from '../../assets/leaf_color.png';
 import leafIcon from '../../assets/feuille.png';
-import './appHeader.scss';
+import './Header.scss';
 import { fetchPosts, setSearchText } from '../../store/reducers/posts';
 import { useAppDispatch, useAppSelector } from '../../hooks/redux';
 
@@ -31,7 +31,7 @@ type FilterData = {
   status: string;
   reserved: boolean;
 };
-function AppHeader() {
+function Header() {
   const drawerWidth = 340;
   const theme = useTheme();
   const [open, setOpen] = useState(false);
@@ -300,4 +300,4 @@ function AppHeader() {
   );
 }
 
-export default AppHeader;
+export default Header;

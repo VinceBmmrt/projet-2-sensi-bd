@@ -15,7 +15,7 @@ import { useAppDispatch, useAppSelector } from '../../hooks/redux';
 import { changeCredentialValue, login } from '../../store/reducers/user';
 import CustomToast from '../CustomToast/CustomToast';
 
-export default function SignIn() {
+export default function LoginPage() {
   const dispatch = useAppDispatch();
   const emailValue = useAppSelector((state) => state.user.credentials.email);
   const passwordValue = useAppSelector(

@@ -1,13 +1,14 @@
 import { createBrowserRouter } from 'react-router-dom';
 import App from './components/App/App';
-import Home from './components/Home/Home';
-import Login from './components/Login/Login';
+import HomePage from './components/HomePage/HomePage';
+import LoginPage from './components/LoginPage/LoginPage';
 import AddPostPage from './components/AddPostPage/AddPostPage';
-import SignupForm from './components/SignupForm/SignupForm';
+import SignupPage from './components/SignupPage/SignupPage';
 import UserProfilePage from './components/ProfilPage/ProfilPage';
 import CreditPage from './components/CreditPage/CreditPage';
 import ConversationPage from './components/ConversationPage/ConversationPage';
 import DiscussionsPage from './components/DiscussionsPage/DiscussionsPage';
+import Error from './components/ErrorPage/ErrorPage';
 // eslint-disable-next-line import/prefer-default-export
 export const router = createBrowserRouter([
   {
@@ -22,11 +23,11 @@ export const router = createBrowserRouter([
     children: [
       {
         path: '/',
-        element: <Home />,
+        element: <HomePage />,
       },
       {
         path: '/login',
-        element: <Login />,
+        element: <LoginPage />,
       },
       {
         path: '/addPost',
@@ -39,7 +40,7 @@ export const router = createBrowserRouter([
 
       {
         path: '/signup',
-        element: <SignupForm />,
+        element: <SignupPage />,
       },
       {
         path: '/credits',
