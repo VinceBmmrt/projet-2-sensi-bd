@@ -136,7 +136,7 @@ function AddPostPage() {
       const imageUrl = result?.location;
       console.log('Image URL:', imageUrl);
 
-      // Further logic based on the server response
+      // Call axios avec redirection vers la homepage si réussi
       await axiosInstance
         .post('/posts', {
           ...formData,
