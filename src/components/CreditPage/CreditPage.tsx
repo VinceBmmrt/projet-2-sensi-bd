@@ -5,10 +5,11 @@ import Step from '@mui/material/Step';
 import StepLabel from '@mui/material/StepLabel';
 import StepContent from '@mui/material/StepContent';
 import Button from '@mui/material/Button';
-import Paper from '@mui/material/Paper';
 import Typography from '@mui/material/Typography';
+import { useState } from 'react';
 import leafIcon from '../../assets/feuille.png';
 
+// Contenu des 3 étapes du composant Stepper
 const steps = [
   {
     label: '10 crédits de départ',
@@ -26,8 +27,10 @@ const steps = [
   },
 ];
 
+//* Composant Stepper
+
 export default function VerticalLinearStepper() {
-  const [activeStep, setActiveStep] = React.useState(0);
+  const [activeStep, setActiveStep] = useState(0);
 
   const handleNext = () => {
     setActiveStep((prevActiveStep) => prevActiveStep + 1);
