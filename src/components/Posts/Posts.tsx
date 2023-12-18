@@ -86,7 +86,6 @@ function Posts() {
             <Post
               post={item}
               key={item.id}
-              isLoading={isLoading}
               id={item.id}
               user_id={item.user_id}
             />
