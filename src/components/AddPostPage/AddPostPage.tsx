@@ -77,7 +77,7 @@ function AddPostPage() {
   });
   const userId = useAppSelector((state) => state.user.userId);
   const [successOpen, setSuccessOpen] = useState(false);
-
+  const [errorOpen, setErrorOpen] = useState(false);
   useEffect(() => {
     setFormData((prevData) => ({
       ...prevData,
@@ -99,8 +99,7 @@ function AddPostPage() {
   ) => {
     const inputValue = event.target.value;
     const inputValueSlug = slugify(inputValue);
-    console.log(inputValue);
-    console.log(inputValueSlug);
+
     setFormData((prevData) => ({
       ...prevData,
       post_title: event.target.value,
@@ -127,7 +126,7 @@ function AddPostPage() {
     event.preventDefault();
 
     try {
-      // Pass the file and description to the postImage function
+      // Envoi du fichier et de la description depuis la fonction postImage + success toast
       const result = await postImage({
         file: formData.file,
         description: formData.description,
@@ -156,7 +155,7 @@ function AddPostPage() {
           }
         });
     } catch (error) {
-      console.error('An error occurred:', error);
+      setErrorOpen(true);
     }
   };
 
@@ -242,11 +241,6 @@ function AddPostPage() {
             )}
             <Grid
               item
-              // xs={12}
-              // style={{
-              //   display: 'flex',
-              //   flexDirection: 'column',
-              // }}
               sx={{
                 // Styles pour les écrans extra petits (xs) à moyens (md)
                 '@media (max-width:600px)': {
@@ -372,6 +366,13 @@ function AddPostPage() {
           severity="success"
         >
           Ajout réussi !
+        </CustomToast>
+        <CustomToast
+          open={errorOpen}
+          onClose={() => setErrorOpen(false)}
+          severity="error"
+        >
+          Echec , remplissez tous les champs
         </CustomToast>
       </div>
     </div>
