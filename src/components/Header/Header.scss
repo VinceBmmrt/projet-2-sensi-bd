@@ -43,8 +43,6 @@
         height: 2.5rem;
       }
     }
-    &-filterButton {
-    }
   }
 }
 
@@ -52,6 +50,9 @@
   min-height: 30px;
 }
 
+h2 {
+  margin-bottom: 1rem;
+}
 .drawer {
   margin-top: 0, 5rem;
   padding: 1rem;
@@ -65,151 +66,3 @@
     margin-bottom: 1rem;
   }
 }
-//animation logo test pulse
-// .header__topContainer-logo-container {
-//   display: flex;
-//   justify-content: center;
-//   align-items: center;
-//   height: 100px; /* Ajustez la hauteur selon vos besoins */
-// }
-
-// .header__topContainer-logo {
-//   width: 100px; /* Ajustez la largeur selon vos besoins */
-//   height: auto;
-//   animation: pulse 2s infinite; /* Animation de pulsation pendant 2 secondes en boucle infinie */
-//   padding: 1rem;
-// }
-
-// @keyframes pulse {
-//   0% {
-//     transform: scale(1);
-//   }
-//   50% {
-//     transform: scale(1.1);
-//   }
-//   100% {
-//     transform: scale(1);
-//   }
-// }
-
-//test 2  rotation
-// .header__topContainer-logo-container {
-//   display: flex;
-//   justify-content: center;
-//   align-items: center;
-//   height: 100px; /* Ajustez la hauteur selon vos besoins */
-// }
-
-// .header__topContainer-logo {
-//   width: 100px; /* Ajustez la largeur selon vos besoins */
-//   height: auto;
-//   animation: rotate 4s linear infinite; /* Animation de rotation pendant 4 secondes en boucle infinie */
-//   transition: transform 0.5s ease-in-out; /* Transition en douceur lors des changements de transformation */
-//   cursor: pointer; /* Ajoute un curseur indiquant que le logo est cliquable (optionnel) */
-// }
-
-// .header__topContainer-logo:hover {
-//   transform: scale(1.1) rotate(360deg); /* Effet de rotation supplémentaire et agrandissement lors du survol */
-// }
-
-// @keyframes rotate {
-//   0% {
-//     transform: rotate(0deg);
-//   }
-//   100% {
-//     transform: rotate(360deg);
-//   }
-// }
-
-//test3 mouse over
-// .header__topContainer-logo-container {
-//   display: flex;
-//   justify-content: center;
-//   align-items: center;
-//   height: 100px;
-// }
-
-// .header__topContainer-logo {
-//   width: 100px;
-//   height: auto;
-//   position: relative;
-//   cursor: pointer;
-//   transition: transform 0.5s ease-in-out, filter 0.5s ease-in-out,
-//     box-shadow 0.5s ease-in-out;
-// }
-
-// .header__topContainer-logo:hover {
-//   transform: scale(1.1) rotate(5deg); /* Effet de rotation et agrandissement lors du survol */
-//   filter: brightness(80%);
-//   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Ombre douce au survol */
-// }
-
-// test 4 360
-// .header__topContainer-logo-container {
-//   display: flex;
-//   justify-content: center;
-//   align-items: center;
-//   height: 100px;
-// }
-
-// .header__topContainer-logo {
-//   width: 100px;
-//   height: auto;
-//   position: relative;
-//   cursor: pointer;
-//   transition: transform 0.5s ease-in-out, filter 0.5s ease-in-out,
-//     box-shadow 0.5s ease-in-out, color 0.5s ease-in-out;
-// }
-
-// .header__topContainer-logo:hover {
-//   transform: scale(1.2) rotate(360deg);
-//   filter: brightness(60%) saturate(150%);
-//   box-shadow: 0 12px 24px rgba(0, 0, 0, 0.4);
-//   color: #ff4081; /* Change la couleur au survol */
-// }
-
-// test4 3D
-// @keyframes rotate {
-//   0% {
-//     transform: rotateX(0deg) rotateY(0deg) rotateZ(0deg);
-//   }
-//   100% {
-//     transform: rotateX(360deg) rotateY(360deg) rotateZ(360deg);
-//   }
-// }
-
-// @keyframes lightPulse {
-//   0% {
-//     box-shadow: 0 0 10px rgba(255, 255, 255, 0.8),
-//       0 0 20px rgba(255, 255, 255, 0.8), 0 0 30px rgba(255, 255, 255, 0.8);
-//   }
-//   50% {
-//     box-shadow: 0 0 30px rgba(255, 255, 255, 0.8),
-//       0 0 40px rgba(255, 255, 255, 0.8), 0 0 50px rgba(255, 255, 255, 0.8);
-//   }
-//   100% {
-//     box-shadow: 0 0 10px rgba(255, 255, 255, 0.8),
-//       0 0 20px rgba(255, 255, 255, 0.8), 0 0 30px rgba(255, 255, 255, 0.8);
-//   }
-// }
-
-// .header__topContainer-logo-container {
-//   display: flex;
-//   justify-content: center;
-//   align-items: center;
-//   height: 100px;
-// }
-
-// .header__topContainer-logo {
-//   width: 100px;
-//   height: auto;
-//   position: relative;
-//   cursor: pointer;
-//   animation: rotate 5s linear infinite, lightPulse 4s ease-in-out infinite;
-//   transition: filter 0.5s ease-in-out, box-shadow 0.5s ease-in-out;
-// }
-
-// .header__topContainer-logo:hover {
-//   filter: brightness(60%) saturate(150%);
-//   box-shadow: 0 12px 24px rgba(255, 255, 255, 0.4);
-// }

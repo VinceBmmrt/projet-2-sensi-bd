@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { styled, useTheme } from '@mui/material/styles';
 import { Link } from 'react-router-dom';
-
+// importation des icones de la libraire material UI
 import SearchIcon from '@mui/icons-material/Search';
 import TuneIcon from '@mui/icons-material/Tune';
 import {
@@ -15,42 +15,33 @@ import {
   Slider,
   TextField,
 } from '@mui/material';
-import { ChangeEvent, FormEvent, useState } from 'react';
-import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
+import { ChangeEvent, FormEvent, useState } from 'react';
 import logo from '../../assets/leaf_color.png';
 import leafIcon from '../../assets/feuille.png';
-import './Header.scss';
-import { fetchPosts, setSearchText } from '../../store/reducers/posts';
+import { setSearchText } from '../../store/reducers/posts';
 import { useAppDispatch, useAppSelector } from '../../hooks/redux';
+import './Header.scss';
+import { FilterData as TFilterData } from '../../@types/filterData';
 
-type FilterData = {
-  distance: number | number[];
-  bookType: string;
-  age: string;
-  status: string;
-  reserved: boolean;
-};
 function Header() {
-  const drawerWidth = 340;
   const theme = useTheme();
-  const [open, setOpen] = useState(false);
   const dispatch = useAppDispatch();
-  const searchText = useAppSelector((state) => state.posts.searchText);
   const isLogged = useAppSelector((state) => state.user.isLogged);
 
-  const [formData, setFormData] = useState<FilterData>({
+  //* Drawer
+  const drawerWidth = 340;
+  const [open, setOpen] = useState(false);
+  const [drawerData, setDrawerData] = useState<TFilterData>({
     distance: 5,
-    bookType: '',
-    age: '',
-    status: '',
-    reserved: false,
+    category_id: null,
+    audience_id: null,
+    condition_id: null,
   });
   const DrawerHeader = styled('div')(() => ({
     display: 'flex',
     alignItems: 'center',
     padding: theme.spacing(0, 1),
-    // necessary for content to be below app bar
     ...theme.mixins.toolbar,
     justifyContent: 'flex-start',
   }));
@@ -64,35 +55,38 @@ function Header() {
   };
 
   const handleSliderChange = (event: Event, newValue: number | number[]) => {
-    setFormData({ ...formData, distance: newValue });
+    setDrawerData({ ...drawerData, distance: newValue });
   };
 
-  const handleCheckboxChange = (category, value) => {
-    setFormData((prevData) => ({
+  // En fonction de la category de la checkbox, on met à jour la valeur qui lui est associée dans le drawerData
+  const handleCheckboxChange = (category: keyof TFilterData, value: number) => {
+    setDrawerData((prevData) => ({
       ...prevData,
       [category]: prevData[category] === value ? '' : value,
     }));
   };
 
-  // gestion de la barre de recherche et soumission du formulaire de recherche
-
-  const handleSubmitSearchValue = (event: FormEvent<HTMLFormElement>) => {
+  const handleDrawerSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    console.log('formulaire soumis');
-    dispatch(fetchPosts());
+    console.log('drawer data :', drawerData);
   };
 
+  //* Barre de recherche
+
+  const searchText = useAppSelector((state) => state.posts.searchText);
+
+  // récupération et stockage de la recherche utilisateur
   const handleChangeSearchValue = (
     event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
     dispatch(setSearchText(event.target.value));
-    // TODO envoyer le event target.value dans le call api
-    console.log('🚀 ~ event.target.value:', event.target.value);
+    console.log('texte tapé :', event.target.value);
   };
 
-  function handleSubmit(event: FormEvent<HTMLFormElement>): void {
-    console.log('formulaire soumis');
-  }
+  const handleSubmitSearchValue = (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    console.log('texte à rechercher :', searchText);
+  };
 
   return (
     <header className="header">
@@ -128,7 +122,7 @@ function Header() {
         >
           <TextField
             variant="standard"
-            placeholder="ouvrage, code postal, ville"
+            placeholder="ouvrage, auteur, code postal, ville"
             value={searchText}
             onChange={handleChangeSearchValue}
             InputProps={{
@@ -163,21 +157,17 @@ function Header() {
       >
         <DrawerHeader>
           <IconButton onClick={handleDrawerClose}>
-            {theme.direction === 'rtl' ? (
-              <ChevronLeftIcon />
-            ) : (
-              <ChevronRightIcon />
-            )}
+            <ChevronRightIcon />
           </IconButton>
         </DrawerHeader>
         <Divider />
         <div className="drawer">
           <h2>Options de filtres</h2>
-          <form onSubmit={handleSubmit}>
+          <form onSubmit={handleDrawerSubmit}>
             <div>
-              <label>Distance autour de chez vous</label>
+              <h3>Distance autour de chez vous</h3>
               <Slider
-                value={formData.distance}
+                value={drawerData.distance}
                 onChange={handleSliderChange}
                 valueLabelDisplay="auto"
                 valueLabelFormat={(value) => `${value} km`}
@@ -193,10 +183,8 @@ function Header() {
                 <FormControlLabel
                   control={
                     <Checkbox
-                      checked={formData.bookType === 'magazine'}
-                      onChange={() =>
-                        handleCheckboxChange('bookType', 'magazine')
-                      }
+                      checked={drawerData.category_id === 3}
+                      onChange={() => handleCheckboxChange('category_id', 3)}
                     />
                   }
                   label="Magazine"
@@ -204,8 +192,8 @@ function Header() {
                 <FormControlLabel
                   control={
                     <Checkbox
-                      checked={formData.bookType === 'book'}
-                      onChange={() => handleCheckboxChange('bookType', 'book')}
+                      checked={drawerData.category_id === 2}
+                      onChange={() => handleCheckboxChange('category_id', 2)}
                     />
                   }
                   label="Livres"
@@ -213,10 +201,8 @@ function Header() {
                 <FormControlLabel
                   control={
                     <Checkbox
-                      checked={formData.bookType === 'comics'}
-                      onChange={() =>
-                        handleCheckboxChange('bookType', 'comics')
-                      }
+                      checked={drawerData.category_id === 1}
+                      onChange={() => handleCheckboxChange('category_id', 1)}
                     />
                   }
                   label="Bande dsessinée"
@@ -229,20 +215,20 @@ function Header() {
                 <FormControlLabel
                   control={
                     <Checkbox
-                      checked={formData.age === 'adult'}
-                      onChange={() => handleCheckboxChange('age', 'adult')}
+                      checked={drawerData.audience_id === 1}
+                      onChange={() => handleCheckboxChange('audience_id', 1)}
                     />
                   }
-                  label="adultes"
+                  label="Tout public"
                 />
                 <FormControlLabel
                   control={
                     <Checkbox
-                      checked={formData.age === 'kid'}
-                      onChange={() => handleCheckboxChange('age', 'kid')}
+                      checked={drawerData.audience_id === 2}
+                      onChange={() => handleCheckboxChange('audience_id', 2)}
                     />
                   }
-                  label="enfants"
+                  label="Jeunesse"
                 />
               </FormGroup>
             </div>
@@ -252,8 +238,8 @@ function Header() {
                 <FormControlLabel
                   control={
                     <Checkbox
-                      checked={formData.status === 'good'}
-                      onChange={() => handleCheckboxChange('status', 'good')}
+                      checked={drawerData.condition_id === 1}
+                      onChange={() => handleCheckboxChange('condition_id', 1)}
                     />
                   }
                   label="Comme neuf"
@@ -261,8 +247,8 @@ function Header() {
                 <FormControlLabel
                   control={
                     <Checkbox
-                      checked={formData.status === 'ok'}
-                      onChange={() => handleCheckboxChange('status', 'ok')}
+                      checked={drawerData.condition_id === 2}
+                      onChange={() => handleCheckboxChange('condition_id', 2)}
                     />
                   }
                   label="Bon état"
@@ -270,8 +256,8 @@ function Header() {
                 <FormControlLabel
                   control={
                     <Checkbox
-                      checked={formData.status === 'bad'}
-                      onChange={() => handleCheckboxChange('status', 'bad')}
+                      checked={drawerData.condition_id === 3}
+                      onChange={() => handleCheckboxChange('condition_id', 3)}
                     />
                   }
                   label="Abimé"
@@ -284,9 +270,9 @@ function Header() {
               variant="contained"
               color="primary"
               sx={{
-                backgroundColor: '#95C23D', // Change this to the desired color
+                backgroundColor: '#95C23D',
                 '&:hover': {
-                  backgroundColor: '#7E9D2D', // Change this to the desired hover color
+                  backgroundColor: '#7E9D2D',
                 },
               }}
             >
