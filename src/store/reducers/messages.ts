@@ -3,15 +3,15 @@ import { Message as TMessage } from '../../@types/message';
 import { axiosInstance } from '../../utils/axios';
 
 // typage des données
-type ChatState = {
+type MessagesState = {
   isLoading: boolean;
   messagesList: TMessage[];
-  userId?: number | undefined;
-  postId?: number | undefined;
+  userId: number | undefined;
+  postId: number | undefined;
 };
 
 //* Données initiales
-const initialState: ChatState = {
+const initialState: MessagesState = {
   isLoading: false,
   messagesList: [],
   userId: undefined,
@@ -21,7 +21,7 @@ const initialState: ChatState = {
 // Fonction asynchrone pour récupérer les messages
 export const fetchMessages = createAsyncThunk(
   'chat/fetchMessages',
-  async ({ postId, userId }: { postId: number; userId: number }) => {
+  async ({ postId, userId }: MessagesState) => {
     const response = await axiosInstance.get<TMessage[]>(
       `/messages/${postId}/${userId}`
     );

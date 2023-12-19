@@ -1,37 +1,32 @@
 import React, { useEffect, useState } from 'react';
-import axios from 'axios';
 import { formatRelative } from 'date-fns';
 import { fr } from 'date-fns/locale';
 import { useParams } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../../hooks/redux';
-import {
-  fetchMessages,
-  sendMessage,
-  setMessagesList,
-  setSenderId,
-  setPostId,
-} from '../../store/reducers/messages';
-// import dataMessagetest from '../../dataMessageTest';
+import { fetchMessages, sendMessage } from '../../store/reducers/messages';
 import './ConversationPage.scss';
+
+//* Composant de la page de conversation entre utilisateurs (chat)
 
 function ConversationPage() {
   const dispatch = useAppDispatch();
   const { postId, userId } = useParams();
   const myID = useAppSelector((state) => state.user.userId);
   const messages = useAppSelector((state) => state.messages.messagesList);
-
   const [messageContent, setMessageContent] = useState('');
+
   useEffect(() => {
-    // Dispatch l'action pour récupérer les messages
+    // Emission de l'intention de récupérer les messages
     dispatch(fetchMessages({ postId, userId }));
   }, [dispatch, postId, userId]);
 
+  // Formatage de la date
   const formatTimestampRelative = (timestamp: Date) => {
     return formatRelative(new Date(timestamp), new Date(), { locale: fr });
   };
 
   const handleSendClick = () => {
-    // Assurez-vous que le messageContent n'est pas vide avant de l'envoyer
+    // Vérification que le messageContent n'est pas vide avant de l'envoyer
     if (messageContent.trim() !== '') {
       dispatch(sendMessage({ postId, userId, messageContent }));
       console.log('🚀 ~ messageContent:', messageContent);
@@ -45,7 +40,6 @@ function ConversationPage() {
         <h2>Chat</h2>
         <ul>
           {messages.map((message) => {
-            console.log(message.created_at);
             return (
               <li
                 key={message.id}
