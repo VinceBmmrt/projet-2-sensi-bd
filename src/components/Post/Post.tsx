@@ -20,12 +20,11 @@ import { useState } from 'react';
 import { useAppSelector } from '../../hooks/redux';
 import { Post as TPost } from '../../@types/post';
 
-// Flèche d'agrandissent des informations de la carte: https://mui.com/material-ui/react-card/
-
 interface ExpandMoreProps extends IconButtonProps {
   expand: boolean;
 }
 
+// Flèche d'agrandissent des informations de la carte: https://mui.com/material-ui/react-card/
 const ExpandMore = styled((props: ExpandMoreProps) => {
   const { expand, ...other } = props;
   return <IconButton {...other} />;
