@@ -158,14 +158,10 @@ function AddPostPage() {
             setTimeout(() => {
               window.location.replace('/');
             }, 2000);
-          } else {
-            console.log(
-              'Request was not successful. Status code:',
-              response.status
-            );
           }
         });
     } catch (error) {
+      console.log(error);
       setErrorOpen(true);
     }
   };
@@ -182,8 +178,10 @@ function AddPostPage() {
               <TextField
                 label="Titre de l'annonce"
                 fullWidth
+                required
                 value={formData.post_title}
                 onChange={handletitleAndSlugChange}
+                inputProps={{ maxLength: 50 }}
               />
             </Grid>
             <Grid item xs={12}>
@@ -192,28 +190,34 @@ function AddPostPage() {
                 multiline
                 rows={4}
                 fullWidth
+                required
                 value={formData.description}
                 onChange={handleInputChange('description')}
+                inputProps={{ maxLength: 200 }}
               />
             </Grid>
             <Grid item xs={12}>
               <TextField
                 label="Titre de l'ouvrage"
                 multiline
+                required
                 rows={4}
                 fullWidth
                 value={formData.book_title}
                 onChange={handleInputChange('book_title')}
+                inputProps={{ maxLength: 100 }}
               />
             </Grid>
             <Grid item xs={12}>
               <TextField
                 label="Auteur de l'ouvrage"
                 multiline
+                required
                 rows={4}
                 fullWidth
                 value={formData.book_author}
                 onChange={handleInputChange('book_author')}
+                inputProps={{ maxLength: 100 }}
               />
             </Grid>
             <Grid item xs={12}>
