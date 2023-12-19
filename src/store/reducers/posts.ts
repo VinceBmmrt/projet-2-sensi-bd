@@ -1,8 +1,8 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import axios from 'axios';
 import { Post as TPost } from '../../@types/post';
-import { axiosInstance } from '../../utils/axios';
 
+// typage du composant post
 type PostsState = {
   isLoading: boolean;
   list: TPost[];
@@ -10,6 +10,7 @@ type PostsState = {
   currentPage: number;
 };
 
+//* données initiales
 const initialState: PostsState = {
   isLoading: true,
   list: [],
@@ -17,6 +18,7 @@ const initialState: PostsState = {
   currentPage: 1,
 };
 
+// fonction de récupération des données de l'API
 export const fetchPosts = createAsyncThunk(
   'posts/fetch',
   async (page: number) => {
@@ -26,6 +28,8 @@ export const fetchPosts = createAsyncThunk(
     return data;
   }
 );
+
+//* Création d'une slice pour gérer les posts
 
 const postsReducer = createSlice({
   name: 'posts',
@@ -40,8 +44,6 @@ const postsReducer = createSlice({
       .addCase(fetchPosts.fulfilled, (state, action) => {
         state.list = [...state.list, ...action.payload];
         state.isLoading = false;
-        console.log('🚀 ~  state.isLoading:', state.isLoading);
-
         state.currentPage += 1;
       })
       .addCase(fetchPosts.pending, (state) => {

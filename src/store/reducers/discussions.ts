@@ -1,15 +1,14 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import axios from 'axios';
-
 import { axiosInstance } from '../../utils/axios';
 import { Discussion as TDiscussion } from '../../@types/discussion';
-// Définir le type pour l'état initial
+
+// Typage des données
 type DiscussionsState = {
   isLoading: boolean;
   discussionsList: TDiscussion[];
 };
 
-// Définir l'état initial
+//* données initiales
 const initialState: DiscussionsState = {
   isLoading: false,
   discussionsList: [],
@@ -22,13 +21,12 @@ export const fetchDiscussions = createAsyncThunk(
     const response = await axiosInstance.get<TDiscussion[]>(
       `/messages/conversations`
     );
-    console.log('🚀 ~ response:', response);
-    console.log('🚀 ~ data:', response.data);
     return response.data;
   }
 );
 
-// Créer une slice pour gérer les discussions
+//* Création d'une slice pour gérer les discussions
+
 const discussionsSlice = createSlice({
   name: 'discussions',
   initialState,
@@ -53,5 +51,4 @@ const discussionsSlice = createSlice({
 });
 
 export const { setDiscussionsList } = discussionsSlice.actions;
-
 export const discussionsReducer = discussionsSlice.reducer;

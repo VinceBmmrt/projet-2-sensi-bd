@@ -26,7 +26,8 @@ interface UserState {
 // Récupération des données de l'utilisateur dans le localStorage
 const userData = LocalStorage.getItem('user');
 
-// Données initiales
+//* Données initiales
+
 export const initialState: UserState = {
   pseudo: undefined,
   token: undefined,
@@ -67,6 +68,8 @@ export const login = createAsyncThunk(
     }
   }
 );
+
+//* Création d'une slice pour gérer l'utilisateur connecté
 
 const userReducer = createSlice({
   name: 'user',
