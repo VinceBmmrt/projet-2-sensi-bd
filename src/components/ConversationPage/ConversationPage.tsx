@@ -20,8 +20,6 @@ function ConversationPage() {
     dispatch(fetchMessages({ postId, userId }));
   }, [dispatch, postId, userId]);
 
-  console.log(messages);
-
   // Formatage de la date
   const formatTimestampRelative = (timestamp: Date) => {
     return formatRelative(new Date(timestamp), new Date(), { locale: fr });

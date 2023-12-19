@@ -5,7 +5,9 @@
   border-radius: 8px;
   background-color: #fff;
   box-shadow: 0 0 10px rgba(152, 194, 161, 0.1);
-  width: 90%;
+  width: 90vw;
+  height: 88vh;
+  position: relative;
 
   .messagesContainer__title {
     color: #333;
@@ -23,7 +25,7 @@
     padding: 1rem;
     border: 1px solid #eee;
     border-radius: 6px;
-    background-color: #f9f9f9;
+    background-color: #eee;
 
     div {
       margin-bottom: 0.5rem;
@@ -34,7 +36,7 @@
     }
 
     &.myMessage {
-      background-color: #eee;
+      background-color: rgba(149, 194, 61, 0.2);
     }
     &.interlocutorMessage {
       text-align: right;
@@ -44,20 +46,21 @@
       font-size: small;
       margin-bottom: -0.2rem;
     }
+    .messagesContainer__list-date {
+      font-size: small;
+      font-style: italic;
+    }
   }
-}
-
-.messagesContainer__list-date {
-  font-size: small;
-  font-style: italic;
 }
 
 .inputContainer {
   display: flex;
   align-items: center;
   border-radius: 8px;
-  position: sticky;
-  bottom: 8vh;
+  position: absolute;
+  bottom: 1rem;
+  width: 100%;
+
   input {
     flex: 1;
     border: 1px solid #ccc;
@@ -68,6 +71,7 @@
 
   button {
     margin-left: 0.5rem;
+    margin-right: 2rem;
     padding: 0.5rem 1rem;
     background-color: #95c23d;
     color: #fff;
