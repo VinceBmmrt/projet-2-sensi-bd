@@ -19,7 +19,6 @@ import ChatBubbleIcon from '@mui/icons-material/ChatBubble';
 import { useState } from 'react';
 import { useAppSelector } from '../../hooks/redux';
 import { Post as TPost } from '../../@types/post';
-import './Post.scss';
 
 // Flèche d'agrandissent des informations de la carte: https://mui.com/material-ui/react-card/
 
@@ -68,7 +67,7 @@ export default function Post({ post, id, user_id }: PostProps) {
 
   return (
     <div className="post">
-      <Card sx={{ maxWidth: 345 }}>
+      <Card sx={{ width: 300 }}>
         <CardHeader
           avatar={
             <Avatar
@@ -97,6 +96,7 @@ export default function Post({ post, id, user_id }: PostProps) {
           height="250"
           image={post.image}
           alt="photo de l'ouvrage"
+          style={{ objectFit: 'cover', width: '100%' }}
         />
 
         <CardHeader title={post.post_title} subheader="50km" />
