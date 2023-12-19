@@ -25,9 +25,10 @@ type FormData = {
   condition_id: number | null;
   user_id: number | undefined;
   slug: string;
-  file: File | null; // New state for managing the selected file
+  file: File | null;
 };
 
+// fonction pour transformer le titre de l'annonce en slug (tout en minuscule, sans accents, séparé par des tirets, etc.)
 const slugify = (text: string) =>
   text
     .toString()
@@ -39,6 +40,7 @@ const slugify = (text: string) =>
     .replace(/[^\w-]+/g, '')
     .replace(/--+/g, '-');
 
+// envoie d'une image vers un serveur http
 type FileData = { file: File | null; description: string };
 async function postImage({ file, description }: FileData) {
   const imgFormData = new FormData();
@@ -61,6 +63,8 @@ async function postImage({ file, description }: FileData) {
   return null;
 }
 
+//* Composant pour poster une annonce
+
 function AddPostPage() {
   const [formData, setFormData] = useState<FormData>({
     post_title: '',
@@ -73,11 +77,13 @@ function AddPostPage() {
     condition_id: null,
     slug: '',
     user_id: undefined,
-    file: null, // Initialize the file state
+    file: null,
   });
   const userId = useAppSelector((state) => state.user.userId);
   const [successOpen, setSuccessOpen] = useState(false);
   const [errorOpen, setErrorOpen] = useState(false);
+
+  // Récupération de l'id de l'utilisateur connecté depuis le store, grâce au token
   useEffect(() => {
     setFormData((prevData) => ({
       ...prevData,
@@ -85,6 +91,7 @@ function AddPostPage() {
     }));
   }, [userId]);
 
+  // changement des données du Form en dynamique (field représente la clé du tableau formData)
   const handleInputChange =
     (field: keyof FormData) =>
     (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -94,6 +101,7 @@ function AddPostPage() {
       }));
     };
 
+  // Enregistrement dans le formData et son slug
   const handletitleAndSlugChange = (
     event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
@@ -107,6 +115,7 @@ function AddPostPage() {
     }));
   };
 
+  // Enregistrement de l'image dans le formData dans file
   const handleFileChange = (event: ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0] || null;
     setFormData((prevData) => ({
@@ -115,6 +124,7 @@ function AddPostPage() {
     }));
   };
 
+  // Enregistrement des valeurs des checkbox (même principe que file mais la clé ici s'appelle category)
   const handleCheckboxChange = (category: keyof FormData, value: number) => {
     setFormData((prevData) => ({
       ...prevData,
@@ -122,6 +132,7 @@ function AddPostPage() {
     }));
   };
 
+  // Envoie du FormData
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
@@ -135,7 +146,7 @@ function AddPostPage() {
       const imageUrl = result?.location;
       console.log('Image URL:', imageUrl);
 
-      // Call axios avec redirection vers la homepage si réussi
+      // Post axios avec redirection vers la homepage si réussi
       await axiosInstance
         .post('/posts', {
           ...formData,
@@ -349,9 +360,9 @@ function AddPostPage() {
                 type="submit"
                 sx={{
                   mb: 6,
-                  backgroundColor: '#95C23D', // Change this to the desired color
+                  backgroundColor: '#95C23D',
                   '&:hover': {
-                    backgroundColor: '#7E9D2D', // Change this to the desired hover color
+                    backgroundColor: '#7E9D2D',
                   },
                 }}
               >
@@ -372,7 +383,7 @@ function AddPostPage() {
           onClose={() => setErrorOpen(false)}
           severity="error"
         >
-          Echec , remplissez tous les champs
+          Echec, remplissez tous les champs
         </CustomToast>
       </div>
     </div>
