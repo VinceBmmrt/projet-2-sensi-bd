@@ -1,4 +1,4 @@
-import { Alert, AlertTitle, Typography } from '@mui/material';
+import { Typography } from '@mui/material';
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 import axios from 'axios';
@@ -18,6 +18,8 @@ type UserData = {
   error: boolean;
 };
 
+//* Composant de page d'inscription
+
 function SignupPage() {
   const googlePlacesAPIKey = import.meta.env.VITE_GOOGLE_API_KEY;
   const [warningOpen, setWarningOpen] = useState(false);
@@ -35,6 +37,7 @@ function SignupPage() {
     error: false,
   });
 
+  // Fonction de récupération des coordonnées latitude et longitude depuis l'API google
   const getCoordinates = async (address: string) => {
     const response = await fetch(
       `https://maps.googleapis.com/maps/api/geocode/json?address=${encodeURIComponent(
@@ -43,6 +46,7 @@ function SignupPage() {
     );
     const data = await response.json();
 
+    // Récupération des données découpées par l'API
     if (data.results.length > 0) {
       const { location } = data.results[0].geometry;
       return {
@@ -59,9 +63,9 @@ function SignupPage() {
     throw new Error('Adresse non trouvée');
   };
 
+  // Enregistrer la valeur des inputs en fonction de leur nom
   const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
-    // Reset the error state when passwords are updated
     if (name === 'password' || name === 'confirmPassword') {
       setUserFormData((prevData) => ({
         ...prevData,
@@ -73,10 +77,11 @@ function SignupPage() {
     }
   };
 
+  // Gestion de l'input placesref avec la propriété ref qui permet de cibler un élément du DOM
+  // le hook usePlaceWidget du package googleAutocomplete permet de trouver une addresse, ici limité à la France
   const { ref: placesRef } = usePlacesWidget({
     apiKey: googlePlacesAPIKey,
     onPlaceSelected: (place) => {
-      // Update the address in the form data when a place is selected
       setUserFormData((prevData) => ({
         ...prevData,
         address: place.formatted_address,
@@ -88,6 +93,7 @@ function SignupPage() {
     },
   });
 
+  // Envoie du formulaire
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
@@ -104,8 +110,6 @@ function SignupPage() {
 
     try {
       const addressData = await getCoordinates(userFormData.address);
-      console.log('🚀 ~ userFormData:', userFormData);
-      console.log('🚀 ~ adressData:', addressData);
 
       axios
         .post('http://localhost:3000/users/', {
@@ -113,7 +117,7 @@ function SignupPage() {
           ...addressData,
         })
         .then((response) => {
-          console.log('🚀 ~ Response:', response.data);
+          console.log('Response:', response.data);
           setSuccessOpen(true);
           setTimeout(() => {
             window.location.replace('/login');
@@ -127,15 +131,6 @@ function SignupPage() {
       console.error('Erreur lors de la récupération des coordonnées:', error);
       throw error;
     }
-    // // Check if password and confirmPassword match
-    // if (userFormData.password !== userFormData.confirmPassword) {
-    //   console.error('Passwords match incorrect');
-
-    //   setUserFormData((prevData) => ({
-    //     ...prevData,
-    //     error: true,
-    //   }));
-    // }
   };
 
   return (
@@ -239,23 +234,17 @@ function SignupPage() {
           required
           sx={{ marginBottom: '1rem' }}
         />
-        {/* {userFormData.error && (
-          <Alert severity="warning">
-            <AlertTitle>Warning</AlertTitle>
-            Les passwords indiqués ne correspondent pas !
-          </Alert>
-        )} */}
         <Button
           type="submit"
           variant="contained"
           sx={{
-            backgroundColor: '#95C23D', // Change this to the desired color
+            backgroundColor: '#95C23D',
             '&:hover': {
-              backgroundColor: '#7E9D2D', // Change this to the desired hover color
+              backgroundColor: '#7E9D2D',
             },
           }}
         >
-          S'inscrire
+          S&apos;inscrire
         </Button>
       </form>
       <CustomToast

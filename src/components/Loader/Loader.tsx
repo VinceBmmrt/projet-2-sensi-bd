@@ -1,6 +1,8 @@
 import React from 'react';
 import { Bars } from 'react-loader-spinner';
 
+//* Composant loader de React
+
 function Loader() {
   return (
     <div style={{ display: 'flex', justifyContent: 'center' }}>

@@ -7,7 +7,8 @@ interface CustomSnackbarProps extends AlertProps {
   onClose: () => void;
 }
 
-// Utilisation d'une fonction de déclaration pour un composant nommé
+//* Composant d'alerte material UI
+
 function CustomSnackbar({
   open,
   onClose,
