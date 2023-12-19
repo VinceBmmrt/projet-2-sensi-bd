@@ -20,6 +20,8 @@ function ConversationPage() {
     dispatch(fetchMessages({ postId, userId }));
   }, [dispatch, postId, userId]);
 
+  console.log(messages);
+
   // Formatage de la date
   const formatTimestampRelative = (timestamp: Date) => {
     return formatRelative(new Date(timestamp), new Date(), { locale: fr });
@@ -37,8 +39,8 @@ function ConversationPage() {
   return (
     <div>
       <div className="messagesContainer">
-        <h2>Chat</h2>
-        <ul>
+        <h2 className="messagesContainer__title">Conversation</h2>
+        <ul className="messagesContainer__list">
           {messages.map((message) => {
             return (
               <li
@@ -50,13 +52,16 @@ function ConversationPage() {
                 }
               >
                 {/* Afficher l'auteur du message */}
-                <div className="messageHeader">
-                  Auteur:{' '}
+                <div className="messagesContainer__list-Header">
                   {message.sender_id === myID ? 'Moi' : ` ${message.pseudonym}`}
                 </div>
+                <div className="messagesContainer__list-date">
+                  {formatTimestampRelative(message.created_at)}
+                </div>
                 {/* Afficher le contenu du message */}
-                <div>{message.content}</div>
-                <div>envoyé: {formatTimestampRelative(message.created_at)}</div>
+                <div className="messagesContainer__list-content">
+                  {message.content}
+                </div>
               </li>
             );
           })}
@@ -65,7 +70,7 @@ function ConversationPage() {
           <input
             type="text"
             value={messageContent}
-            onChange={(e) => setMessageContent(e.target.value)}
+            onChange={(event) => setMessageContent(event.target.value)}
           />
           <button type="submit" onClick={handleSendClick}>
             Envoyer

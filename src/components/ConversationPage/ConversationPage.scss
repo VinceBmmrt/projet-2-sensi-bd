@@ -1,5 +1,5 @@
 .messagesContainer {
-  margin: 2rem auto; // Utiliser des unités relatives pour la marge
+  margin: 2rem auto;
   padding: 1rem;
   border: 1px solid #ccc;
   border-radius: 8px;
@@ -7,12 +7,12 @@
   box-shadow: 0 0 10px rgba(152, 194, 161, 0.1);
   width: 90%;
 
-  h2 {
+  .messagesContainer__title {
     color: #333;
-    font-size: 1.5rem; // Utiliser une unité relative pour la taille de police
+    font-size: 1.5rem;
   }
 
-  ul {
+  .messagesContainer__list {
     list-style: none;
     padding: 0;
     margin: 0;
@@ -39,15 +39,20 @@
     &.interlocutorMessage {
       text-align: right;
     }
-    .messageHeader {
-      text-decoration: underline;
+    .messagesContainer__list-Header {
       font-weight: bold;
+      font-size: small;
+      margin-bottom: -0.2rem;
     }
   }
 }
 
+.messagesContainer__list-date {
+  font-size: small;
+  font-style: italic;
+}
+
 .inputContainer {
-  margin: 1rem;
   display: flex;
   align-items: center;
   border-radius: 8px;

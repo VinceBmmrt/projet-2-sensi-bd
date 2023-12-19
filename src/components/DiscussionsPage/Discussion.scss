@@ -1,0 +1,26 @@
+.discussionsContainer {
+  margin: 2rem auto;
+  padding: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  background-color: #fff;
+  box-shadow: 0 0 10px rgba(152, 194, 161, 0.1);
+  width: 90%;
+}
+
+.discussionsContainer__title {
+  color: #333;
+  font-size: 1.5rem;
+}
+
+.discussionsContainer__list-item-title {
+  display: inline-block;
+  margin-right: 1rem;
+}
+
+.discussionsContainer__list-item-date {
+  display: inline-block;
+  text-decoration: none;
+  font-size: small;
+  font-style: italic;
+}

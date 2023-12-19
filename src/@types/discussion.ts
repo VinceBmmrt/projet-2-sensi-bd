@@ -5,5 +5,5 @@ export type Discussion = {
   sender_id: number;
   sender_pseudonym: string;
   receiver_pseudonym: string;
-  last_message_time: string;
+  last_message_time: Date;
 };

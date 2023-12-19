@@ -4,6 +4,7 @@ import { fr } from 'date-fns/locale';
 import { Link } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../../hooks/redux';
 import { fetchDiscussions } from '../../store/reducers/discussions';
+import './Discussion.scss';
 
 //* Composant page affichant les discussions en cours
 
@@ -19,7 +20,7 @@ function DiscussionsPage() {
     dispatch(fetchDiscussions());
   }, []);
 
-  // fonction de création de la date d'envoie
+  // Formatage de la date
   const formatTimestampRelative = (timestamp: Date) => {
     return formatRelative(new Date(timestamp), new Date(), { locale: fr });
   };
@@ -27,25 +28,29 @@ function DiscussionsPage() {
   return (
     <div>
       <div className="discussionsContainer">
-        <h2>Messages</h2>
+        <h2 className="discussionsContainer__title">Messages</h2>
         <ul>
           {discussions.map((discussion) => {
             return (
-              <Link
-                to={
-                  discussion.receiver_id === myID
-                    ? `/messages/${discussion.post_id}/${discussion.sender_id}`
-                    : `/messages/${discussion.post_id}/${discussion.receiver_id}`
-                }
+              <li
+                className="discussionsContainer__list-item"
                 key={discussion.post_id}
               >
-                <li>
-                  <div>{discussion.post_title}</div>
-                  <div>
-                    envoyé: {formatTimestampRelative(discussion.timestamp)}
-                  </div>
-                </li>
-              </Link>
+                <div className="discussionsContainer__list-item-title">
+                  <Link
+                    to={
+                      discussion.receiver_id === myID
+                        ? `/messages/${discussion.post_id}/${discussion.sender_id}`
+                        : `/messages/${discussion.post_id}/${discussion.receiver_id}`
+                    }
+                  >
+                    {discussion.post_title}
+                  </Link>
+                </div>
+                <div className="discussionsContainer__list-item-date">
+                  {formatTimestampRelative(discussion.last_message_time)}
+                </div>
+              </li>
             );
           })}
         </ul>

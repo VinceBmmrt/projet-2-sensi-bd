@@ -21,6 +21,7 @@ export const fetchDiscussions = createAsyncThunk(
     const response = await axiosInstance.get<TDiscussion[]>(
       `/messages/conversations`
     );
+    console.log(response.data);
     return response.data;
   }
 );
