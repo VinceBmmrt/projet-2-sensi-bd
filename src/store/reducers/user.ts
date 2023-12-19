@@ -2,6 +2,7 @@ import { PayloadAction, createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { axiosInstance } from '../../utils/axios';
 import { LocalStorage } from '../../utils/LocalStorage';
 
+// typage des données récupérées par le server à la connexion
 type UserData = {
   pseudo: string;
   token: string;
@@ -20,12 +21,12 @@ interface UserState {
   isLoading: boolean;
   error?: string;
   userId?: number;
-  // loggedMessage?: string;
 }
 
-// Je vais récupérer les données de l'utilisateur dans le localStorage
+// Récupération des données de l'utilisateur dans le localStorage
 const userData = LocalStorage.getItem('user');
 
+// Données initiales
 export const initialState: UserState = {
   pseudo: undefined,
   token: undefined,
@@ -38,11 +39,10 @@ export const initialState: UserState = {
   },
   isLoading: false,
   error: undefined,
-  // loggedMessage: undefined,
-  // checked: false,
-  ...userData, // si null, ça ne fait rien, si utilisateur, écrase les données prédécentes et donc isLogged sera à jour
+  ...userData, // déversement des données du localsorage. Si null, rien, si utilisateur alors on écrase les données prédécentes
 };
 
+// fonction login
 type LoginCredentials = { email: string; password: string };
 export const login = createAsyncThunk(
   'LoginForm',
@@ -52,19 +52,15 @@ export const login = createAsyncThunk(
         '/users/login',
         credentials
       );
-
-      // Lorsque je me connecte, je stocke le token d'authorization dans axios
-      // Ce header sera envoyé automatiquement à chaque requête avec `axiosInstance`
-      // axiosInstance.defaults.headers.common.Authorization = `Bearer ${data.token}`;
-
-      // Je vais enregistrer dans le localStorage les données de l'utilisateur
+      // Je vais enregistrer dans le localStorage les données de l'utilisateur que me retourne l'API avec un setItem
       // comme ça au rafraichissement de la page, il reste connecté
-      // je stocke une information sur le navigateur en lmode clé/valeur
+
+      // Les infos sont stockées sur le navigateur en mode clé/valeur :
       // La clé me permet de pouvoir récupérer / modifier / supprimer la valeur
-      // La valeur DOIT être une chaine de caractère. On transforme donc notre objet en chaines de caractères
+      // La valeur doit être une chaine de caractère. On transforme donc notre objet en chaines de caractères dans le fichier utils localstorage
       LocalStorage.setItem('user', data);
 
-      // Je retourne les données récupérer depuis mon API
+      // Je retourne les données récupérer depuis mon API qui seront récupérées par un getItem et déversées dans les données initiales
       return data;
     } catch (error) {
       console.log(error);
@@ -79,34 +75,15 @@ const userReducer = createSlice({
     changeCredentialValue(
       state,
       action: PayloadAction<{
-        textfieldName: keyof UserState['credentials']; // name 'email'|'password'
+        textfieldName: keyof UserState['credentials']; // ici textfieldName 'email'|'password'
         value: string;
       }>
     ) {
       const { textfieldName, value } = action.payload;
       state.credentials[textfieldName] = value;
     },
-    // changeCheckedValue(state) {
-    //   state.checked = !state.checked;
-    // },
-    // getCredentialsFromStorage(state) {
-    //   const getEmail = localStorage.getItem('email');
-    //   const getPassword = localStorage.getItem('password');
-
-    //   if (getEmail && getPassword) {
-    //     state.credentials.email = getEmail;
-    //     state.credentials.password = getPassword;
-    //   }
-    // },
-    // setCredentialsToStorage(state) {
-    //   if (state.isLogged === true) {
-    //     localStorage.setItem('email', state.credentials.email);
-    //     localStorage.setItem('password', state.credentials.password);
-    //   }
-    // },
-
     handleLogout(state) {
-      // a la deconnection je supprime les infos de l'utilisateur dans le navigateur
+      // a la deconnection je supprime les infos de l'utilisateur dans le navigateur avec removeItem
       LocalStorage.removeItem('user');
       state.isLogged = false;
       state.pseudo = undefined;
@@ -132,16 +109,9 @@ const userReducer = createSlice({
       state.isLogged = action.payload.isLogged;
       state.role = action.payload.role;
       state.userId = action.payload.userId;
-      // state.loggedMessage = 'vous êtes connecté';
     });
   },
 });
 
-export const {
-  changeCredentialValue,
-  handleLogout,
-  // changeCheckedValue,
-  // getCredentialsFromStorage,
-  // setCredentialsToStorage,
-} = userReducer.actions;
+export const { changeCredentialValue, handleLogout } = userReducer.actions;
 export default userReducer.reducer;
