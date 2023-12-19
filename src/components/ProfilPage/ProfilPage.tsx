@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { FormEvent, useEffect, useState } from 'react';
 import axios from 'axios';
 
 import {
@@ -16,8 +16,33 @@ import { Link } from 'react-router-dom';
 import { handleLogout } from '../../store/reducers/user';
 import { useAppDispatch, useAppSelector } from '../../hooks/redux';
 import { axiosInstance } from '../../utils/axios';
+import convertImageFile from '../../utils/convertImageFile';
 
-function EditableField({ label, value, onSave }) {
+interface UserData {
+  firstname: string;
+  lastname: string;
+  pseudonym: string;
+  email: string;
+  credits?: number;
+  postedAds?: number;
+  address: string;
+  score?: number;
+}
+interface EditableFieldProps {
+  label: string;
+  value: string;
+  onSave: (value: string) => void;
+}
+interface ImageUploadResult {
+  location: string;
+}
+interface PostImageParams {
+  image?: File | null;
+  description: string;
+  avatarSrc?: string;
+}
+type UserDataKey = keyof UserData;
+function EditableField({ label, value, onSave }: EditableFieldProps) {
   const [isEditing, setIsEditing] = useState(false);
   const [fieldValue, setFieldValue] = useState(value);
 
@@ -56,7 +81,7 @@ function EditableField({ label, value, onSave }) {
   );
 }
 
-async function postImage({ image, description, avatarSrc }) {
+async function postImage({ image, description, avatarSrc }: PostImageParams) {
   const formData = new FormData();
 
   if (image) {
@@ -66,7 +91,7 @@ async function postImage({ image, description, avatarSrc }) {
 
   if (image) {
     try {
-      const result = await axios.post(
+      const result = await axios.post<ImageUploadResult>(
         'http://localhost:3000/images',
         formData,
         {
@@ -86,7 +111,7 @@ async function postImage({ image, description, avatarSrc }) {
 }
 
 function UserProfilePage() {
-  const [userData, setUserData] = useState({
+  const [userData, setUserData] = useState<UserData>({
     firstname: '',
     lastname: '',
     pseudonym: '',
@@ -97,9 +122,9 @@ function UserProfilePage() {
     score: undefined,
   });
   const [avatarSrc, setAvatarSrc] = useState('/path/to/avatar.jpg'); // Initial avatar source
-  const [file, setFile] = useState();
+  const [file, setFile] = useState<File | null>(null);
   const [description, setDescription] = useState('');
-  const [images, setImages] = useState([]);
+  const [images, setImages] = useState<string[]>([]);
   const dispatch = useAppDispatch();
   const userId = useAppSelector((state) => state.user.userId);
 
@@ -127,37 +152,40 @@ function UserProfilePage() {
       });
   }, [userId]);
 
-  const handleInputChange = (field, value) => {
+  const handleInputChange = (field: string, value: string) => {
     setUserData((prevData) => ({ ...prevData, [field]: value }));
   };
-
-  const handleSaveClick = async (event) => {
-    // Ajoutez ici la logique de sauvegarde des modifications
+  const handleSaveClick = async (event: FormEvent<HTMLButtonElement>) => {
     event.preventDefault();
     try {
       const result = await postImage({ image: file, description });
-      const imageUrl = result.location; // Assurez-vous que 'location' est la clé retournée par votre serveur avec l'URL de l'image
-      setImages([imageUrl, ...images]);
+      const imageUrl: string | undefined = result?.location;
+
+      if (imageUrl) {
+        setImages([imageUrl, ...images]);
+      }
     } catch (error) {
       console.error("Erreur lors de l'upload de l'image", error);
-      // Gérer l'erreur, par exemple en affichant un message à l'utilisateur
     }
     console.log('newInfo', userData);
   };
 
-  const handleImageUpload = async (event) => {
-    const file = event.target.files[0];
-    setFile(file);
-
-    // Update the avatar source dynamically
-    setAvatarSrc(URL.createObjectURL(file));
+  const handleImageUpload = async (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    const imageFile: FileList | null = event.target.files;
+    if (imageFile?.length) {
+      const imageBlob = await convertImageFile(imageFile[0]);
+      setFile(imageFile[0]);
+      // TODO:  Tester le blob avec le backend
+      // Update the avatar source dynamically
+      setAvatarSrc(URL.createObjectURL(imageBlob as Blob));
+    }
 
     // Handle the file upload logic here
     console.log('Uploaded file:', file);
   };
-  const handleDisconnect = (
-    event: MouseEvent<HTMLAnchorElement, MouseEvent>
-  ) => {
+  const handleDisconnect = () => {
     dispatch(handleLogout());
   };
 
@@ -214,27 +242,27 @@ function UserProfilePage() {
           <EditableField
             label="Prénom"
             value={userData.firstname}
-            onSave={(value) => handleInputChange('firstName', value)}
+            onSave={(value: string) => handleInputChange('firstName', value)}
           />
           <EditableField
             label="Nom"
             value={userData.lastname}
-            onSave={(value) => handleInputChange('lastName', value)}
+            onSave={(value: string) => handleInputChange('lastName', value)}
           />
           <EditableField
             label="Pseudo"
             value={userData.pseudonym}
-            onSave={(value) => handleInputChange('pseudonym', value)}
+            onSave={(value: string) => handleInputChange('pseudonym', value)}
           />
           <EditableField
             label="Adresse email"
             value={userData.email}
-            onSave={(value) => handleInputChange('email', value)}
+            onSave={(value: string) => handleInputChange('email', value)}
           />
           <EditableField
             label="Adresse"
             value={userData.address}
-            onSave={(value) => handleInputChange('address', value)}
+            onSave={(value: string) => handleInputChange('address', value)}
           />
         </Grid>
 
