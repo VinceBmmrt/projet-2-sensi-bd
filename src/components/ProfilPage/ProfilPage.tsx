@@ -2,7 +2,6 @@ import React, { FormEvent, useEffect, useState } from 'react';
 import axios from 'axios';
 
 import {
-  Paper,
   Typography,
   Avatar,
   IconButton,
@@ -41,7 +40,7 @@ interface PostImageParams {
   description: string;
   avatarSrc?: string;
 }
-type UserDataKey = keyof UserData;
+
 function EditableField({ label, value, onSave }: EditableFieldProps) {
   const [isEditing, setIsEditing] = useState(false);
   const [fieldValue, setFieldValue] = useState(value);
@@ -81,7 +80,7 @@ function EditableField({ label, value, onSave }: EditableFieldProps) {
   );
 }
 
-async function postImage({ image, description, avatarSrc }: PostImageParams) {
+async function postImage({ image, description }: PostImageParams) {
   const formData = new FormData();
 
   if (image) {
@@ -121,7 +120,7 @@ function UserProfilePage() {
     address: '',
     score: undefined,
   });
-  const [avatarSrc, setAvatarSrc] = useState('/path/to/avatar.jpg'); // Initial avatar source
+  const [avatarSrc, setAvatarSrc] = useState('/path/to/avatar.jpg');
   const [file, setFile] = useState<File | null>(null);
   const [description, setDescription] = useState('');
   const [images, setImages] = useState<string[]>([]);
@@ -178,11 +177,10 @@ function UserProfilePage() {
       const imageBlob = await convertImageFile(imageFile[0]);
       setFile(imageFile[0]);
       // TODO:  Tester le blob avec le backend
-      // Update the avatar source dynamically
+      // Change l' URL de l'avatar dynamiquement
       setAvatarSrc(URL.createObjectURL(imageBlob as Blob));
     }
 
-    // Handle the file upload logic here
     console.log('Uploaded file:', file);
   };
   const handleDisconnect = () => {
@@ -212,7 +210,7 @@ function UserProfilePage() {
         <label htmlFor="image-upload">
           <Avatar
             alt="User Avatar"
-            src={avatarSrc} // Set the src dynamically
+            src={avatarSrc}
             sx={{
               width: 100,
               height: 100,
@@ -242,12 +240,12 @@ function UserProfilePage() {
           <EditableField
             label="Prénom"
             value={userData.firstname}
-            onSave={(value: string) => handleInputChange('firstName', value)}
+            onSave={(value: string) => handleInputChange('firstname', value)}
           />
           <EditableField
             label="Nom"
             value={userData.lastname}
-            onSave={(value: string) => handleInputChange('lastName', value)}
+            onSave={(value: string) => handleInputChange('lastname', value)}
           />
           <EditableField
             label="Pseudo"
