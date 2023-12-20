@@ -9,6 +9,7 @@ import {
   FormControlLabel,
   Checkbox,
 } from '@mui/material';
+import RemoveIcon from '@mui/icons-material/Remove';
 import { Add as AddIcon } from '@mui/icons-material';
 import { axiosInstance } from '../../utils/axios';
 import { useAppSelector } from '../../hooks/redux';
@@ -250,7 +251,7 @@ function AddPostPage() {
                     setFormData((prevData) => ({ ...prevData, file: null }))
                   }
                 >
-                  <AddIcon />
+                  <RemoveIcon />
                 </IconButton>
               </Grid>
             )}
