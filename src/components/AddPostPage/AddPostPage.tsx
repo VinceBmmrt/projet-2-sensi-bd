@@ -10,6 +10,7 @@ import {
   Checkbox,
 } from '@mui/material';
 import { Add as AddIcon } from '@mui/icons-material';
+import RemoveIcon from '@mui/icons-material/Remove';
 import { axiosInstance } from '../../utils/axios';
 import { useAppSelector } from '../../hooks/redux';
 import CustomToast from '../CustomToast/CustomToast';
@@ -19,13 +20,13 @@ type FormData = {
   description: string;
   book_title: string;
   book_author: string;
-  image: File | null;
+  image: string | null;
   category_id: number | null;
   audience_id: number | null;
   condition_id: number | null;
   user_id: number | undefined;
   slug: string;
-  file: File | null;
+  file?: File | null;
 };
 
 // fonction pour transformer le titre de l'annonce en slug (tout en minuscule, sans accents, séparé par des tirets, etc.)
@@ -122,6 +123,8 @@ function AddPostPage() {
       ...prevData,
       file,
     }));
+    // Reset la valeur de l'input d'upload d'image aprés le changement
+    event.target.value = '';
   };
 
   // Enregistrement des valeurs des checkbox (même principe que file mais la clé ici s'appelle category)
@@ -138,33 +141,53 @@ function AddPostPage() {
 
     try {
       // Envoi du fichier et de la description depuis la fonction postImage + success toast
-      const result = await postImage({
+      const uploadResult = await postImage({
         file: formData.file,
         description: formData.description,
       });
+      // Construct the new post data including the image URL
+      const newPostData = {
+        ...formData,
+        image: uploadResult?.signedUrl, // Assuming 'signedUrl' is the field returned by your image upload endpoint
+      };
+      // Remove the 'file' field as it's not needed for the post creation
+      delete newPostData.file;
 
-      const imageUrl = result?.location;
-      console.log('Image URL:', imageUrl);
-
-      // Post axios avec redirection vers la homepage si réussi
-      await axiosInstance
-        .post('/posts', {
-          ...formData,
-        })
-        .then((response) => {
-          if (response && response.status >= 200 && response.status < 300) {
-            console.log('Request was successful:', response.data);
-            setSuccessOpen(true);
-            setTimeout(() => {
-              window.location.replace('/');
-            }, 2000);
-          }
-        });
+      // Send the new post data to the backend to create the post
+      const response = await axiosInstance.post('/posts', newPostData);
+      if (response.status === 201) {
+        console.log('Post was successful:', response.data);
+        setSuccessOpen(true);
+        setTimeout(() => {
+          window.location.replace('/');
+        }, 2000);
+      }
     } catch (error) {
-      console.log(error);
+      console.error('Failed to create post:', error);
       setErrorOpen(true);
     }
+    console.log('🚀 ~ newPostData:', formData);
   };
+
+  // Post axios avec redirection vers la homepage si réussi
+  //     await axiosInstance
+  //       .post('/posts', {
+  //         ...formData,
+  //       })
+  //       .then((response) => {
+  //         if (response && response.status >= 200 && response.status < 300) {
+  //           console.log('Request was successful:', response.data);
+  //           setSuccessOpen(true);
+  //           setTimeout(() => {
+  //             window.location.replace('/');
+  //           }, 2000);
+  //         }
+  //       });
+  //   } catch (error) {
+  //     console.log(error);
+  //     setErrorOpen(true);
+  //   }
+  // };
 
   return (
     <div className="postForm" style={{ padding: '1rem' }}>
@@ -250,7 +273,7 @@ function AddPostPage() {
                     setFormData((prevData) => ({ ...prevData, file: null }))
                   }
                 >
-                  <AddIcon />
+                  <RemoveIcon />
                 </IconButton>
               </Grid>
             )}
