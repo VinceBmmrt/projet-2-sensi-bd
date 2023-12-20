@@ -1,11 +1,12 @@
 import { Outlet } from 'react-router-dom';
-
+import BottomNav from '../BottomNav/BottomNav';
 import './App.scss';
 
 function App() {
   return (
-    <div className="App">
+    <div className="app">
       <Outlet />
+      <BottomNav />
     </div>
   );
 }

@@ -1,4 +1,5 @@
 {
+  "files.eol": "\n",  // Ajout de cette ligne pour spécifier la séquence de fin de ligne
   "editor.defaultFormatter": "esbenp.prettier-vscode",
   "[javascript][typescript]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode",
