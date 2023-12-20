@@ -59,12 +59,13 @@ export default function LoginPage() {
 
     const credentials = { email: emailValue, password: passwordValue };
     try {
-      dispatch(login(credentials));
+      await dispatch(login(credentials));
       setSuccessOpen(true);
-      // redirection au succès vers la home page
+
       setTimeout(() => {
         window.location.replace('/');
       }, 1500);
+      // redirection au succès vers la home page
     } catch (error) {
       console.log('Error:', error);
       setErrorOpen(true);
